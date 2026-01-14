@@ -12,18 +12,23 @@ jobs:
     strategy:
       matrix:
         repo:
-          - owner: zinapark
-            name: final-04-eat-da-release
+          - owner: OWNER_ZINA
+            name: REPO_ZINA
             token: TOKEN_ZINA
             email: EMAIL_ZINA
-          - owner: UJin1122
-            name: final-04-eat-da-release
+          - owner: OWNER_UZ
+            name: REPO_UZ
             token: TOKEN_UZ
             email: EMAIL_UZ
-          - owner: jiyou228
-            name: final-04-eat-da-release
+          - owner: OWNER_ZU
+            name: REPO_ZU
             token: TOKEN_ZU
             email: EMAIL_ZU
+          - owner: OWNER_YS
+            name: REPO_YS
+            token: TOKEN_YS
+            email: EMAIL_YS
+
             
     steps:
       - uses: actions/checkout@v2
