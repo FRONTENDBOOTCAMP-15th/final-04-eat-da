@@ -24,10 +24,6 @@ jobs:
             name: final-04-eat-da-release
             token: TOKEN_ZU
             email: EMAIL_ZU
-          - owner: nnjys99
-            name: final-04-eat-da-release
-            token: TOKEN_YS
-            email: EMAIL_YS
             
     steps:
       - uses: actions/checkout@v2
