@@ -1,8 +1,10 @@
+import Link from "next/link";
+import "./src/styles/tailwind.css";
+
 export default function Home() {
   return (
     <>
-      <h1>라이언 보드 v.03</h1>
-      <h2>client-id: { process.env.NEXT_PUBLIC_CLIENT_ID }</h2>
+      <Link href="/cart">장바구니</Link>
     </>
   );
 }
