@@ -4,8 +4,12 @@ import "./src/styles/tailwind.css";
 export default function Home() {
   return (
     <>
-      <Link href="/wishlist">찜한 반찬</Link>
-      <Link href="/cart">장바구니</Link>
+      <li>
+        <Link href="/wishlist">찜한 반찬</Link>
+      </li>
+      <li>
+        <Link href="/cart">장바구니</Link>
+      </li>
     </>
   );
 }
