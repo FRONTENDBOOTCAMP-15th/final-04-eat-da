@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 export default function CheckoutPageClient() {
@@ -38,32 +39,40 @@ export default function CheckoutPageClient() {
         </button>
 
         {isProductInfoOpen && (
-          <div className="space-y-3 p-4 bg-gray-50 rounded-lg">
-            <div className="flex gap-3">
-              <div className="w-20 h-20 bg-gray-200 rounded-lg"></div>
-              <div>
-                <p className="">김미숙님의 소고기 장조림</p>
-                <p className="text-paragraph-sm text-gray-600">
-                  김미숙 주부 9단
-                </p>
-                <div className="flex">
-                  <p className="">8,500원</p>
-                  <p>|</p>
-                  <p>수량 2개</p>
+          <div className="space-y-4 p-4">
+            <div className="flex gap-5 pb-3.5 border-b-[1px] border-gray-400">
+              <Image
+                src="/food1.png"
+                alt="food1"
+                width={55}
+                height={55}
+                className="rounded-lg"
+              ></Image>
+              <div className="flex flex-col gap-0.5">
+                <p className="text-paragraph-sm">김미숙님의 소고기 장조림</p>
+                <p className="text-x-small text-gray-600">김미숙 주부 9단</p>
+                <div className="flex gap-1">
+                  <p className="text-x-small text-eatda-orange">8,500원</p>
+                  <p className="text-x-small">|</p>
+                  <p className="text-x-small text-gray-600">수량 2개</p>
                 </div>
               </div>
             </div>
-            <div className="flex gap-3">
-              <div className="w-20 h-20 bg-gray-200 rounded-lg"></div>
-              <div>
-                <p className="">얼큰한 김치찌개</p>
-                <p className="text-paragraph-sm text-gray-600">
-                  김지유 주부 8단
-                </p>
-                <div className="flex">
-                  <p className="">7,000원</p>
-                  <p>|</p>
-                  <p>수량 2개</p>
+            <div className="flex gap-5 pb-4 border-b-[0.5px] border-gray-400">
+              <Image
+                src="/food1.png"
+                alt="food1"
+                width={55}
+                height={55}
+                className="rounded-lg"
+              ></Image>
+              <div className="flex flex-col gap-0.5">
+                <p className="text-paragraph-sm">얼큰한 김치찌개</p>
+                <p className="text-x-small text-gray-600">김지유 주부 8단</p>
+                <div className="flex gap-1">
+                  <p className="text-x-small text-eatda-orange">7,000원</p>
+                  <p className="text-x-small">|</p>
+                  <p className="text-x-small text-gray-600">수량 2개</p>
                 </div>
               </div>
             </div>
@@ -107,9 +116,9 @@ export default function CheckoutPageClient() {
         <div className="flex gap-2.5 w-full">
           <button
             onClick={() => setSelectedDate("today")}
-            className={`flex-1 py-4 px-5 border rounded-lg transition-colors ${
+            className={`flex-1 py-4 px-5 border rounded-lg ${
               selectedDate === "today"
-                ? "border-eatda-orange"
+                ? "border-2 border-eatda-orange "
                 : "border-gray-300"
             }`}
           >
@@ -118,9 +127,9 @@ export default function CheckoutPageClient() {
           </button>
           <button
             onClick={() => setSelectedDate("tomorrow")}
-            className={`flex-1 py-4 px-5 border rounded-lg transition-colors ${
+            className={`flex-1 py-4 px-5 border rounded-lg ${
               selectedDate === "tomorrow"
-                ? "border-eatda-orange"
+                ? "border-2 border-eatda-orange"
                 : "border-gray-300"
             }`}
           >
@@ -138,9 +147,9 @@ export default function CheckoutPageClient() {
         <div className="space-y-2">
           <button
             onClick={() => setSelectedTime("9-12")}
-            className={`w-full py-4 px-5 border rounded-lg transition-colors ${
+            className={`w-full py-4 px-5 border rounded-lg ${
               selectedTime === "9-12"
-                ? "border-eatda-orange"
+                ? "border-2 border-eatda-orange"
                 : "border-gray-300"
             }`}
           >
@@ -148,9 +157,9 @@ export default function CheckoutPageClient() {
           </button>
           <button
             onClick={() => setSelectedTime("12-16")}
-            className={`w-full py-4 px-5 border rounded-lg transition-colors ${
+            className={`w-full py-4 px-5 border rounded-lg ${
               selectedTime === "12-16"
-                ? "border-eatda-orange"
+                ? "border-2 border-eatda-orange"
                 : "border-gray-300"
             }`}
           >
@@ -158,9 +167,9 @@ export default function CheckoutPageClient() {
           </button>
           <button
             onClick={() => setSelectedTime("16-20")}
-            className={`w-full py-4 px-5 border rounded-lg transition-colors ${
+            className={`w-full py-4 px-5 border rounded-lg ${
               selectedTime === "16-20"
-                ? "border-eatda-orange"
+                ? "border-2 border-eatda-orange"
                 : "border-gray-300"
             }`}
           >
