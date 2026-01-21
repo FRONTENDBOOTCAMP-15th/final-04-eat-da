@@ -7,9 +7,9 @@ export default function SellerProfileCard() {
         className="h-15 w-15 flex-none rounded-full object-cover"
       />
 
-      <div className="flex min-w-0 flex-1 flex-col gap-2">
-        <header className="flex flex-col gap-1">
-          <h3 className="text-paragraph-md font-semibold text-gray-800">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <header className="flex flex-col gap-0">
+          <h3 className="text-paragraph-lg font-semibold text-gray-800">
             김미숙 주부9단
           </h3>
 
@@ -32,7 +32,7 @@ export default function SellerProfileCard() {
           </div>
         </header>
 
-        <p className="text-paragraph-sm font-regular text-gray-600">
+        <p className="text-paragraph font-regular text-gray-600">
           30년 주부 경력으로 정성스럽게 만든 집밥을 나눕니다. 아들 둘을 키우며
           매일 해온 손맛 그대로 담았어요.
         </p>
