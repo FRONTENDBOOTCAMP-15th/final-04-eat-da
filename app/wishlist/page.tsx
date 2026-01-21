@@ -1,5 +1,5 @@
 import WishListItem from "@/app/wishlist/WishListItem";
-import WishSmallItem from "@/app/wishlist/WishSmallItem";
+import WishSmallItem from "@/app/src/components/ui/WishSmallItem";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,14 +16,60 @@ export default function WishlistPage() {
     <div className="space-y-3">
       <h2 className="text-2xl font-medium">찜한 반찬</h2>
       <div className="grid grid-cols-2 gap-0.5">
-        <WishSmallItem />
-        <WishSmallItem />
-        <WishSmallItem />
-        <WishSmallItem />
-        <WishSmallItem />
-        <WishSmallItem />
-        <WishSmallItem />
-        <WishSmallItem />
+        <WishSmallItem
+          imageSrc="/food2.png"
+          chefName="김미숙 주부9단"
+          dishName="얼큰한 김치찌개"
+          rating={4.9}
+          reviewCount={13}
+          price={8500}
+          initialWished={true}
+        />
+        <WishSmallItem
+          imageSrc="/food1.png"
+          chefName="박영희 주부8단"
+          dishName="소고기 장조림"
+          rating={4.8}
+          reviewCount={25}
+          price={12000}
+          initialWished={false}
+        />
+        <WishSmallItem
+          imageSrc="/food2.png"
+          chefName="김미숙 주부9단"
+          dishName="얼큰한 김치찌개"
+          rating={4.9}
+          reviewCount={13}
+          price={8500}
+          initialWished={true}
+        />
+        <WishSmallItem
+          imageSrc="/food1.png"
+          chefName="박영희 주부8단"
+          dishName="소고기 장조림"
+          rating={4.8}
+          reviewCount={25}
+          price={12000}
+          initialWished={false}
+        />
+        <WishSmallItem
+          imageSrc="/food2.png"
+          chefName="김미숙 주부9단"
+          dishName="얼큰한 김치찌개"
+          rating={4.9}
+          reviewCount={13}
+          price={8500}
+          initialWished={true}
+        />
+        <WishSmallItem
+          imageSrc="/food1.png"
+          chefName="박영희 주부8단"
+          dishName="소고기 장조림"
+          rating={4.8}
+          reviewCount={25}
+          price={12000}
+          initialWished={false}
+        />
       </div>
     </div>
   );
