@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export default function CartPageClient() {
   const [isOpen, setIsOpen] = useState(false);
-  const cartItems = [1, 2, 3]; // 빈 배열로 테스트, 실제로는 상태나 props로 관리
+  const cartItems = []; // 빈 배열로 테스트, 실제로는 상태나 props로 관리
 
   return (
     <div className="p-5 min-h-screen flex flex-col">
@@ -32,8 +32,8 @@ export default function CartPageClient() {
             <br />
             오늘의 식탁을 채워줄 동네 반찬을 만나보세요.
           </p>
-          <Link href="/menu">
-            <button className="px-5 py-3 bg-gray-200 text-paragraph-sm rounded-lg hover:bg-orange-600 transition-colors">
+          <Link href="/">
+            <button className="px-5 py-3 bg-gray-200 border border-gray-300 text-paragraph-sm rounded-lg">
               반찬 둘러보기
             </button>
           </Link>
