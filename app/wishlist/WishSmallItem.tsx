@@ -2,22 +2,21 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export default function WishListItem() {
+export default function WishSmallItem() {
   const [isWished, setIsWished] = useState(true);
 
   return (
-    <div className="flex flex-col shadow-xl rounded-2xl overflow-hidden">
-      <div className="relative">
+    <div className="flex flex-col">
+      <div className="relative w-full aspect-square">
         <Image
           src="/food2.png"
-          width={320}
-          height={300}
+          fill
           alt="반찬 이미지"
-          className="w-full"
+          className="object-cover"
         />
         <button
           onClick={() => setIsWished(!isWished)}
-          className="absolute bottom-3 right-3 p-2 hover:scale-110 transition-transform"
+          className="absolute bottom-2 right-1 p-2 hover:scale-110 transition-transform"
         >
           <Image
             src={isWished ? "/filledHeart.png" : "/emptyHeart.png"}
@@ -27,9 +26,29 @@ export default function WishListItem() {
           />
         </button>
       </div>
-      <div className="p-5 space-y-2">
+      <div className="pt-4 pb-5 px-2.5 space-y-1">
+        <div className="flex gap-2 items-center">
+          <p className="text-eatda-orange text-display-1 font-semibold">
+            김미숙 주부9단
+          </p>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="5"
+            height="8"
+            viewBox="0 0 5 8"
+            fill="none"
+          >
+            <path
+              d="M0.49487 7.09351L3.79419 3.79419L0.49487 0.494873"
+              stroke="#FF6155"
+              strokeWidth="0.989796"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
         <div className="flex items-center">
-          <p className="font-semibold text-display-6 mr-3">얼큰한 김치찌개</p>
+          <p className="text-paragraph-sm mr-2">얼큰한 김치찌개</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -42,17 +61,9 @@ export default function WishListItem() {
               fill="#FF6155"
             />
           </svg>
-          <p className="text-sm ml-0.5">4.9(13)</p>
+          <p className="text-x-small ml-1">4.9(13)</p>
         </div>
-        <div className="flex space-x-1.5 items-center">
-          <p className="text-eatda-orange text-paragraph-sm">서교동 공유주방</p>
-          <p className="text-paragraph-sm text-gray-400">|</p>
-          <p className="text-gray-600 text-paragraph-sm">김미숙 주부9단</p>
-        </div>
-        <p className="text-gray-600 text-paragraph-sm">
-          직접 담근 김치로 끓인 얼큰한 김치찌개
-        </p>
-        <p className="text-display-3 font-semibold text-gray-600">8,500원</p>
+        <p className="text-paragraph-md font-semibold">8,500원</p>
       </div>
     </div>
   );

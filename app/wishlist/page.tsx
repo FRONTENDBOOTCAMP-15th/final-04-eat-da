@@ -1,4 +1,5 @@
 import WishListItem from "@/app/wishlist/WishListItem";
+import WishSmallItem from "@/app/wishlist/WishSmallItem";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,12 +13,17 @@ export const metadata: Metadata = {
 
 export default function WishlistPage() {
   return (
-    <div className="p-7 space-y-3">
+    <div className="space-y-3">
       <h2 className="text-2xl font-medium">찜한 반찬</h2>
-      <div className="space-y-4">
-        <WishListItem />
-        <WishListItem />
-        <WishListItem />
+      <div className="grid grid-cols-2 gap-0.5">
+        <WishSmallItem />
+        <WishSmallItem />
+        <WishSmallItem />
+        <WishSmallItem />
+        <WishSmallItem />
+        <WishSmallItem />
+        <WishSmallItem />
+        <WishSmallItem />
       </div>
     </div>
   );
