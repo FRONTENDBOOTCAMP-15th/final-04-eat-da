@@ -1,20 +1,64 @@
-import WishListItem from "@/app/wishlist/WishListItem";
+import RecommendProduct from "@/app/home/RecommendProduct";
+import SellerProfileClear from "@/app/src/components/ui/SellerProfileClear";
 import WishSmallItem from "@/app/src/components/ui/WishSmallItem";
 import { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "잇다 찜 목록",
+  title: "잇다 홈",
   openGraph: {
-    title: "잇다 찜 목록",
-    description: "찜 페이지",
-    url: "/wishlist",
+    title: "잇다 홈",
+    description: "홈 페이지",
+    url: "/home",
   },
 };
 
-export default function WishlistPage() {
+export default function Home() {
   return (
-    <div className="space-y-3">
-      <h2 className="text-2xl font-medium">찜한 반찬</h2>
+    <div className="p-5 flex flex-col gap-6">
+      <Image src="/Hero.png" alt="banner" height={460} width={350}></Image>
+      <div>
+        <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
+        <div className="flex gap-1 overflow-x-auto pb-4">
+          <RecommendProduct />
+          <RecommendProduct />
+          <RecommendProduct />
+          <RecommendProduct />
+        </div>
+      </div>
+      <div className="border-b-[0.5px] border-gray-400 pb-4">
+        <p className="text-display-5 font-semibold pb-4">오늘의 추천 주부님</p>
+        <div className="flex gap-1 overflow-x-auto pb-4">
+          <div className="shrink-0 w-28">
+            <Image
+              src="/food2.png"
+              alt="음식"
+              width={120}
+              height={120}
+              className="object-cover"
+            />
+          </div>
+          <div className="shrink-0 w-28">
+            <Image
+              src="/food2.png"
+              alt="음식"
+              width={120}
+              height={120}
+              className="object-cover"
+            />
+          </div>
+          <div className="shrink-0 w-28">
+            <Image
+              src="/food2.png"
+              alt="음식"
+              width={120}
+              height={120}
+              className="object-cover"
+            />
+          </div>
+        </div>
+        <SellerProfileClear />
+      </div>
       <div className="grid grid-cols-2">
         <WishSmallItem
           imageSrc="/food2.png"
