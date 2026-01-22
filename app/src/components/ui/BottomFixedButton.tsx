@@ -14,7 +14,7 @@ type BottomFixedButtonProps =
 
 export default function BottomFixedButton(props: BottomFixedButtonProps) {
   const className =
-    "fixed bottom-0 w-full h-25 flex justify-center pt-6.75 pb-15 text-white font-semibold bg-eatda-orange hover:opacity-90";
+    "fixed bottom-0 left-0 w-full h-25 flex justify-center pt-6.75 pb-15 text-white font-semibold bg-eatda-orange hover:opacity-90";
 
   if (props.as === "link") {
     return (
