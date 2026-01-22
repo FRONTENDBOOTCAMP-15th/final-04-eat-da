@@ -16,11 +16,14 @@
   --color-white: #ffffff;
 
   /* font */
-  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
-    "Noto Sans KR", sans-serif;
+  --font-sans:
+    "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans KR",
+    sans-serif;
 
   /* weights */
+  --font-weight-light: 300;
   --font-weight-regular: 400;
+  --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-extrabold: 800;
 
@@ -70,7 +73,7 @@
 ========================= */
 @layer base {
   body {
-    font-family: var(--font-sans);
+    font-family: var(--font-inter), var(--font-sans);
   }
 }
 
@@ -79,8 +82,14 @@
 ========================= */
 @layer utilities {
   /* font weights */
+  .font-light {
+    font-weight: var(--font-weight-light);
+  }
   .font-regular {
     font-weight: var(--font-weight-regular);
+  }
+  .font-medium {
+    font-weight: var(--font-weight-medium);
   }
   .font-semibold {
     font-weight: var(--font-weight-semibold);
