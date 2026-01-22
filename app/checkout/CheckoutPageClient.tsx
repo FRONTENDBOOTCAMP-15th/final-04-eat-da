@@ -1,5 +1,6 @@
 "use client";
 
+import PurchaseProductItem from "@/app/src/components/ui/PurchaseProductItem";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -39,43 +40,21 @@ export default function CheckoutPageClient() {
         </button>
 
         {isProductInfoOpen && (
-          <div className="space-y-4 p-4">
-            <div className="flex gap-5 pb-3.5 border-b-[1px] border-gray-400">
-              <Image
-                src="/food1.png"
-                alt="food1"
-                width={55}
-                height={55}
-                className="rounded-lg"
-              ></Image>
-              <div className="flex flex-col gap-0.5">
-                <p className="text-paragraph-sm">김미숙님의 소고기 장조림</p>
-                <p className="text-x-small text-gray-600">김미숙 주부 9단</p>
-                <div className="flex gap-1">
-                  <p className="text-x-small text-eatda-orange">8,500원</p>
-                  <p className="text-x-small">|</p>
-                  <p className="text-x-small text-gray-600">수량 2개</p>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-5 pb-4 border-b-[0.5px] border-gray-400">
-              <Image
-                src="/food1.png"
-                alt="food1"
-                width={55}
-                height={55}
-                className="rounded-lg"
-              ></Image>
-              <div className="flex flex-col gap-0.5">
-                <p className="text-paragraph-sm">얼큰한 김치찌개</p>
-                <p className="text-x-small text-gray-600">김지유 주부 8단</p>
-                <div className="flex gap-1">
-                  <p className="text-x-small text-eatda-orange">7,000원</p>
-                  <p className="text-x-small">|</p>
-                  <p className="text-x-small text-gray-600">수량 2개</p>
-                </div>
-              </div>
-            </div>
+          <div className="space-y-4">
+            <PurchaseProductItem
+              imageSrc="/food1.png"
+              dishName="김미숙님의 소고기 장조림"
+              chefName="김미숙 주부 9단"
+              price={8500}
+              quantity={2}
+            />
+            <PurchaseProductItem
+              imageSrc="/food1.png"
+              dishName="얼큰한 김치찌개"
+              chefName="김지유 주부 8단"
+              price={7000}
+              quantity={2}
+            />
           </div>
         )}
       </div>
