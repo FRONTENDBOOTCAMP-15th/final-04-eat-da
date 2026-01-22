@@ -1,35 +1,39 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import HeartItem from "./HeartItem";
 
-export default function WishSmallItem() {
-  const [isWished, setIsWished] = useState(true);
+interface WishSmallItemProps {
+  imageSrc: string;
+  chefName: string;
+  dishName: string;
+  rating: number;
+  reviewCount: number;
+  price: number;
+  initialWished?: boolean;
+}
 
+export default function WishSmallItem({
+  imageSrc,
+  chefName,
+  dishName,
+  rating,
+  reviewCount,
+  price,
+  initialWished = false,
+}: WishSmallItemProps) {
   return (
     <div className="flex flex-col">
       <div className="relative w-full aspect-square">
-        <Image
-          src="/food2.png"
-          fill
-          alt="반찬 이미지"
-          className="object-cover"
+        <Image src={imageSrc} fill alt={dishName} className="object-cover" />
+        <HeartItem
+          initialWished={initialWished}
+          className="absolute bottom-2 right-1"
         />
-        <button
-          onClick={() => setIsWished(!isWished)}
-          className="absolute bottom-2 right-1 p-2 hover:scale-110 transition-transform"
-        >
-          <Image
-            src={isWished ? "/filledHeart.png" : "/emptyHeart.png"}
-            width={27}
-            height={27}
-            alt="찜"
-          />
-        </button>
       </div>
       <div className="pt-4 pb-5 px-2.5 space-y-1">
         <div className="flex gap-2 items-center">
           <p className="text-eatda-orange text-display-1 font-semibold">
-            김미숙 주부9단
+            {chefName}
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +52,7 @@ export default function WishSmallItem() {
           </svg>
         </div>
         <div className="flex items-center">
-          <p className="text-paragraph-sm mr-2">얼큰한 김치찌개</p>
+          <p className="text-paragraph-sm mr-2">{dishName}</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -61,9 +65,13 @@ export default function WishSmallItem() {
               fill="#FF6155"
             />
           </svg>
-          <p className="text-x-small ml-1">4.9(13)</p>
+          <p className="text-x-small ml-1">
+            {rating}({reviewCount})
+          </p>
         </div>
-        <p className="text-paragraph-md font-semibold">8,500원</p>
+        <p className="text-paragraph-md font-semibold">
+          {price.toLocaleString()}원
+        </p>
       </div>
     </div>
   );

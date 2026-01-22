@@ -1,6 +1,6 @@
 export default function SellerProfileCard() {
   return (
-    <article className="flex items-start gap-2.5 self-stretch rounded-lg border border-gray-300 bg-gray-200 px-2.5 py-5">
+    <article className="flex items-start mx-5 gap-2.5 self-stretch rounded-lg border border-gray-300 bg-gray-200 px-2.5 py-5">
       <img
         src="/seller/seller1.png"
         alt="김미숙 주부 프로필 이미지"
