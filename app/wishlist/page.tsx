@@ -15,7 +15,7 @@ export default function WishlistPage() {
   return (
     <div className="space-y-3">
       <h2 className="text-2xl font-medium">찜한 반찬</h2>
-      <div className="grid grid-cols-2 gap-0.5">
+      <div className="grid grid-cols-2">
         <WishSmallItem
           imageSrc="/food2.png"
           chefName="김미숙 주부9단"
