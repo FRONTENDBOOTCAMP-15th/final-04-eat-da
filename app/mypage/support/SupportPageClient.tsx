@@ -1,0 +1,142 @@
+"use client";
+
+import { useState } from "react";
+
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+const faqs: FAQ[] = [
+  {
+    question: "반찬은 어떻게 주문하나요?",
+    answer:
+      "원하는 반찬을 선택한 후 '구매하기' 버튼을 눌러 픽업 날짜와 시간을 선택하고 결제하시면 됩니다. 장바구니에 여러 반찬을 담아 한 번에 주문하실 수도 있습니다.",
+  },
+  {
+    question: "픽업은 어떻게 하나요?",
+    answer:
+      "주문 시 선택하신 날짜와 시간에 픽업 장소로 방문하시면 됩니다. 주문 확인 메시지를 보여주시면 반찬을 수령하실 수 있습니다.",
+  },
+  {
+    question: "환불은 어떻게 하나요?",
+    answer:
+      "픽업 2시간 전까지 주문 내역에서 취소 가능하며, 결제하신 금액이 전액 환불됩니다. 그 이후에는 환불이 어려우니 양해 부탁드립니다.",
+  },
+  {
+    question: "반찬은 어떻게 주문하나요?",
+    answer:
+      "원하는 반찬을 선택한 후 '구매하기' 버튼을 눌러 픽업 날짜와 시간을 선택하고 결제하시면 됩니다. 장바구니에 여러 반찬을 담아 한 번에 주문하실 수도 있습니다.",
+  },
+  {
+    question: "픽업은 어떻게 하나요?",
+    answer:
+      "주문 시 선택하신 날짜와 시간에 픽업 장소로 방문하시면 됩니다. 주문 확인 메시지를 보여주시면 반찬을 수령하실 수 있습니다.",
+  },
+  {
+    question: "환불은 어떻게 하나요?",
+    answer:
+      "픽업 2시간 전까지 주문 내역에서 취소 가능하며, 결제하신 금액이 전액 환불됩니다. 그 이후에는 환불이 어려우니 양해 부탁드립니다.",
+  },
+  {
+    question: "반찬은 어떻게 주문하나요?",
+    answer:
+      "원하는 반찬을 선택한 후 '구매하기' 버튼을 눌러 픽업 날짜와 시간을 선택하고 결제하시면 됩니다. 장바구니에 여러 반찬을 담아 한 번에 주문하실 수도 있습니다.",
+  },
+  {
+    question: "픽업은 어떻게 하나요?",
+    answer:
+      "주문 시 선택하신 날짜와 시간에 픽업 장소로 방문하시면 됩니다. 주문 확인 메시지를 보여주시면 반찬을 수령하실 수 있습니다.",
+  },
+  {
+    question: "환불은 어떻게 하나요?",
+    answer:
+      "픽업 2시간 전까지 주문 내역에서 취소 가능하며, 결제하신 금액이 전액 환불됩니다. 그 이후에는 환불이 어려우니 양해 부탁드립니다.",
+  },
+];
+
+export default function SupportPageClient() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const toggleFAQ = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <div className="p-5 space-y-4">
+      <h2 className="text-display-6 font-semibold">고객센터</h2>
+
+      <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
+        <div>
+          <p className="text-paragraph font-semibold">전화 문의</p>
+          <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
+        </div>
+        <p className="text-paragraph font-semibold text-eatda-orange">
+          1234 - 5678
+        </p>
+      </div>
+
+      <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
+        <div>
+          <p className="text-paragraph font-semibold">이메일 문의</p>
+          <p className="text-paragraph text-gray-600">24시간 접수</p>
+        </div>
+        <p className="text-paragraph font-semibold text-eatda-orange">
+          support@eatda.com
+        </p>
+      </div>
+
+      <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
+        <div>
+          <p className="text-paragraph font-semibold">카카오톡 문의</p>
+          <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
+        </div>
+        <p className="text-paragraph font-semibold text-eatda-orange">
+          카카오톡에서 '잇다 EAT-DA'를 검색해주세요
+        </p>
+      </div>
+
+      <div className="pt-5 space-y-3">
+        <h2 className="text-display-4 font-semibold">자주 묻는 질문</h2>
+        <div className="space-y-3">
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className="border-b-[0.5px] border-gray-400 rounded-lg overflow-hidden"
+            >
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full flex justify-between items-center py-4 text-left hover:bg-gray-50"
+              >
+                <p className="text-paragraph">{faq.question}</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  className={`transition-transform ${
+                    openIndex === index ? "rotate-180" : ""
+                  }`}
+                >
+                  <path
+                    d="M5 7.5L10 12.5L15 7.5"
+                    stroke="#353E5C"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              {openIndex === index && (
+                <div className="px-1 pb-4 pt-0">
+                  <p className="text-paragraph text-gray-600">{faq.answer}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
