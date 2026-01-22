@@ -1,8 +1,12 @@
 import Image from "next/image";
 
-export default function ReviewItem() {
+interface ReviewItemProps {
+  showDivider?: boolean;
+}
+
+export default function ReviewItem({ showDivider = true }: ReviewItemProps) {
   return (
-    <article className="flex flex-col w-full gap-2.5  py-5">
+    <article className="flex flex-col w-full gap-2.5  pt-5">
       {/* 리뷰 콘텐츠 */}
       <div className="w-full flex flex-1 px-5 items-center gap-2">
         {/* 프로필 아이콘 */}
@@ -74,7 +78,7 @@ export default function ReviewItem() {
           </span>
         </div>
       </div>
-      <div className="flex flex-col mx-1 gap-1">
+      <div className="flex flex-col gap-1">
         {/* 메뉴명 */}
         <p className="text-paragraph-sm px-5  text-gray-600 font-regular">
           얼큰한 김치찌개
@@ -85,7 +89,7 @@ export default function ReviewItem() {
           정말 맛있어요! 어머니 손맛이 느껴집니다. 김치가 정말 맛있고 찌개도
           깊은 맛이 나요. 다음에 또 주문할게요!
         </p>
-        <section className="mt-4 flex pl-5 gap-1 overflow-x-auto">
+        <section className="mt-4 flex px-5 gap-1 overflow-x-auto scrollbar-hide">
           <div className="relative aspect-square w-28 shrink-0 overflow-hidden">
             <Image
               src="/food/food_01.png"
@@ -95,7 +99,7 @@ export default function ReviewItem() {
             />
           </div>
 
-          <div className="relative aspect-square w-28 shrink-0 overflow-hidden">
+          <div className="relative aspect-square w-28 shrink-0 overflow-hidden ">
             <Image
               src="/food/food_01.png"
               alt="얼큰한 김치찌개 리뷰 이미지"
@@ -122,7 +126,7 @@ export default function ReviewItem() {
             />
           </div>
         </section>
-        <div className="border-b mt-5 mx-5 border-gray-400/50" />
+        {showDivider && <div className="mt-5 mx-5 border-b border-gray-400" />}
       </div>
     </article>
   );
