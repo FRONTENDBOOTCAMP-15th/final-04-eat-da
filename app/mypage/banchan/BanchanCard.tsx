@@ -21,7 +21,7 @@ export default function BanchanCard({ item }: BanchanCardProps) {
 
   return (
     <Link
-      href={`/mypage/banchan/edit/${item._id}`}
+      href={`/mypage/banchan/${item._id}/edit`}
       className="flex border-b-[0.5px] border-gray-400 py-5 gap-5 cursor-pointer hover:bg-gray-100"
     >
       {/* 이미지 영역 */}
