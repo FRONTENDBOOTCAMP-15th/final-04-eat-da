@@ -95,10 +95,8 @@ export default function CheckoutPageClient() {
         <div className="flex gap-2.5 w-full">
           <button
             onClick={() => setSelectedDate("today")}
-            className={`flex-1 py-4 px-5 border rounded-lg ${
-              selectedDate === "today"
-                ? "border-2 border-eatda-orange "
-                : "border-gray-300"
+            className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
+              selectedDate === "today" ? "shadow-[inset_0_0_0_2px_#FF6155]" : ""
             }`}
           >
             <p className="text-paragraph font-semibold">오늘</p>
@@ -106,10 +104,10 @@ export default function CheckoutPageClient() {
           </button>
           <button
             onClick={() => setSelectedDate("tomorrow")}
-            className={`flex-1 py-4 px-5 border rounded-lg ${
+            className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
               selectedDate === "tomorrow"
-                ? "border-2 border-eatda-orange"
-                : "border-gray-300"
+                ? "shadow-[inset_0_0_0_2px_#FF6155]"
+                : ""
             }`}
           >
             <p className="text-paragraph font-semibold">내일</p>
@@ -126,30 +124,24 @@ export default function CheckoutPageClient() {
         <div className="space-y-2">
           <button
             onClick={() => setSelectedTime("9-12")}
-            className={`w-full py-4 px-5 border rounded-lg ${
-              selectedTime === "9-12"
-                ? "border-2 border-eatda-orange"
-                : "border-gray-300"
+            className={`w-full py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
+              selectedTime === "9-12" ? "shadow-[inset_0_0_0_2px_#FF6155]" : ""
             }`}
           >
             9:00 - 12:00
           </button>
           <button
             onClick={() => setSelectedTime("12-16")}
-            className={`w-full py-4 px-5 border rounded-lg ${
-              selectedTime === "12-16"
-                ? "border-2 border-eatda-orange"
-                : "border-gray-300"
+            className={`w-full py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
+              selectedTime === "12-16" ? "shadow-[inset_0_0_0_2px_#FF6155]" : ""
             }`}
           >
             12:00 - 16:00
           </button>
           <button
             onClick={() => setSelectedTime("16-20")}
-            className={`w-full py-4 px-5 border rounded-lg ${
-              selectedTime === "16-20"
-                ? "border-2 border-eatda-orange"
-                : "border-gray-300"
+            className={`w-full py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
+              selectedTime === "16-20" ? "shadow-[inset_0_0_0_2px_#FF6155]" : ""
             }`}
           >
             16:00 - 20:00
