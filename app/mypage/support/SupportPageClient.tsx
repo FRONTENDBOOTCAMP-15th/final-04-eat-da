@@ -66,9 +66,7 @@ export default function SupportPageClient() {
   return (
     <>
       <Header title="고객센터" showSearch={true} showCart={true} />
-      <div className="p-5 space-y-4">
-        <h2 className="text-display-6 font-semibold">고객센터</h2>
-
+      <div className="p-5 space-y-4 mt-15">
         <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
           <div>
             <p className="text-paragraph font-semibold">전화 문의</p>
@@ -105,7 +103,7 @@ export default function SupportPageClient() {
             {faqs.map((faq, index) => (
               <div
                 key={index}
-                className="border-b-[0.5px] border-gray-400 rounded-lg overflow-hidden"
+                className="border-b-[0.5px] border-gray-400 overflow-hidden"
               >
                 <button
                   onClick={() => toggleFAQ(index)}
