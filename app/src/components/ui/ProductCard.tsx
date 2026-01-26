@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import HeartItem from "./HeartItem";
+import Link from "next/link";
 
 interface WishSmallItemProps {
   imageSrc: string;
@@ -12,7 +13,7 @@ interface WishSmallItemProps {
   initialWished?: boolean;
 }
 
-export default function WishSmallItem({
+export default function ProductCard({
   imageSrc,
   chefName,
   dishName,
@@ -22,15 +23,19 @@ export default function WishSmallItem({
   initialWished = false,
 }: WishSmallItemProps) {
   return (
-    <div className="flex flex-col">
+    <Link href="/products/1" className="flex flex-col">
       <div className="relative w-full aspect-square">
         <Image src={imageSrc} fill alt={dishName} className="object-cover" />
-        <HeartItem
-          initialWished={initialWished}
-          lineColor="white"
-          size={25}
+        <div
+          onClick={(e) => e.stopPropagation()}
           className="absolute bottom-2 right-1"
-        />
+        >
+          <HeartItem
+            initialWished={initialWished}
+            lineColor="white"
+            size={25}
+          />
+        </div>
       </div>
       <div className="pt-4 pb-5 px-2.5 space-y-1">
         <div className="flex gap-2 items-center">
@@ -75,6 +80,6 @@ export default function WishSmallItem({
           {price.toLocaleString()}원
         </p>
       </div>
-    </div>
+    </Link>
   );
 }
