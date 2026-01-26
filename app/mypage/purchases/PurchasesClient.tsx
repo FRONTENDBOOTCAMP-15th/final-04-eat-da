@@ -27,10 +27,10 @@ export default function PurchasesClient() {
                 {date}
               </p>
               <Link
-                href={"/mypage/purchases"}
+                href={`/mypage/purchases/${items[0]._id}`}
                 className="flex items-center gap-3"
               >
-                <p className="text-display-2">주문상세</p>
+                <p className="text-display-2 text-gray-800">주문상세</p>
                 <svg
                   width="5"
                   height="10"
@@ -60,7 +60,7 @@ export default function PurchasesClient() {
             <p>구매 내역이 없습니다.</p>
             <p>오늘의 식탁을 채워줄 동네 반찬을 만나보세요.</p>
           </div>
-          <Link href="/mypage">
+          <Link href="/products">
             <button className="px-5 py-3 bg-gray-200 border border-gray-300 text-display-1 rounded-lg">
               반찬 둘러보기
             </button>

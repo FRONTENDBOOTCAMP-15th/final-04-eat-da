@@ -1,4 +1,4 @@
-import BottomFixedButton from "@/app/src/components/ui/BottomFixedButton";
+import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
 import NewBanchanClient from "@/app/mypage/banchan/new/NewBanchanClient";
 import { Metadata } from "next";
 import Link from "next/link";

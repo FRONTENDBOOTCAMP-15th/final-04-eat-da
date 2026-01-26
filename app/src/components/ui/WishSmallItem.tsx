@@ -27,6 +27,8 @@ export default function WishSmallItem({
         <Image src={imageSrc} fill alt={dishName} className="object-cover" />
         <HeartItem
           initialWished={initialWished}
+          lineColor="white"
+          size={25}
           className="absolute bottom-2 right-1"
         />
       </div>
