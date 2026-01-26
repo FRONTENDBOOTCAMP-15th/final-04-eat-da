@@ -19,7 +19,7 @@ export default function Home() {
       <Image src="/Hero.png" alt="banner" height={460} width={350}></Image>
       <div>
         <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
-        <div className="flex gap-1 overflow-x-auto pb-4">
+        <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5">
           <RecommendProduct />
           <RecommendProduct />
           <RecommendProduct />
@@ -28,7 +28,16 @@ export default function Home() {
       </div>
       <div className="border-b-[0.5px] border-gray-400 pb-4">
         <p className="text-display-5 font-semibold pb-4">오늘의 추천 주부님</p>
-        <div className="flex gap-1 overflow-x-auto pb-4">
+        <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5">
+          <div className="shrink-0 w-28">
+            <Image
+              src="/food2.png"
+              alt="음식"
+              width={120}
+              height={120}
+              className="object-cover"
+            />
+          </div>
           <div className="shrink-0 w-28">
             <Image
               src="/food2.png"
