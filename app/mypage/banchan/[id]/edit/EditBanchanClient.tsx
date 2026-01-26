@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AddImage from "@/app/src/components/ui/AddImage";
+import ConfirmModal from "@/app/src/components/ui/ConfirmModal";
 
 interface EditBanchanClientProps {
   initialData: {
@@ -49,7 +50,7 @@ export default function EditBanchanClient({
           <button
             type="button"
             onClick={() => setIsOnSale(true)}
-            className={`flex-1 h-12.5 rounded text-display-1 font-semibold border ${
+            className={`flex-1 h-12.5 rounded-lg text-display-1 font-semibold border ${
               isOnSale
                 ? "bg-eatda-orange text-white border-eatda-orange"
                 : "bg-white text-gray-500 border-gray-300"
@@ -60,7 +61,7 @@ export default function EditBanchanClient({
           <button
             type="button"
             onClick={() => setIsOnSale(false)}
-            className={`flex-1 h-12.5 rounded text-display-1 font-semibold border ${
+            className={`flex-1 h-12.5 rounded-lg text-display-1 font-semibold border ${
               !isOnSale
                 ? "bg-eatda-orange text-white border-eatda-orange"
                 : "bg-white text-gray-500 border-gray-300"
@@ -183,27 +184,12 @@ export default function EditBanchanClient({
         </fieldset>
       </div>
 
-      {/* 모달 */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-5">
-          <div className="bg-white rounded w-[90vw] max-w-150 p-6 flex flex-col gap-6.5">
-            <div className="text-gray-800 text-center flex flex-col gap-4">
-              <p className="text-display-4 font-semibold">
-                반찬 정보가 변경되었습니다.
-              </p>
-              <p className="text-display-2">변경된 정보로 상품이 노출됩니다.</p>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleModalConfirm}
-              className="w-full py-3 rounded bg-eatda-orange text-white text-display-2 font-semibold hover:opacity-90"
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        isOpen={showModal}
+        title="반찬 정보가 변경되었습니다."
+        description="변경된 정보로 상품이 노출됩니다."
+        onConfirm={handleModalConfirm}
+      />
     </form>
   );
 }
