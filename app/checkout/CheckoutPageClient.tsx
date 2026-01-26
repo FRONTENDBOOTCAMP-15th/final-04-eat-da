@@ -15,7 +15,7 @@ export default function CheckoutPageClient() {
     <>
       <Header title="구매하기" showBackButton={true} />
 
-      <div className="p-5 space-y-5 mt-5 mb-24">
+      <div className="p-5 space-y-5 mt-15 mb-16">
         <div className="space-y-5">
           <button
             onClick={() => setIsProductInfoOpen(!isProductInfoOpen)}
