@@ -2,6 +2,7 @@ import WishListItem from "@/app/wishlist/WishListItem";
 import WishSmallItem from "@/app/src/components/ui/WishSmallItem";
 import { Metadata } from "next";
 import Header from "@/app/src/components/common/Header";
+import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 
 export const metadata: Metadata = {
   title: "잇다 찜 목록",
@@ -21,7 +22,7 @@ export default function WishlistPage() {
         showSearch={true}
         showCart={true}
       />
-      <div className="mt-20">
+      <div className="mt-20 mb-15">
         <div className="grid grid-cols-2">
           <WishSmallItem
             imageSrc="/food2.png"
@@ -79,6 +80,7 @@ export default function WishlistPage() {
           />
         </div>
       </div>
+      <BottomNavigation />
     </>
   );
 }
