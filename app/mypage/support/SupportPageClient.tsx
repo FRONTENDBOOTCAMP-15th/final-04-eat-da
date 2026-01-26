@@ -1,5 +1,6 @@
 "use client";
 
+import Header from "@/app/src/components/common/Header";
 import { useState } from "react";
 
 interface FAQ {
@@ -63,80 +64,83 @@ export default function SupportPageClient() {
   };
 
   return (
-    <div className="p-5 space-y-4">
-      <h2 className="text-display-6 font-semibold">고객센터</h2>
+    <>
+      <Header title="고객센터" showSearch={true} showCart={true} />
+      <div className="p-5 space-y-4">
+        <h2 className="text-display-6 font-semibold">고객센터</h2>
 
-      <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
-        <div>
-          <p className="text-paragraph font-semibold">전화 문의</p>
-          <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
+        <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
+          <div>
+            <p className="text-paragraph font-semibold">전화 문의</p>
+            <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
+          </div>
+          <p className="text-paragraph font-semibold text-eatda-orange">
+            1234 - 5678
+          </p>
         </div>
-        <p className="text-paragraph font-semibold text-eatda-orange">
-          1234 - 5678
-        </p>
-      </div>
 
-      <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
-        <div>
-          <p className="text-paragraph font-semibold">이메일 문의</p>
-          <p className="text-paragraph text-gray-600">24시간 접수</p>
+        <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
+          <div>
+            <p className="text-paragraph font-semibold">이메일 문의</p>
+            <p className="text-paragraph text-gray-600">24시간 접수</p>
+          </div>
+          <p className="text-paragraph font-semibold text-eatda-orange">
+            support@eatda.com
+          </p>
         </div>
-        <p className="text-paragraph font-semibold text-eatda-orange">
-          support@eatda.com
-        </p>
-      </div>
 
-      <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
-        <div>
-          <p className="text-paragraph font-semibold">카카오톡 문의</p>
-          <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
+        <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
+          <div>
+            <p className="text-paragraph font-semibold">카카오톡 문의</p>
+            <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
+          </div>
+          <p className="text-paragraph font-semibold text-eatda-orange">
+            카카오톡에서 '잇다 EAT-DA'를 검색해주세요
+          </p>
         </div>
-        <p className="text-paragraph font-semibold text-eatda-orange">
-          카카오톡에서 '잇다 EAT-DA'를 검색해주세요
-        </p>
-      </div>
 
-      <div className="pt-5 space-y-3">
-        <h2 className="text-display-4 font-semibold">자주 묻는 질문</h2>
-        <div className="space-y-3">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className="border-b-[0.5px] border-gray-400 rounded-lg overflow-hidden"
-            >
-              <button
-                onClick={() => toggleFAQ(index)}
-                className="w-full flex justify-between items-center py-4 text-left hover:bg-gray-50"
+        <div className="pt-5 space-y-3">
+          <h2 className="text-display-4 font-semibold">자주 묻는 질문</h2>
+          <div className="space-y-3">
+            {faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="border-b-[0.5px] border-gray-400 rounded-lg overflow-hidden"
               >
-                <p className="text-paragraph">{faq.question}</p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                  className={`transition-transform ${
-                    openIndex === index ? "rotate-180" : ""
-                  }`}
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full flex justify-between items-center py-4 text-left hover:bg-gray-50"
                 >
-                  <path
-                    d="M5 7.5L10 12.5L15 7.5"
-                    stroke="#353E5C"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </button>
-              {openIndex === index && (
-                <div className="px-1 pb-4 pt-0">
-                  <p className="text-paragraph text-gray-600">{faq.answer}</p>
-                </div>
-              )}
-            </div>
-          ))}
+                  <p className="text-paragraph">{faq.question}</p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    className={`transition-transform ${
+                      openIndex === index ? "rotate-180" : ""
+                    }`}
+                  >
+                    <path
+                      d="M5 7.5L10 12.5L15 7.5"
+                      stroke="#353E5C"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+                {openIndex === index && (
+                  <div className="px-1 pb-4 pt-0">
+                    <p className="text-paragraph text-gray-600">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
