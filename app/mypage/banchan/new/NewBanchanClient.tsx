@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AddImage from "@/app/src/components/ui/AddImage";
+import ConfirmModal from "@/app/src/components/ui/ConfirmModal";
 
 export default function NewBanchanClient() {
   const router = useRouter();
@@ -128,23 +129,11 @@ export default function NewBanchanClient() {
         </div>
       </div>
 
-      {/* 모달 */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-5">
-          <div className="bg-white rounded w-[90vw] max-w-150 p-6 flex flex-col gap-6.5">
-            <p className="text-display-4 font-semibold text-gray-800 text-center">
-              반찬이 등록되었습니다.
-            </p>
-            <button
-              type="button"
-              onClick={handleModalConfirm}
-              className="w-full py-3 rounded bg-eatda-orange text-white text-display-2 font-semibold hover:opacity-90"
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        isOpen={showModal}
+        title="반찬이 등록되었습니다."
+        onConfirm={handleModalConfirm}
+      />
     </form>
   );
 }
