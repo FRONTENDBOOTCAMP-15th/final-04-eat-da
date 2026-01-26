@@ -9,7 +9,7 @@ export default function MyPageClient() {
   const userEmail = "jubu@gmail.com";
 
   return (
-    <>
+    <div className="px-5 py-15.5 flex flex-col gap-5">
       {/* 프로필 섹션 */}
       <section className="p-5 border border-gray-400 rounded-lg bg-gray-200">
         <div className="flex items-start gap-2.5">
@@ -139,6 +139,6 @@ export default function MyPageClient() {
           </div>
         </ul>
       </nav>
-    </>
+    </div>
   );
 }
