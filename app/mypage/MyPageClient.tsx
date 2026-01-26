@@ -110,28 +110,28 @@ export default function MyPageClient() {
             </Link>
 
             <Link
-              href="/mypage"
+              href="/mypage/subscription"
               className="py-5 hover:bg-gray-200 cursor-pointer border-b border-gray-400"
             >
               <span className="text-gray-800">구독 관리</span>
             </Link>
 
             <Link
-              href="/mypage"
+              href="/review"
               className="py-5 hover:bg-gray-200 cursor-pointer border-b border-gray-400"
             >
               <span className="text-gray-800">반찬 리뷰</span>
             </Link>
 
             <Link
-              href="/mypage"
+              href="/mypage/verify"
               className="py-5 hover:bg-gray-200 cursor-pointer border-b border-gray-400"
             >
               <span className="text-gray-800">개인 정보 설정</span>
             </Link>
 
             <Link
-              href="/mypage"
+              href="/mypage/support"
               className="py-5 hover:bg-gray-200 cursor-pointer"
             >
               <span className="text-gray-800">고객센터</span>
