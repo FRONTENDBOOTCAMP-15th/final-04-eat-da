@@ -15,7 +15,7 @@ export default function CheckoutPageClient() {
     <>
       <Header title="구매하기" showBackButton={true} />
 
-      <div className="p-5 space-y-5">
+      <div className="p-5 space-y-5 mt-5 mb-24">
         <div className="space-y-5">
           <button
             onClick={() => setIsProductInfoOpen(!isProductInfoOpen)}
@@ -62,7 +62,7 @@ export default function CheckoutPageClient() {
           )}
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-3">
           <p className="text-display-3 font-semibold">픽업 장소</p>
           <div className="flex gap-1 p-5 bg-gray-200 border border-gray-300 rounded-lg">
             <svg
@@ -90,9 +90,9 @@ export default function CheckoutPageClient() {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-0.5">
           <h2 className="text-display-3 font-semibold">픽업 날짜</h2>
-          <p className="text-x-small text-eatda-orange">
+          <p className="text-x-small text-eatda-orange mb-4">
             픽업할 날짜를 선택해주세요
           </p>
           <div className="flex gap-2.5 w-full">
@@ -121,9 +121,9 @@ export default function CheckoutPageClient() {
           </div>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-0.5">
           <h2 className="text-display-3 font-semibold">픽업 시간</h2>
-          <p className="text-x-small text-eatda-orange">
+          <p className="text-x-small text-eatda-orange mb-4">
             픽업할 시간을 선택해주세요
           </p>
           <div className="space-y-2">
