@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function CheckoutCompletePage() {
   return (
     <>
-      <div className="p-5 space-y-5 pt-20">
+      <div className="p-5 space-y-5 mt-5 mb-16">
         <div className="space-y-5">
           <h2 className="text-display-6 font-semibold">결제 완료!</h2>
           <div>
