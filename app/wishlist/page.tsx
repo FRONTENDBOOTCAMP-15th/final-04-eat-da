@@ -1,5 +1,5 @@
 import WishListItem from "@/app/wishlist/WishListItem";
-import WishSmallItem from "@/app/src/components/ui/WishSmallItem";
+import ProductCard from "@/app/src/components/ui/ProductCard";
 import { Metadata } from "next";
 import Header from "@/app/src/components/common/Header";
 import BottomNavigation from "@/app/src/components/common/BottomNavigation";
@@ -24,7 +24,7 @@ export default function WishlistPage() {
       />
       <div className="mt-20 mb-15">
         <div className="grid grid-cols-2">
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food2.png"
             chefName="김미숙 주부9단"
             dishName="얼큰한 김치찌개"
@@ -33,7 +33,7 @@ export default function WishlistPage() {
             price={8500}
             initialWished={true}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food1.png"
             chefName="박영희 주부8단"
             dishName="소고기 장조림"
@@ -42,7 +42,7 @@ export default function WishlistPage() {
             price={12000}
             initialWished={false}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food2.png"
             chefName="김미숙 주부9단"
             dishName="얼큰한 김치찌개"
@@ -51,7 +51,7 @@ export default function WishlistPage() {
             price={8500}
             initialWished={true}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food1.png"
             chefName="박영희 주부8단"
             dishName="소고기 장조림"
@@ -60,7 +60,7 @@ export default function WishlistPage() {
             price={12000}
             initialWished={false}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food2.png"
             chefName="김미숙 주부9단"
             dishName="얼큰한 김치찌개"
@@ -69,7 +69,7 @@ export default function WishlistPage() {
             price={8500}
             initialWished={true}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food1.png"
             chefName="박영희 주부8단"
             dishName="소고기 장조림"

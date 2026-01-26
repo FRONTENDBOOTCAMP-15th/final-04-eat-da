@@ -17,7 +17,7 @@ export default function CategoryTabs() {
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
   return (
-    <div className="fixed top-15 z-10 bg-white flex h-10 items-center gap-7.5 overflow-x-auto px-5 scrollbar-hide text-paragraph">
+    <div className="fixed top-15 z-10 bg-white border-b-[0.5px] border-gray-300 flex h-10 items-center gap-7.5 overflow-x-auto px-5 scrollbar-hide text-paragraph">
       {CATEGORIES.map((category) => {
         const isSelected = selectedCategory === category;
 
