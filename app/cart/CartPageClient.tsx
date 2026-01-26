@@ -17,9 +17,7 @@ export default function CartPageClient() {
         showCart={true}
       />
 
-      <div
-        className={`pt-[120px] p-5 flex-1 flex flex-col ${cartItems.length > 0 ? "pb-[100px]" : ""}`}
-      >
+      <div className="mt-12 p-5 flex-1 flex flex-col">
         {cartItems.length > 0 ? (
           <>
             <p className="text-paragraph-md py-4">{cartItems.length}개 상품</p>
