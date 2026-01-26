@@ -2,7 +2,7 @@ import HomeHeader from "@/app/home/HomeHeader";
 import RecommendProduct from "@/app/home/RecommendProduct";
 import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 import SellerProfileClear from "@/app/src/components/ui/SellerProfileClear";
-import WishSmallItem from "@/app/src/components/ui/WishSmallItem";
+import ProductCard from "@/app/src/components/ui/ProductCard";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -75,7 +75,7 @@ export default function Home() {
           <SellerProfileClear />
         </div>
         <div className="grid grid-cols-2">
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food2.png"
             chefName="김미숙 주부9단"
             dishName="얼큰한 김치찌개"
@@ -84,7 +84,7 @@ export default function Home() {
             price={8500}
             initialWished={true}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food1.png"
             chefName="박영희 주부8단"
             dishName="소고기 장조림"
@@ -93,7 +93,7 @@ export default function Home() {
             price={12000}
             initialWished={false}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food2.png"
             chefName="김미숙 주부9단"
             dishName="얼큰한 김치찌개"
@@ -102,7 +102,7 @@ export default function Home() {
             price={8500}
             initialWished={true}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food1.png"
             chefName="박영희 주부8단"
             dishName="소고기 장조림"
@@ -111,7 +111,7 @@ export default function Home() {
             price={12000}
             initialWished={false}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food2.png"
             chefName="김미숙 주부9단"
             dishName="얼큰한 김치찌개"
@@ -120,7 +120,7 @@ export default function Home() {
             price={8500}
             initialWished={true}
           />
-          <WishSmallItem
+          <ProductCard
             imageSrc="/food1.png"
             chefName="박영희 주부8단"
             dishName="소고기 장조림"
