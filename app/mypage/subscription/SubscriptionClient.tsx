@@ -71,7 +71,7 @@ export default function SubscriptionClient() {
 
   return (
     <form id="subscription-form" onSubmit={handleSubmit}>
-      <div className="px-5 py-20 flex flex-col gap-5">
+      <div className="px-5 pt-16 pb-22 flex flex-col gap-5">
         {/* 설명 */}
         <p className="text-display-2 text-gray-600">
           구독을 통해 새로운 반찬을 정기적으로 받아보세요!
