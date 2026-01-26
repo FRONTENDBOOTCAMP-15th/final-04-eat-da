@@ -11,7 +11,7 @@ export default function RecommendProduct() {
           alt="반찬 이미지"
           className="object-cover"
         />
-        <HeartItem className="absolute top-1 right-1" />
+        <HeartItem className="absolute top-0.5 right-0" lineColor="white" />
       </div>
       <div className="pt-2 px-1 space-y-1">
         <div className="flex gap-2 items-center">
