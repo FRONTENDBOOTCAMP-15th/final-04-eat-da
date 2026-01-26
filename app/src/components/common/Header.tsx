@@ -60,7 +60,7 @@ export default function Header({
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white px-5 py-6 border-b border-gray-200 z-50">
+    <header className="fixed top-0 left-0 right-0 bg-white px-4 pt-4 pb-3 z-50">
       <div className="flex items-center justify-between">
         {/* 왼쪽: 뒤로가기 + 제목 */}
         <div className="flex items-center gap-3">
