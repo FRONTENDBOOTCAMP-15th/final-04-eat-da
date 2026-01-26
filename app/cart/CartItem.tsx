@@ -2,8 +2,8 @@ import Image from "next/image";
 
 export default function CartItem() {
   return (
-    <div className="p-3 pb-5 border-b-[0.5px] border-gray-400">
-      <div className="flex gap-5 mb-5">
+    <div className="py-3 border-b-[0.5px] border-gray-400">
+      <div className="flex gap-5 mb-4">
         <Image
           src="/food1.png"
           width={70}
