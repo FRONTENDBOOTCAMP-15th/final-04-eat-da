@@ -46,7 +46,7 @@ export default function ProductsList() {
           price={12000}
           initialWished={false}
         />
-        <WishSmallItem
+        <ProductCard
           imageSrc="/food2.png"
           chefName="김미숙 주부9단"
           dishName="얼큰한 김치찌개"
@@ -55,7 +55,7 @@ export default function ProductsList() {
           price={8500}
           initialWished={true}
         />
-        <WishSmallItem
+        <ProductCard
           imageSrc="/food1.png"
           chefName="박영희 주부8단"
           dishName="소고기 장조림"
