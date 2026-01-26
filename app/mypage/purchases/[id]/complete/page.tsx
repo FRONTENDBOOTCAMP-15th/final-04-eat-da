@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 // 임시 주문 데이터
 const mockOrder: OrderDetail = {
-  orderNumber: "12341234",
+  orderNumber: "00000001",
   pickupLocation: "서교동 공유주방",
   pickupTime: "10:00 - 11:00",
   totalPrice: 16500,

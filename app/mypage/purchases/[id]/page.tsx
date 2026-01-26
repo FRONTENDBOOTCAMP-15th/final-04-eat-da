@@ -19,7 +19,7 @@ const pickupTimes = [
 
 const orderData: OrderDetail[] = banchanList.items.map(
   (item: BanchanItem, index: number) => ({
-    orderNumber: `2026012${index + 1}${String(index + 1001).slice(-4)}`,
+    orderNumber: `0000000${index + 1}`,
     pickupLocation: item.extra.pickupLocation,
     pickupTime: pickupTimes[index % pickupTimes.length],
     totalPrice: item.price * item.quantity,
