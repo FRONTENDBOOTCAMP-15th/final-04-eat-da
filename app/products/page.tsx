@@ -9,7 +9,7 @@ export default function ProductsList() {
       {/* 헤더 */}
       <Header title="반찬 목록" showBackButton showSearch showCart />
       <CategoryTabs />
-      <div className="mt-30 grid grid-cols-2">
+      <div className="mt-25 mb-16 grid grid-cols-2">
         <WishSmallItem
           imageSrc="/food2.png"
           chefName="김미숙 주부9단"
