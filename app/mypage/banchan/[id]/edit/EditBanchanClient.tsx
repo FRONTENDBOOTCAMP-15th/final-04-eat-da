@@ -44,7 +44,7 @@ export default function EditBanchanClient({
       onSubmit={handleSubmit}
       className="flex flex-col"
     >
-      <div className="flex-1 px-5 pt-7.5 pb-32.5 flex flex-col gap-7.5 overflow-y-auto">
+      <div className="px-5 pt-16 pb-18 flex flex-col gap-5">
         {/* 판매중/판매중지 버튼 */}
         <div className="flex gap-2.5">
           <button

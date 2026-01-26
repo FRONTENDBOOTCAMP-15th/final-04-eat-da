@@ -1,7 +1,7 @@
 import { OrderDetail } from "@/app/mypage/purchases/[id]/PurchasesDetailCard";
 import PurchaseDetailClient from "./PurchaseDetailClient";
+import Header from "@/app/src/components/common/Header";
 import { Metadata } from "next";
-import Link from "next/link";
 import { banchanList, BanchanItem } from "@/app/mypage/banchan/BanchanData";
 
 export const metadata: Metadata = {
@@ -35,32 +35,8 @@ const orderData: OrderDetail[] = banchanList.items.map(
 export default function PurchaseDetailPage() {
   return (
     <>
-      <div className="px-5 flex flex-col gap-5 min-h-screen">
-        <header className="flex gap-4 pt-21">
-          <Link href={"/mypage/purchases"} className="flex items-center">
-            <span>
-              <svg
-                width="10"
-                height="18"
-                viewBox="0 0 10 18"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9 0.999999L1 9L9 17"
-                  stroke="#353E5C"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          </Link>
-          <h1 className="text-display-6 text-gray-800 font-semibold">
-            구매 내역 정보
-          </h1>
-        </header>
-
+      <Header title={`${metadata.title}`} showBackButton showSearch showCart />
+      <div className="px-5 pt-16 pb-18 flex flex-col gap-5">
         <PurchaseDetailClient orders={orderData} />
       </div>
     </>

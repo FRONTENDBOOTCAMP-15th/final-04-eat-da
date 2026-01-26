@@ -1,5 +1,6 @@
 "use client";
 
+import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 import Header from "@/app/src/components/common/Header";
 import { useState } from "react";
 
@@ -50,7 +51,7 @@ const faqs: FAQ[] = [
       "주문 시 선택하신 날짜와 시간에 픽업 장소로 방문하시면 됩니다. 주문 확인 메시지를 보여주시면 반찬을 수령하실 수 있습니다.",
   },
   {
-    question: "환불은 어떻게 하나요?",
+    question: "환불은?",
     answer:
       "픽업 2시간 전까지 주문 내역에서 취소 가능하며, 결제하신 금액이 전액 환불됩니다. 그 이후에는 환불이 어려우니 양해 부탁드립니다.",
   },
@@ -66,7 +67,7 @@ export default function SupportPageClient() {
   return (
     <>
       <Header title="고객센터" showSearch={true} showCart={true} />
-      <div className="p-5 space-y-4 mt-15">
+      <div className="p-5 space-y-4 mt-15 mb-15">
         <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
           <div>
             <p className="text-paragraph font-semibold">전화 문의</p>
@@ -93,7 +94,7 @@ export default function SupportPageClient() {
             <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
           </div>
           <p className="text-paragraph font-semibold text-eatda-orange">
-            카카오톡에서 '잇다 EAT-DA'를 검색해주세요
+            카카오톡에서 &lsquo;잇다 EAT-DA&rsquo;를 검색해주세요
           </p>
         </div>
 
@@ -139,6 +140,7 @@ export default function SupportPageClient() {
           </div>
         </div>
       </div>
+      <BottomNavigation />
     </>
   );
 }

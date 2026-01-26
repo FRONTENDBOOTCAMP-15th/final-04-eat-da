@@ -22,12 +22,8 @@ export default function NewBanchanClient() {
   };
 
   return (
-    <form
-      id="new-banchan-form"
-      onSubmit={handleSubmit}
-      className="flex flex-col"
-    >
-      <div className="flex-1 px-5 pt-5 pb-32.5 flex flex-col gap-7.5 overflow-y-auto">
+    <form id="new-banchan-form" onSubmit={handleSubmit}>
+      <div className="px-5 pt-16 pb-18 flex flex-col gap-5">
         {/* 반찬 이름 */}
         <div>
           <label className="text-display-2 font-semibold text-gray-800 mb-2">

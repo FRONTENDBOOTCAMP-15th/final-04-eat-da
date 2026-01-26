@@ -1,10 +1,11 @@
 import { OrderDetail } from "@/app/mypage/purchases/[id]/PurchasesDetailCard";
 import PickupCompleteClient from "./PickupCompleteClient";
 import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
+import Header from "@/app/src/components/common/Header";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "픽업 완료",
+  title: "픽업 완료!",
   description: "픽업 완료 페이지",
 };
 
@@ -25,16 +26,13 @@ const mockOrder: OrderDetail = {
 export default function PickupCompletePage() {
   return (
     <>
-      <div className="px-5 flex flex-col gap-5 min-h-screen pb-30">
-        {/* 픽업 완료 헤더 */}
-        <div className="pt-21">
-          <h1 className="text-display-6 text-gray-800 font-semibold">
-            픽업 완료!
-          </h1>
-          <div className="mt-2 text-paragraph text-gray-600">
-            <p>오늘의 집밥을 잘 전달했어요.</p>
-            <p>맛있게 드세요!</p>
-          </div>
+      <Header title={`${metadata.title}`} />
+      <div className="px-5 pt-16 pb-18 flex flex-col gap-5">
+        {/* 픽업 완료 안내 */}
+
+        <div className="mt-2 text-paragraph text-gray-600">
+          <p>오늘의 집밥을 잘 전달했어요.</p>
+          <p>맛있게 드세요!</p>
         </div>
 
         {/* 주문 상세 정보 + 리뷰 쓰기 버튼 */}
