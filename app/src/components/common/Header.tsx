@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   title: string;
@@ -47,7 +47,7 @@ export default function Header({
     if (onSearch) {
       onSearch();
     } else {
-      console.log('검색');
+      console.log("검색");
     }
   };
 
@@ -55,12 +55,12 @@ export default function Header({
     if (onCart) {
       onCart();
     } else {
-      router.push('/cart');
+      router.push("/cart");
     }
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white px-5 pb-3 border-b border-gray-200 z-50">
+    <header className="fixed top-0 left-0 right-0 bg-white px-5 py-6 border-b border-gray-200 z-50">
       <div className="flex items-center justify-between">
         {/* 왼쪽: 뒤로가기 + 제목 */}
         <div className="flex items-center gap-3">
@@ -73,7 +73,9 @@ export default function Header({
               <img src="/back.svg" alt="뒤로가기" width={10} height={18} />
             </button>
           )}
-          <h1 className="text-display-6 font-semibold text-gray-900">{title}</h1>
+          <h1 className="text-display-6 font-semibold text-gray-900">
+            {title}
+          </h1>
         </div>
 
         {/* 오른쪽: X, 검색, 장바구니 */}
@@ -84,7 +86,14 @@ export default function Header({
               className="text-gray-900"
               aria-label="닫기"
             >
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
             </button>
@@ -96,7 +105,12 @@ export default function Header({
           )}
           {showCart && (
             <button onClick={handleCart} className="text-gray-900 relative">
-              <img src="/shopping cart.svg" alt="장바구니" width={22} height={22} />
+              <img
+                src="/shopping cart.svg"
+                alt="장바구니"
+                width={22}
+                height={22}
+              />
             </button>
           )}
         </div>
