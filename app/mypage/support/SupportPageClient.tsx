@@ -94,7 +94,7 @@ export default function SupportPageClient() {
             <p className="text-paragraph text-gray-600">평일 9:00 - 18:00</p>
           </div>
           <p className="text-paragraph font-semibold text-eatda-orange">
-            카카오톡에서 '잇다 EAT-DA'를 검색해주세요
+            카카오톡에서 &lsquo;잇다 EAT-DA&rsquo;를 검색해주세요
           </p>
         </div>
 
