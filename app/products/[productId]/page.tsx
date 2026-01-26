@@ -33,9 +33,9 @@ export default function ProductDetailPage() {
   const reviews = [{ id: "r1" }, { id: "r2" }, { id: "r3" }];
 
   return (
-    <main className="flex flex-col gap-5 pb-32">
+    <main className="flex flex-col mt-12.5 gap-5 pb-23">
       {/* 헤더 */}
-      <Header title="반찬 목록" showBackButton showSearch showCart />
+      <Header title=" " showBackButton showSearch showCart />
       {/* 상품 정보 */}
       <ProductImageSlider images={productImages} />
       {/* 반찬이름 */}
