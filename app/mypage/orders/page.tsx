@@ -37,7 +37,7 @@ export default function OrdersPage() {
         showSearch={true}
         showCart={true}
       />
-      <div className="flex flex-col gap-6 p-5">
+      <div className="flex flex-col gap-6 p-5 mt-2">
         <h2 className="text-display-6 font-semibold">주문관리</h2>
         <div className="grid grid-cols-2 gap-3">
           <button className="flex justify-between items-center px-3 py-4 border border-gray-300 bg-gray-200 rounded-lg">
