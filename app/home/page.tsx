@@ -1,5 +1,6 @@
 import HomeHeader from "@/app/home/HomeHeader";
 import RecommendProduct from "@/app/home/RecommendProduct";
+import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 import SellerProfileClear from "@/app/src/components/ui/SellerProfileClear";
 import WishSmallItem from "@/app/src/components/ui/WishSmallItem";
 import { Metadata } from "next";
@@ -18,7 +19,7 @@ export default function Home() {
   return (
     <>
       <HomeHeader />
-      <div className="p-5 flex flex-col gap-6">
+      <div className="p-5 flex flex-col gap-6 mt-14 mb-10">
         <Image src="/Hero.png" alt="banner" height={460} width={350}></Image>
         <div>
           <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
@@ -130,6 +131,7 @@ export default function Home() {
           />
         </div>
       </div>
+      <BottomNavigation />
     </>
   );
 }
