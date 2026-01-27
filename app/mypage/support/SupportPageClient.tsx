@@ -131,7 +131,7 @@ export default function SupportPageClient() {
                   </svg>
                 </button>
                 {openIndex === index && (
-                  <div className="px-1 pb-4 pt-0">
+                  <div className="pb-4 pt-0">
                     <p className="text-paragraph text-gray-600">{faq.answer}</p>
                   </div>
                 )}

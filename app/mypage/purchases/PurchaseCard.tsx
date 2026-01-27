@@ -16,21 +16,21 @@ export default function PurchaseCard({ item }: PurchasesClientProps) {
   return (
     <div className="flex border-b-[0.5px] border-gray-400 pb-4 gap-5">
       {/* 이미지 영역 */}
-      <div className="flex items-start rounded">
+      <div className="flex items-start rounded-lg">
         <Image
           src={imgSrc}
           alt={item.name}
           width={50}
           height={50}
-          className="object-cover rounded"
+          className="object-cover rounded-lg"
         />
       </div>
 
       {/* 정보 영역 */}
-      <div className=" flex-1 flex flex-col gap-1">
+      <div className=" flex-1 flex flex-col">
         <div className="flex justify-between ">
           {/* 반찬명과 판매자 정보 */}
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col">
             <p className="text-display-1 text-gray-800">{item.name}</p>
             <p className="text-x-small text-gray-600">
               {item.seller.name} 주부 9단
@@ -39,7 +39,7 @@ export default function PurchaseCard({ item }: PurchasesClientProps) {
         </div>
 
         {/* 총 금액 및 수량 정보 */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-0.5">
           <p className="text-x-small text-eatda-orange">{totalprice}원</p>
           <svg
             width="1"
@@ -57,7 +57,7 @@ export default function PurchaseCard({ item }: PurchasesClientProps) {
               strokeWidth="0.5"
             />
           </svg>
-          <p className="text-x-small text-gray-600">수량 {item.quantity}개</p>
+          <p className="text-x-small text-gray-800">수량 {item.quantity}개</p>
         </div>
       </div>
     </div>
