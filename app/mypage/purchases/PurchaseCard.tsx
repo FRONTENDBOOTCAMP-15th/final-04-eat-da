@@ -16,13 +16,13 @@ export default function PurchaseCard({ item }: PurchasesClientProps) {
   return (
     <div className="flex border-b-[0.5px] border-gray-400 pb-4 gap-5">
       {/* 이미지 영역 */}
-      <div className="flex items-start rounded">
+      <div className="flex items-start rounded-lg">
         <Image
           src={imgSrc}
           alt={item.name}
           width={50}
           height={50}
-          className="object-cover rounded"
+          className="object-cover rounded-lg"
         />
       </div>
 
@@ -57,7 +57,7 @@ export default function PurchaseCard({ item }: PurchasesClientProps) {
               strokeWidth="0.5"
             />
           </svg>
-          <p className="text-x-small text-gray-600">수량 {item.quantity}개</p>
+          <p className="text-x-small text-gray-800">수량 {item.quantity}개</p>
         </div>
       </div>
     </div>
