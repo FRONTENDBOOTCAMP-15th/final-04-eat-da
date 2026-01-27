@@ -1,7 +1,6 @@
 "use client";
 
 import BottomNavigation from "@/app/src/components/common/BottomNavigation";
-import Header from "@/app/src/components/common/Header";
 import { useState } from "react";
 
 interface FAQ {
@@ -66,8 +65,7 @@ export default function SupportPageClient() {
 
   return (
     <>
-      <Header title="고객센터" showSearch={true} showCart={true} />
-      <div className="p-5 space-y-4 mt-15 mb-15">
+      <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
         <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
           <div>
             <p className="text-paragraph font-semibold">전화 문의</p>
