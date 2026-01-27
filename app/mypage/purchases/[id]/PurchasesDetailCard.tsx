@@ -26,7 +26,7 @@ export default function PurchasesDetailCard({
   return (
     <div className="flex flex-col gap-5 border-b-[0.5px] border-gray-400 pb-5">
       {/* 주문번호 */}
-      <div className="flex justify-between items-center text-display-2 text-gray-800 font-semibold">
+      <div className="flex border-b-[0.5px] border-gray-600 py-3 justify-between items-center text-display-2 text-gray-800 font-semibold">
         <p>주문번호</p>
         <p>ORDER - {order.orderNumber}</p>
       </div>

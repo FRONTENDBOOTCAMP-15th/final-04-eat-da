@@ -18,11 +18,11 @@ export default function PurchasesClient() {
   );
 
   return (
-    <section className="px-5 pt-16 pb-18 flex flex-col gap-5">
+    <section className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
       {Object.entries(groupedByDate).length ? (
         Object.entries(groupedByDate).map(([date, items]) => (
           <div key={date}>
-            <div className="py-5 flex justify-between border-b-[0.5px] border-gray-600">
+            <div className="py-4 flex justify-between border-b-[0.5px] border-gray-600">
               <p className=" font-semibold text-gray-800 text-display-2 ">
                 {date}
               </p>
