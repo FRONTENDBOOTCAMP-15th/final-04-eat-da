@@ -16,10 +16,10 @@ export default function CheckoutPageClient() {
       <Header title="구매하기" showBackButton={true} />
 
       <div className="p-5 space-y-5 mt-15 mb-16">
-        <div className="space-y-5">
+        <div>
           <button
             onClick={() => setIsProductInfoOpen(!isProductInfoOpen)}
-            className="w-full flex justify-between items-center"
+            className={`w-full flex justify-between items-center ${!isProductInfoOpen ? "pb-5 border-b-[0.5px] border-gray-600" : ""}`}
           >
             <p className="text-display-3 font-semibold">구매 상품 정보</p>
             <svg
@@ -43,7 +43,7 @@ export default function CheckoutPageClient() {
           </button>
 
           {isProductInfoOpen && (
-            <div className="space-y-4">
+            <div className="space-y-4 pt-3 pb-3">
               <PurchaseProductItem
                 imageSrc="/food1.png"
                 dishName="김미숙님의 소고기 장조림"
@@ -160,7 +160,7 @@ export default function CheckoutPageClient() {
           </div>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-2">
           <h2 className="text-display-3 font-semibold">결제 정보</h2>
           <div className="flex justify-between">
             <p className="text-paragraph">상품 금액</p>
@@ -170,20 +170,20 @@ export default function CheckoutPageClient() {
             <p className="text-paragraph">수량</p>
             <p className="text-paragraph text-gray-600">3개</p>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between pb-1">
             <p className="text-paragraph">쿠폰</p>
             <p className="text-paragraph text-gray-600">사용안함</p>
           </div>
-          <div className="flex justify-between">
+          <div className="flex justify-between border-t-[0.5px] border-gray-600 pt-4">
             <h2 className="text-paragraph-md font-semibold">총 결제 금액</h2>
             <p className="text-paragraph-md font-semibold text-eatda-orange">
-              30,500
+              30,500원
             </p>
           </div>
         </div>
 
         <div className="p-5 text-paragraph-sm bg-gray-200 border border-gray-300 rounded-lg">
-          <p className="text-paragraph font-semibold">안내사항</p>
+          <p className="text-paragraph font-semibold mb-2">안내사항</p>
           <p>• 선택하신 시간에 픽업 장소로 방문해주세요.</p>
           <p>• 픽업 시간이 지나면 자동으로 취소될 수 있습니다.</p>
           <p>• 결제 후 변경 및 취소는 픽업 2시간 전까지 가능합니다.</p>

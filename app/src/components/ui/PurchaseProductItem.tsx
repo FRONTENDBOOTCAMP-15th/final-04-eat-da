@@ -31,8 +31,8 @@ export default function PurchaseProductItem({
           <p className="text-x-small text-eatda-orange">
             {price.toLocaleString()}원
           </p>
-          <p className="text-x-small">|</p>
-          <p className="text-x-small text-gray-600">수량 {quantity}개</p>
+          <p className="text-x-small text-gray-400">|</p>
+          <p className="text-x-small">수량 {quantity}개</p>
         </div>
       </div>
     </div>

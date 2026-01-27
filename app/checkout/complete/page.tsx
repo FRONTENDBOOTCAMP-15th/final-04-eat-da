@@ -25,7 +25,7 @@ export default function CheckoutCompletePage() {
           </div>
         </div>
 
-        <div className="flex justify-between py-5 border-b-[0.5px] border-gray-600">
+        <div className="flex justify-between py-3 border-b-[0.5px] border-gray-600">
           <p className="text-paragraph font-semibold ">주문번호</p>
           <p className="text-paragraph font-semibold">ORDER - 12341234</p>
         </div>
