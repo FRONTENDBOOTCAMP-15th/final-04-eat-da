@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function SellerCard() {
+interface SellerCardProps {
+  showDivider?: boolean;
+}
+
+export default function SellerCard({ showDivider = true }: SellerCardProps) {
   return (
     <Link href="/sellers/1" className="flex flex-col">
       <div>
@@ -41,7 +45,7 @@ export default function SellerCard() {
           </div>
         </section>
         {/* 주부 소개글 */}
-        <article className="flex items-start mx-5 gap-2.5 border-b-[0.5px] border-gray-400 last:border-b-0 self-stretch pt-5 pb-4">
+        <article className="flex items-start mx-5 gap-2.5 self-stretch pt-5 pb-4">
           <img
             src="/seller/seller1.png"
             alt="김미숙 주부 프로필 이미지"
@@ -81,6 +85,9 @@ export default function SellerCard() {
             </p>
           </div>
         </article>
+        {showDivider && (
+          <div className="mx-5 border-b-[0.5px] border-gray-400" />
+        )}
       </div>
     </Link>
   );
