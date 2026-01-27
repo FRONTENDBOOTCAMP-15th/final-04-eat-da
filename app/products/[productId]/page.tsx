@@ -6,6 +6,7 @@ import SellerProfileCard from "@/app/src/components/ui/SellerProfileCard";
 import ReviewList from "@/app/src/components/ui/ReviewList";
 import Header from "@/app/src/components/common/Header";
 import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
+import ProductDetailClient from "@/app/products/[productId]/ProductDetailClient";
 
 export default function ProductDetailPage() {
   {
@@ -80,9 +81,7 @@ export default function ProductDetailPage() {
         <ReviewList reviews={reviews} />
       </div>
 
-      <BottomFixedButton as="link" href={`/order/${"임시"}`}>
-        구매하기
-      </BottomFixedButton>
+      <ProductDetailClient />
     </main>
   );
 }
