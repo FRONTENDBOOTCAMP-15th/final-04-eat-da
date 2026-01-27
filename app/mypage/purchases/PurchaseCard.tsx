@@ -27,10 +27,10 @@ export default function PurchaseCard({ item }: PurchasesClientProps) {
       </div>
 
       {/* 정보 영역 */}
-      <div className=" flex-1 flex flex-col gap-1">
+      <div className=" flex-1 flex flex-col">
         <div className="flex justify-between ">
           {/* 반찬명과 판매자 정보 */}
-          <div className="flex flex-col gap-0.5">
+          <div className="flex flex-col">
             <p className="text-display-1 text-gray-800">{item.name}</p>
             <p className="text-x-small text-gray-600">
               {item.seller.name} 주부 9단
@@ -39,7 +39,7 @@ export default function PurchaseCard({ item }: PurchasesClientProps) {
         </div>
 
         {/* 총 금액 및 수량 정보 */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-0.5">
           <p className="text-x-small text-eatda-orange">{totalprice}원</p>
           <svg
             width="1"
