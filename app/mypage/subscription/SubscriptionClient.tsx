@@ -71,7 +71,7 @@ export default function SubscriptionClient() {
 
   return (
     <form id="subscription-form" onSubmit={handleSubmit}>
-      <div className="px-5 pt-16 pb-22 flex flex-col gap-5">
+      <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
         {/* 설명 */}
         <p className="text-display-2 text-gray-600">
           구독을 통해 새로운 반찬을 정기적으로 받아보세요!
@@ -79,8 +79,8 @@ export default function SubscriptionClient() {
 
         {/* 구독 혜택 */}
         <section className="p-5 border border-gray-300 rounded-lg bg-gray-200">
-          <h2 className="text-display-2 font-semibold mb-4">구독 혜택</h2>
-          <ul className="space-y-1">
+          <h2 className="text-display-3 font-semibold mb-2">구독 혜택</h2>
+          <ul className="space-y-0.5">
             {benefits.map((benefit, index) => (
               <li
                 key={index}
