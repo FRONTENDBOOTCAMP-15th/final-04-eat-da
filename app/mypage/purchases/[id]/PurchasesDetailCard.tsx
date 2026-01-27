@@ -24,7 +24,7 @@ export default function PurchasesDetailCard({
   order,
 }: PurchasesDetailCardProps) {
   return (
-    <div className="flex flex-col gap-5 border-b-[0.5px] border-gray-400 pb-5">
+    <div className="flex flex-col gap-5 pb-5">
       {/* 주문번호 */}
       <div className="flex border-b-[0.5px] border-gray-600 py-3 justify-between items-center text-display-2 text-gray-800 font-semibold">
         <p>주문번호</p>
@@ -41,7 +41,7 @@ export default function PurchasesDetailCard({
 
       {/* 픽업 장소 */}
       <div className="flex justify-between items-center">
-        <p className="text-display-2 text-gray-600">픽업 장소</p>
+        <p className="text-display-2 text-gray-800">픽업 장소</p>
         <div className="flex items-center gap-1">
           <svg
             width="12"
@@ -62,8 +62,8 @@ export default function PurchasesDetailCard({
       </div>
 
       {/* 픽업 시간 */}
-      <div className="flex justify-between items-center">
-        <p className="text-display-2 text-gray-600">픽업 시간</p>
+      <div className="flex justify-between items-center border-b-[0.5px] border-gray-600">
+        <p className="text-display-2 text-gray-800 mb-5">픽업 시간</p>
         <p className="text-display-2 font-semibold text-gray-800">
           {order.pickupTime}
         </p>
@@ -71,7 +71,9 @@ export default function PurchasesDetailCard({
 
       {/* 총 결제 금액 */}
       <div className="flex justify-between items-center">
-        <p className="text-display-2 text-gray-600">총 결제 금액</p>
+        <p className="text-display-2 font-semibold text-gray-800">
+          총 결제 금액
+        </p>
         <p className="text-display-2 font-semibold text-eatda-orange">
           {order.totalPrice.toLocaleString()}원
         </p>
