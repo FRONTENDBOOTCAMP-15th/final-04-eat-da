@@ -85,7 +85,9 @@ export default function SellerCard({ showDivider = true }: SellerCardProps) {
             </p>
           </div>
         </article>
-        {showDivider && <div className="mx-5 border-b border-gray-400" />}
+        {showDivider && (
+          <div className="mx-5 border-b-[0.5px] border-gray-400" />
+        )}
       </div>
     </Link>
   );
