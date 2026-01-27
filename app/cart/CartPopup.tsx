@@ -1,7 +1,7 @@
 // components/CartPopup.tsx
 "use client";
 
-import { CartPopupProps } from "@/types/cart";
+import { CartPopupProps } from "@/app/src/types";
 import CartPopupItem from "./CartPopupItem";
 import { useRouter } from "next/navigation";
 
