@@ -188,10 +188,10 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedType('individual')}
-                  className={`flex-1 py-3 text-sm font-semibold rounded-lg transition-colors ${
+                  className={`flex-1 py-3 text-sm font-semibold rounded-lg border transition-colors ${
                     selectedType === 'individual'
-                      ? 'bg-eatda-orange text-white'
-                      : 'bg-gray-200 border border-gray-300 text-gray-800'
+                      ? 'bg-eatda-orange text-white border-eatda-orange'
+                      : 'bg-gray-200 text-gray-800 border-gray-300'
                   }`}
                 >
                   자취생
@@ -199,10 +199,10 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedType('business')}
-                  className={`flex-1 py-3 text-sm font-semibold rounded-lg transition-colors ${
+                  className={`flex-1 py-3 text-sm font-semibold rounded-lg border transition-colors ${
                     selectedType === 'business'
-                      ? 'bg-eatda-orange text-white'
-                      : 'bg-gray-200 border border-gray-300 text-gray-800'
+                      ? 'bg-eatda-orange text-white border-eatda-orange'
+                      : 'bg-gray-200 text-gray-800 border-gray-300'
                   }`}
                 >
                   주부
@@ -324,15 +324,18 @@ export default function SignupPage() {
                 <label className="block text-display-3 font-semibold text-gray-800 mb-2">
                   자기소개 <span className="text-eatda-orange">*</span>
                 </label>
-                <p className="text-display-1 text-gray-600 mb-2">
-                  요리를 시작하게 된 계기나 자신 있는 반찬 이야기를 적어주시면 좋아요. (100자 이상)
-                </p>
                 <textarea
                   value={formData.introduction}
-                  onChange={(e) => handleChange('introduction', e.target.value)}
+                  onChange={(e) => {
+                    handleChange('introduction', e.target.value);
+                    // 자동 높이 조절
+                    e.target.style.height = 'auto';
+                    e.target.style.height = e.target.scrollHeight + 'px';
+                  }}
                   onBlur={() => handleBlur('introduction')}
                   placeholder="요리를 시작하게 된 계기나 자신 있는 반찬 이야기를 적어주시면 좋아요. (100자 이상)"
-                  className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2 min-h-[120px] resize-none"
+                  className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2 resize-none overflow-hidden"
+                  rows={2}
                 />
                 {touched.introduction && errors.introduction && (
                   <p className="text-eatda-orange text-x-small mt-1">{errors.introduction}</p>
