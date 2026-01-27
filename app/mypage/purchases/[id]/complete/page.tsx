@@ -27,7 +27,7 @@ export default function PickupCompletePage() {
   return (
     <>
       <Header title={`${metadata.title}`} />
-      <div className="px-5 pt-16 pb-18 flex flex-col gap-5">
+      <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
         {/* 픽업 완료 안내 */}
 
         <div className="mt-2 text-paragraph text-gray-600">
