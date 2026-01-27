@@ -44,7 +44,7 @@ export default function MyPageClient() {
                   fill="white"
                 />
               </svg>
-              <span className="text-display-1 text-gray-700">서교동</span>
+              <span className="text-display-1 text-gray-800">서교동</span>
             </div>
           </div>
 
