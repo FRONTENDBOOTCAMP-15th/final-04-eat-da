@@ -136,7 +136,7 @@ export default function ReviewManagementPage() {
                   <p className="text-sm text-eatda-orange">김미숙 주부 9단</p>
                   
                   {/* 별점 */}
-                  <div>
+                  <div className="py-1">
                     <StarItem 
                       rating={1}
                       onRatingChange={() => {}}
@@ -182,7 +182,7 @@ export default function ReviewManagementPage() {
                   <p className="text-sm text-eatda-orange">김미숙 주부 9단</p>
                   
                   {/* 별점 */}
-                  <div>
+                  <div className="py-1">
                     <StarItem 
                       rating={1}
                       onRatingChange={() => {}}
