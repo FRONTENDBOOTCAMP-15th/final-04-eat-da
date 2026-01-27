@@ -84,12 +84,12 @@ export default function LoginPage() {
       <div className="h-[60px]"></div>
 
       {/* 상단 컨텐츠 */}
-      <div className="flex-1 px-5 py-8">
+      <div className="flex-1 px-5 py-8 overflow-y-auto pb-32">
         <div className="max-w-md mx-auto">
-          <form id="loginForm" onSubmit={handleSubmit} className="space-y-6">
+          <form id="loginForm" onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* 이메일 입력 */}
             <div>
-              <label className="block text-paragraph font-medium text-gray-800 mb-2">
+              <label className="block text-display-3 font-semibold text-gray-800 mb-2">
                 이메일 <span className="text-eatda-orange">*</span>
               </label>
               <input
@@ -98,16 +98,16 @@ export default function LoginPage() {
                 onChange={(e) => handleEmailChange(e.target.value)}
                 onBlur={handleEmailBlur}
                 placeholder="example@youremail.com"
-                className="w-full px-0 py-2 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-paragraph text-gray-800"
+                className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2"
               />
               {emailTouched && emailError && (
-                <p className="text-eatda-orange text-x-small mt-2">{emailError}</p>
+                <p className="text-eatda-orange text-x-small mt-1">{emailError}</p>
               )}
             </div>
 
             {/* 비밀번호 입력 */}
             <div>
-              <label className="block text-paragraph font-medium text-gray-800 mb-2">
+              <label className="block text-display-3 font-semibold text-gray-800 mb-2">
                 비밀번호 <span className="text-eatda-orange">*</span>
               </label>
               <input
@@ -116,10 +116,10 @@ export default function LoginPage() {
                 onChange={(e) => handlePasswordChange(e.target.value)}
                 onBlur={handlePasswordBlur}
                 placeholder="현재 비밀번호를 입력하세요"
-                className="w-full px-0 py-2 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-paragraph text-gray-800"
+                className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2"
               />
               {passwordTouched && passwordError && (
-                <p className="text-eatda-orange text-x-small mt-2">{passwordError}</p>
+                <p className="text-eatda-orange text-x-small mt-1">{passwordError}</p>
               )}
             </div>
 
@@ -128,7 +128,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => router.push('/signup')}
-                className="text-paragraph text-gray-600 underline hover:text-gray-800"
+                className="text-display-2 text-gray-600 underline hover:text-gray-800"
               >
                 회원가입
               </button>
