@@ -33,7 +33,7 @@ export default function NewBanchanClient() {
             type="text"
             name="name"
             placeholder="예: 불향 가득 제육볶음"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-600 focus:outline-none"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -50,7 +50,7 @@ export default function NewBanchanClient() {
             type="text"
             name="price"
             placeholder="5,000"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-600 focus:outline-none"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -64,7 +64,7 @@ export default function NewBanchanClient() {
             type="text"
             name="description"
             placeholder="반찬에 대한 소개를 작성해주세요"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-600 focus:outline-none"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -77,7 +77,7 @@ export default function NewBanchanClient() {
           <textarea
             name="ingredients"
             placeholder={`재료를 쉼표로 구분해주세요\n(예: 김치, 돼지고기, 두부)`}
-            className="focus:outline-none resize-none w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-600"
+            className="focus:outline-none resize-none w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
             required
           />
         </div>
@@ -91,7 +91,7 @@ export default function NewBanchanClient() {
             type="text"
             name="quantity"
             placeholder="2"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-600 focus:outline-none"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -105,7 +105,7 @@ export default function NewBanchanClient() {
             type="text"
             name="maxOrder"
             placeholder="20"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-600 focus:outline-none"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -119,7 +119,7 @@ export default function NewBanchanClient() {
             type="text"
             name="pickupLocation"
             placeholder="잇다 서교동 공유주방"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-600 focus:outline-none"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
