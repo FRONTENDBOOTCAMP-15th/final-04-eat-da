@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function MyPageClient() {
   // 나중에 실제 사용자 정보로 변경 예정
@@ -26,24 +27,7 @@ export default function MyPageClient() {
             </div>
             <p className="text-display-2 text-gray-800">{userEmail}</p>
             <div className="flex items-center mt-1">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.8621 7.06226C13.8621 10.814 8.00001 14.8002 8.00001 14.8002C8.00001 14.8002 2.13794 10.814 2.13794 7.06226C2.13794 3.77951 4.89198 1.2002 8.00001 1.2002C11.108 1.2002 13.8621 3.77951 13.8621 7.06226Z"
-                  className="fill-eatda-orange"
-                />
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M8.00007 5.65494C7.22306 5.65494 6.59318 6.28483 6.59318 7.06184C6.59318 7.83885 7.22306 8.46874 8.00007 8.46874C8.77708 8.46874 9.40697 7.83885 9.40697 7.06184C9.40697 6.28483 8.77708 5.65494 8.00007 5.65494ZM5.18628 7.06184C5.18628 5.50782 6.44606 4.24805 8.00007 4.24805C9.55409 4.24805 10.8139 5.50782 10.8139 7.06184C10.8139 8.61585 9.55409 9.87563 8.00007 9.87563C6.44606 9.87563 5.18628 8.61585 5.18628 7.06184Z"
-                  fill="white"
-                />
-              </svg>
+              <Image src="/Location.svg" alt="주소" width={16} height={16} />
               <span className="text-display-1 text-gray-800">서교동</span>
             </div>
           </div>
