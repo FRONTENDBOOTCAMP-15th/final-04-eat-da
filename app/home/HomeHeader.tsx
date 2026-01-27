@@ -31,7 +31,7 @@ export default function HomeHeader({ onSearch, onCart }: HomeHeaderProps) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white px-5 py-6 border-b border-gray-200 z-50">
+    <header className="fixed top-0 left-0 right-0 bg-white px-5 py-5 z-50">
       <div className="flex items-center justify-between">
         <button onClick={handleLogoClick} aria-label="홈으로 이동">
           <svg
