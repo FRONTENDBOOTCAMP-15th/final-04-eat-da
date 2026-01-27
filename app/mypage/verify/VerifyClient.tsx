@@ -43,7 +43,7 @@ export default function VerifyClient() {
               setPassword(e.target.value);
               setIsError(false);
             }}
-            className="text-display-2 w-full border-b-[0.5px] border-gray-400 py-3"
+            className="text-display-2 w-full border-b-[0.5px] border-gray-400 py-3 focus:outline-none"
           />
 
           {isError && (
