@@ -22,7 +22,7 @@ export default function WishlistPage() {
         showSearch={true}
         showCart={true}
       />
-      <div className="mt-20 mb-15">
+      <div className="mt-15 mb-16">
         <div className="grid grid-cols-2">
           <ProductCard
             imageSrc="/food2.png"
