@@ -67,7 +67,7 @@ export default function Header({
     if (onHome) {
       onHome();
     } else {
-      router.push("/");
+      router.push("/home");
     }
   };
 
