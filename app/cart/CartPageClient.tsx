@@ -4,9 +4,74 @@ import Header from "@/app/src/components/common/Header";
 import CartItem from "./CartItem";
 import Link from "next/link";
 import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
+import { useEffect, useState } from "react";
+import { getAxios } from "@/lib/axios";
+import { CartItemType, CartResponse } from "@/app/src/types";
 
 export default function CartPageClient() {
-  const cartItems = [1, 2, 3];
+  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const [cost, setCost] = useState({
+    products: 0,
+    shippingFees: 0,
+    discount: { products: 0, shippingFees: 0 },
+    total: 0,
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchCart = async () => {
+    try {
+      const axios = getAxios();
+      const response = await axios.get<CartResponse>("/carts");
+      setCartItems(response.data.item);
+      setCost(response.data.cost);
+    } catch (error) {
+      console.error("장바구니 조회 실패:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
+  // 수량 변경
+  const handleQuantityChange = async (cartId: number, newQuantity: number) => {
+    try {
+      const axios = getAxios();
+      await axios.patch(`/carts/${cartId}`, { quantity: newQuantity });
+      await fetchCart();
+    } catch (error) {
+      console.error("수량 변경 실패:", error);
+    }
+  };
+
+  // 아이템 삭제
+  const handleRemoveItem = async (cartId: number) => {
+    try {
+      const axios = getAxios();
+      await axios.delete(`/carts/${cartId}`);
+      await fetchCart();
+    } catch (error) {
+      console.error("삭제 실패:", error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <>
+        <Header
+          title="장바구니"
+          showBackButton={true}
+          showSearch={true}
+          showCart={true}
+        />
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="text-gray-600">로딩 중...</p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -17,16 +82,26 @@ export default function CartPageClient() {
         showHome={true}
       />
       <div className="min-h-screen flex flex-col">
-        <div className="mt-6 p-5 flex-1 flex flex-col">
+        <div className="mt-6 mb-12 p-5 flex-1 flex flex-col">
           {cartItems.length > 0 ? (
             <>
               <p className="text-paragraph-md mt-5 mb-3">
                 {cartItems.length}개 상품
               </p>
               <div className="space-y-3">
-                <CartItem />
-                <CartItem />
-                <CartItem />
+                {cartItems.map((item) => (
+                  <CartItem
+                    key={item._id}
+                    cartId={item._id}
+                    productId={item.product._id}
+                    imageSrc={item.product.image.path}
+                    productName={item.product.name}
+                    price={item.product.price}
+                    quantity={item.quantity}
+                    onQuantityChange={handleQuantityChange}
+                    onRemove={handleRemoveItem}
+                  />
+                ))}
               </div>
             </>
           ) : (

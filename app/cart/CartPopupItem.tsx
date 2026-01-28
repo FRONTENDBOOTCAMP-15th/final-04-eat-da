@@ -1,4 +1,3 @@
-// components/CartPopupItem.tsx
 "use client";
 
 import { CartItem } from "@/app/src/types";
