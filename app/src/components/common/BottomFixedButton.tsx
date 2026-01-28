@@ -15,7 +15,7 @@ type BottomFixedButtonProps =
   | {
       as: "button";
       type: "button";
-      onClick: () => void;
+      onClick: () => void | Promise<void>;
       children: React.ReactNode;
     };
 
@@ -40,7 +40,7 @@ export default function BottomFixedButton(props: BottomFixedButtonProps) {
     );
   }
 
-  // 폼 제출 버튼 (
+  // 폼 제출 버튼
   return (
     <button type="submit" form={props.formId} className={className}>
       {props.children}
