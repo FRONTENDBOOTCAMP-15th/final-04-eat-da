@@ -2,12 +2,54 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { getTokenPayload } from "@/lib/axios";
+import { getUser, getCartItems } from "@/lib/mypage";
+
+type UserInfo = Awaited<ReturnType<typeof getUser>>;
 
 export default function MyPageClient() {
-  // 나중에 실제 사용자 정보로 변경 예정
-  const isSeller = true; // true: 판매자, false: 구매자
-  const userName = "박주부";
-  const userEmail = "jubu@gmail.com";
+  const router = useRouter();
+  const [user, setUser] = useState<UserInfo>(null);
+  const [cartCount, setCartCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const tokenPayload = getTokenPayload();
+      if (!tokenPayload) {
+        setLoading(false);
+        return;
+      }
+
+      const [userData, cartItems] = await Promise.all([
+        getUser(tokenPayload._id),
+        getCartItems(),
+      ]);
+
+      setUser(userData);
+      setCartCount(cartItems.length);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="px-5 mt-15 mb-24 flex flex-1 flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
+        <p className="text-gray-600">로딩 중...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    router.push("/home");
+    return null;
+  }
+
+  const isSeller = user.type === "seller";
 
   return (
     <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
@@ -15,20 +57,32 @@ export default function MyPageClient() {
       <section className="p-5 border border-gray-400 rounded-lg bg-gray-200">
         <div className="flex items-start gap-2.5">
           {/* 프로필 이미지 */}
-          <div className="w-15 h-15 rounded-full bg-gray-600"></div>
+          {user.image ? (
+            <Image
+              src={user.image}
+              alt="프로필"
+              width={60}
+              height={60}
+              className="w-15 h-15 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-15 h-15 rounded-full bg-gray-600"></div>
+          )}
 
           {/* 사용자 정보 */}
           <div className="flex-1 flex flex-col">
             <div className="flex items-center gap-1">
               <h2 className="text-display-3 font-semibold text-gray-800">
-                {userName}
+                {user.name}
               </h2>
               <span className="text-display-1 text-gray-600">주부 9단</span>
             </div>
-            <p className="text-display-2 text-gray-800">{userEmail}</p>
+            <p className="text-display-2 text-gray-800">{user.email}</p>
             <div className="flex items-center mt-1">
               <Image src="/Location.svg" alt="주소" width={16} height={16} />
-              <span className="text-display-1 text-gray-800">서교동</span>
+              <span className="text-display-1 text-gray-800">
+                {user.address}
+              </span>
             </div>
           </div>
 
@@ -45,7 +99,9 @@ export default function MyPageClient() {
             className="bg-white rounded-lg text-center flex items-center justify-center cursor-pointer flex-1 py-2.5"
           >
             <div>
-              <p className="text-display-3 font-bold text-eatda-orange">0</p>
+              <p className="text-display-3 font-bold text-eatda-orange">
+                {cartCount}
+              </p>
               <p className="text-display-1 text-gray-800 group-hover:text-gray-700 mt-1">
                 장바구니
               </p>
@@ -56,7 +112,9 @@ export default function MyPageClient() {
             className="bg-white rounded-lg text-center flex items-center justify-center cursor-pointer flex-1 py-2.5"
           >
             <div>
-              <p className="text-display-3 font-bold text-eatda-orange">0</p>
+              <p className="text-display-3 font-bold text-eatda-orange">
+                {user.bookmark.products}
+              </p>
               <p className="text-display-1 text-gray-800 group-hover:text-gray-700 mt-1">
                 찜 목록
               </p>
