@@ -1,6 +1,6 @@
 import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 import Header from "@/app/src/components/common/Header";
-import ProductsListClient from "@/app/products/components/ProductsListClient";
+import ProductsListClient from "@/app/src/components/ui/ProductsListClient";
 
 async function getProducts() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/`, {
