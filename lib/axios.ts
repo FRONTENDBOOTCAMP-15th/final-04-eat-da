@@ -4,7 +4,26 @@ const API_SERVER = "https://fesp-api.koyeb.app/market";
 
 // 개발용 임시 토큰 (나중에 로그인 기능 구현 후 제거)
 const TEMP_ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEzLCJ0eXBlIjoic2VsbGVyIiwiaWF0IjoxNzY5NTc3MjcwLCJleHAiOjE3Njk2NjM2NzAsImlzcyI6IkZFQkMifQ.AU3bTDhARQ9phRqvp0B_l1IX8CwrrsfO54gHwQrksWw";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEyLCJ0eXBlIjoic2VsbGVyIiwiaWF0IjoxNzY5NTc0MTQzLCJleHAiOjE3Njk2NjA1NDMsImlzcyI6IkZFQkMifQ.UofwpK0U914IXxQcIXYGW5C2Jh8OvDYfgf4QYz3Ywr4";
+
+// 토큰 가져오기 / 나중에 로그인 구현되면 수정할것
+export function getAccessToken(): string | null {
+  return TEMP_ACCESS_TOKEN;
+}
+
+// 토큰에서 유저 정보 추출
+export function getTokenPayload(): { _id: number; type: string } | null {
+  const token = TEMP_ACCESS_TOKEN;
+  if (!token) return null;
+
+  try {
+    const payload = token.split(".")[1];
+    const decoded = JSON.parse(atob(payload));
+    return decoded;
+  } catch {
+    return null;
+  }
+}
 
 export function getAxios() {
   const instance = axios.create({
@@ -21,8 +40,11 @@ export function getAxios() {
     (config) => {
       console.log("요청 인터셉터 호출", config);
 
-      // 개발용 임시 토큰 사용
-      config.headers.Authorization = `Bearer ${TEMP_ACCESS_TOKEN}`;
+      // 토큰 설정
+      const token = getAccessToken();
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
 
       config.params = {
         ...config.params,
@@ -31,7 +53,7 @@ export function getAxios() {
     },
     (error) => {
       return Promise.reject(error);
-    }
+    },
   );
 
   instance.interceptors.response.use(
@@ -45,7 +67,7 @@ export function getAxios() {
     (error) => {
       console.error("에러 응답 인터셉터 호출", error);
       return Promise.reject(new Error("잠시 후 다시 이용해 주시기 바랍니다."));
-    }
+    },
   );
 
   return instance;
