@@ -12,6 +12,7 @@ interface WishSmallItemProps {
   reviewCount: number;
   price: number;
   initialWished?: boolean;
+  isLcp?: boolean;
 }
 
 export default function ProductCard({
@@ -23,11 +24,22 @@ export default function ProductCard({
   reviewCount,
   price,
   initialWished = false,
+  isLcp = false,
 }: WishSmallItemProps) {
+  const safeImageSrc = imageSrc || "/food1.png";
+
   return (
     <Link href={`/products/${productId}`} className="flex flex-col">
       <div className="relative w-full aspect-square">
-        <Image src={imageSrc} fill alt={dishName} className="object-cover" />
+        <Image
+          src={safeImageSrc}
+          fill
+          alt={dishName}
+          className="object-cover"
+          sizes="50vw"
+          loading={isLcp ? "eager" : "lazy"}
+          priority={isLcp}
+        />
         <div
           onClick={(e) => {
             e.preventDefault();

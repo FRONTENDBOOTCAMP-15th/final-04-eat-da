@@ -59,7 +59,7 @@ export default function ProductsListClient({
       <CategoryTabs value={selected} onChange={setSelected} />
 
       <div className="mt-25 mb-16 grid grid-cols-2">
-        {filtered.map((product) => (
+        {filtered.map((product, index) => (
           <ProductCard
             key={product._id}
             productId={product._id}
@@ -70,6 +70,7 @@ export default function ProductsListClient({
             reviewCount={product.replies ?? 0}
             price={product.price}
             initialWished={Boolean(product.myBookmarkId)}
+            isLcp={index === 0}
           />
         ))}
       </div>
