@@ -26,6 +26,16 @@ const sellers = [
   { _id: 10, seller_id: 10, name: "서지훈", gender: "M" },
 ];
 
+const priceByCategory = {
+  main: [8000, 16000],
+  soup: [6000, 12000],
+  side: [3000, 8000],
+  stir: [6000, 12000],
+  braise: [7000, 14000],
+  steam: [7000, 15000],
+  fry: [5000, 11000],
+};
+
 // ✅ 카테고리: 요구한 7종
 const categories = [
   {
@@ -151,6 +161,12 @@ function randomBetween(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function randomPrice(min, max, unit = 100) {
+  const minUnit = Math.ceil(min / unit);
+  const maxUnit = Math.floor(max / unit);
+  return randomBetween(minUnit, maxUnit) * unit;
+}
+
 function pickSellerIdByIndex(i) {
   // 제품 인덱스에 따라 판매자 10명에 분배
   return sellers[(i - 1) % sellers.length].seller_id;
@@ -165,13 +181,14 @@ function createProducts({ startId = 1 } = {}) {
   categories.forEach((cat) => {
     cat.items.forEach((name, idx) => {
       const sellerId = pickSellerIdByIndex(id);
+      const [min, max] = priceByCategory[cat.key];
 
       products.push({
         _id: id,
         createdAt: now,
         updatedAt: now,
         seller_id: sellerId,
-        price: randomBetween(4500, 16000),
+        price: randomPrice(min, max),
         show: true,
         active: true,
         name,
