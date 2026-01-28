@@ -5,6 +5,7 @@ interface OrderProductItemProps {
   dishName: string;
   chefName: string;
   price: number;
+  quantity?: number;
 }
 
 export default function OrderProductItem({

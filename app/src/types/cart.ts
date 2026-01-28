@@ -38,6 +38,10 @@ export interface CartProduct {
     _id: number;
   };
   buyQuantity: number;
+  seller: {
+    name: string;
+    _id: number;
+  };
   image: {
     path: string;
     name: string;

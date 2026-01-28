@@ -10,12 +10,6 @@ import { CartItemType, CartResponse } from "@/app/src/types";
 
 export default function CartPageClient() {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
-  const [cost, setCost] = useState({
-    products: 0,
-    shippingFees: 0,
-    discount: { products: 0, shippingFees: 0 },
-    total: 0,
-  });
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchCart = async () => {
@@ -23,7 +17,6 @@ export default function CartPageClient() {
       const axios = getAxios();
       const response = await axios.get<CartResponse>("/carts");
       setCartItems(response.data.item);
-      setCost(response.data.cost);
     } catch (error) {
       console.error("장바구니 조회 실패:", error);
     } finally {
