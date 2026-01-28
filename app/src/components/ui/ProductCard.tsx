@@ -44,9 +44,8 @@ export default function ProductCard({
       </div>
       <div className="pt-4 pb-5 px-2.5 space-y-1">
         <div className="flex gap-2 items-center">
-          {/* */}
           <p className="text-eatda-orange text-display-1 font-semibold">
-            {chefName}
+            {chefName} 주부
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -65,9 +64,7 @@ export default function ProductCard({
           </svg>
         </div>
         <div className="flex items-center">
-          {/* 메뉴명 */}
           <p className="text-paragraph mr-2">{dishName}</p>
-          {/* 별점&리뷰 */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
