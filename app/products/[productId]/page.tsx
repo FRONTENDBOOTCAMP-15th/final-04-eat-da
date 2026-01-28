@@ -6,6 +6,7 @@ import SellerProfileCard from "@/app/src/components/ui/SellerProfileCard";
 import ReviewList from "@/app/src/components/ui/ReviewList";
 import Header from "@/app/src/components/common/Header";
 import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
+import ProductDetailClient from "@/app/products/[productId]/ProductDetailClient";
 
 export default function ProductDetailPage() {
   {
@@ -33,9 +34,9 @@ export default function ProductDetailPage() {
   const reviews = [{ id: "r1" }, { id: "r2" }, { id: "r3" }];
 
   return (
-    <main className="flex flex-col gap-5 pb-32">
+    <main className="flex flex-col mt-12.5 gap-5 pb-23">
       {/* 헤더 */}
-      <Header title="반찬 목록" showBackButton showSearch showCart />
+      <Header title=" " showBackButton showSearch showCart />
       {/* 상품 정보 */}
       <ProductImageSlider images={productImages} />
       {/* 반찬이름 */}
@@ -80,9 +81,7 @@ export default function ProductDetailPage() {
         <ReviewList reviews={reviews} />
       </div>
 
-      <BottomFixedButton as="link" href={`/order/${"임시"}`}>
-        구매하기
-      </BottomFixedButton>
+      <ProductDetailClient />
     </main>
   );
 }

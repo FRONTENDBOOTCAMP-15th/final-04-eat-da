@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function RecommendProduct() {
   return (
-    <div className="shrink-0 w-30">
+    <div className="shrink-0 w-28">
       <div className="relative aspect-square">
         <Image
           src="/food1.png"
@@ -13,8 +13,8 @@ export default function RecommendProduct() {
         />
         <HeartItem className="absolute top-0.5 right-0" lineColor="white" />
       </div>
-      <div className="pt-2 px-1 space-y-1">
-        <div className="flex gap-2 items-center">
+      <div className="pt-2 px-1">
+        <div className="flex items-center">
           <p className="text-eatda-orange text-display-1 font-semibold">
             김미숙 주부9단
           </p>

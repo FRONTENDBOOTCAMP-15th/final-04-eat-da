@@ -3,17 +3,17 @@ import Image from "next/image";
 export default function CartItem() {
   return (
     <div className="py-3 border-b-[0.5px] border-gray-400">
-      <div className="flex gap-5 mb-4">
+      <div className="flex gap-5 mb-3">
         <Image
           src="/food1.png"
           width={70}
           height={70}
           alt="반찬 사진1"
-          className="rounded-xl"
+          className="rounded-lg"
         />
-        <div className="flex-1 flex flex-col gap-1">
+        <div className="flex-1 flex flex-col gap-0.5 mt-1">
           <div className="flex justify-between items-start">
-            <p className="font-semibold text-display-2">
+            <p className="font-semibold text-paragraph">
               김미숙님의 소고기 장조림
             </p>
             <svg
@@ -39,12 +39,14 @@ export default function CartItem() {
             </svg>
           </div>
           <p className="text-x-small text-gray-500">김미숙 주부 9단</p>
-          <p className="font-bold">8,500원</p>
+          <p className="font-semibold text-paragraph-sm text-eatda-orange">
+            8,500원
+          </p>
         </div>
       </div>
       <div className="flex justify-between">
         <div className="flex items-center gap-4">
-          <button className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
+          <button className="w-6 h-6 bg-gray-200 rounded-xs flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="19"
@@ -62,7 +64,7 @@ export default function CartItem() {
             </svg>
           </button>
           <p className="flex items-center justify-center text-paragraph">2</p>
-          <button className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
+          <button className="w-6 h-6 bg-gray-200 rounded-xs flex items-center justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="19"
@@ -89,7 +91,7 @@ export default function CartItem() {
         </div>
         <div className="">
           <p className="text-right text-gray-500 text-x-small">총합</p>
-          <p className="--font-weight-semibold text-display-2">17,000원</p>
+          <p className="font-semibold text-paragraph">17,000원</p>
         </div>
       </div>
     </div>

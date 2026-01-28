@@ -27,20 +27,20 @@ export default function ReviewManagementPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setActiveTab('available')}
-            className={`flex-1 py-3 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 rounded-md text-sm font-medium transition-colors border ${
               activeTab === 'available'
-                ? 'bg-eatda-orange text-white'
-                : 'bg-white text-gray-900 border border-gray-200'
+                ? 'bg-eatda-orange text-white border-eatda-orange'
+                : 'bg-gray-200 text-gray-900 border-gray-300'
             }`}
           >
             작성 가능한 리뷰
           </button>
           <button
             onClick={() => setActiveTab('my')}
-            className={`flex-1 py-3 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex-1 py-3 rounded-md text-sm font-medium transition-colors border ${
               activeTab === 'my'
-                ? 'bg-eatda-orange text-white'
-                : 'bg-white text-gray-900 border border-gray-200'
+                ? 'bg-eatda-orange text-white border-eatda-orange'
+                : 'bg-gray-200 text-gray-900 border-gray-300'
             }`}
           >
             내 리뷰
@@ -54,14 +54,14 @@ export default function ReviewManagementPage() {
           // 작성 가능한 리뷰 탭
           <div>
             {/* 리뷰 아이템 1 */}
-            <div className="px-5 py-4 border-b border-gray-300">
-              <div className="flex gap-3 mb-3">
-                <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+            <div className="px-5 py-4">
+              <div className="flex gap-4 mb-5">
+                <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="text-base font-semibold text-gray-900 mb-1">
+                  <h3 className="text-base font-semibold text-gray-900">
                     입에서 녹는 소고기 장조림
                   </h3>
-                  <p className="text-sm text-eatda-orange mb-0.5">
+                  <p className="text-sm text-eatda-orange">
                     김미숙 주부 9단
                   </p>
                   <p className="text-xs text-gray-500">2026.01.10 구매완료</p>
@@ -69,21 +69,22 @@ export default function ReviewManagementPage() {
               </div>
               <button 
                 onClick={() => router.push('/review/write')}
-                className="w-full py-3 bg-eatda-orange text-white font-medium rounded-lg"
+                className="w-full py-3 bg-eatda-orange text-white font-medium rounded-md"
               >
                 리뷰 쓰기
               </button>
+              <div className="border-b border-gray-300  mt-4"></div>
             </div>
 
             {/* 리뷰 아이템 2 */}
-            <div className="px-5 py-4 border-b border-gray-300">
-              <div className="flex gap-3 mb-3">
-                <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+            <div className="px-5 py-4">
+              <div className="flex gap-4 mb-5">
+                <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="text-base font-semibold text-gray-900 mb-1">
+                  <h3 className="text-base font-semibold text-gray-900">
                     얼큰한 김치찌개
                   </h3>
-                  <p className="text-sm text-eatda-orange mb-0.5">
+                  <p className="text-sm text-eatda-orange">
                     김미숙 주부 9단
                   </p>
                   <p className="text-xs text-gray-500">2026.01.10 구매완료</p>
@@ -91,21 +92,22 @@ export default function ReviewManagementPage() {
               </div>
               <button 
                 onClick={() => router.push('/review/write')}
-                className="w-full py-3 bg-eatda-orange text-white font-medium rounded-lg"
+                className="w-full py-3 bg-eatda-orange text-white font-medium rounded-md"
               >
                 리뷰 쓰기
               </button>
+              <div className="border-b border-gray-300  mt-4"></div>
             </div>
 
             {/* 리뷰 아이템 3 */}
-            <div className="px-5 py-4 border-b border-gray-300">
-              <div className="flex gap-3 mb-3">
-                <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+            <div className="px-5 py-4">
+              <div className="flex gap-4 mb-5">
+                <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="text-base font-semibold text-gray-900 mb-1">
+                  <h3 className="text-base font-semibold text-gray-900">
                     얼큰한 김치찌개
                   </h3>
-                  <p className="text-sm text-eatda-orange mb-0.5">
+                  <p className="text-sm text-eatda-orange">
                     김미숙 주부 9단
                   </p>
                   <p className="text-xs text-gray-500">2026.01.10 구매완료</p>
@@ -113,27 +115,28 @@ export default function ReviewManagementPage() {
               </div>
               <button 
                 onClick={() => router.push('/review/write')}
-                className="w-full py-3 bg-eatda-orange text-white font-medium rounded-lg"
+                className="w-full py-3 bg-eatda-orange text-white font-medium rounded-md"
               >
                 리뷰 쓰기
               </button>
+              <div className="border-b border-gray-300  mt-4"></div>
             </div>
           </div>
         ) : (
           // 내 리뷰 탭
           <div>
             {/* 내 리뷰 아이템 1 */}
-            <div className="px-5 py-4 border-b border-gray-300">
-              <div className="flex gap-3 mb-3">
-                <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+            <div className="px-5 py-4">
+              <div className="flex gap-4 mb-5">
+                <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="text-base font-semibold text-gray-900 mb-1">
+                  <h3 className="text-base font-semibold text-gray-900">
                     입에서 녹는 소고기 장조림
                   </h3>
-                  <p className="text-sm text-eatda-orange mb-1">김미숙 주부 9단</p>
+                  <p className="text-sm text-eatda-orange">김미숙 주부 9단</p>
                   
                   {/* 별점 */}
-                  <div className="mb-1">
+                  <div className="py-1">
                     <StarItem 
                       rating={1}
                       onRatingChange={() => {}}
@@ -165,20 +168,21 @@ export default function ReviewManagementPage() {
                   />
                 </div>
               </div>
+              <div className="border-b border-gray-300  mt-4"></div>
             </div>
 
             {/* 내 리뷰 아이템 2 */}
-            <div className="px-5 py-4 border-b border-gray-300">
-              <div className="flex gap-3 mb-3">
-                <div className="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0" />
+            <div className="px-5 py-4">
+              <div className="flex gap-4 mb-5">
+                <div className="w-16 h-16 bg-gray-200 rounded-md flex-shrink-0" />
                 <div className="flex-1">
-                  <h3 className="text-base font-semibold text-gray-900 mb-1">
+                  <h3 className="text-base font-semibold text-gray-900">
                     입에서 녹는 소고기 장조림
                   </h3>
-                  <p className="text-sm text-eatda-orange mb-1">김미숙 주부 9단</p>
+                  <p className="text-sm text-eatda-orange">김미숙 주부 9단</p>
                   
                   {/* 별점 */}
-                  <div className="mb-1">
+                  <div className="py-1">
                     <StarItem 
                       rating={1}
                       onRatingChange={() => {}}
@@ -209,6 +213,7 @@ export default function ReviewManagementPage() {
                   />
                 </div>
               </div>
+              <div className="border-b border-gray-300  mt-4"></div>
             </div>
           </div>
         )}

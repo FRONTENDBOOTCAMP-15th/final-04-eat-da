@@ -1,21 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 interface AddImageProps {
   onChange?: (images: string[]) => void;
   maxImages?: number;
   initialImages?: string[];
+  showLabel?: boolean; // 라벨 표시 여부 추가
 }
 
 export default function AddImage({
   onChange,
-  maxImages = 20, // 최대 이미지 갯수
+  maxImages = 20,
   initialImages = [],
+  showLabel = true, // 기본값 true (기존 동작 유지)
 }: AddImageProps) {
   const [images, setImages] = useState<string[]>(initialImages);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  // 가로 스크롤 (마우스 휠)
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      if (e.deltaY !== 0) {
+        container.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+    return () => container.removeEventListener("wheel", handleWheel);
+  }, []);
 
   // 이미지 추가 버튼 클릭
   const handleImageButtonClick = () => {
@@ -48,9 +67,12 @@ export default function AddImage({
 
   return (
     <div>
-      <label className="text-display-2 font-semibold text-gray-800">
-        반찬 이미지 등록 <span className="text-eatda-orange">*</span>
-      </label>
+      {/* showLabel이 true일 때만 라벨 표시 */}
+      {showLabel && (
+        <label className="text-display-2 font-semibold text-gray-800">
+          반찬 이미지 등록 <span className="text-eatda-orange">*</span>
+        </label>
+      )}
       {/* 파일 input */}
       <input
         type="file"
@@ -60,7 +82,7 @@ export default function AddImage({
         multiple
         className="hidden"
       />
-      <div className="flex gap-2.5 overflow-x-auto overflow-y-visible py-2">
+      <div ref={scrollContainerRef} className="flex gap-2.5 scrollbar-hide overflow-x-auto overflow-y-visible py-2">
         {/* 등록된 이미지 미리보기 */}
         {images.map((imageUrl, index) => (
           <div key={index} className="w-17.5 h-17.5 shrink-0 relative">
@@ -68,7 +90,7 @@ export default function AddImage({
               src={imageUrl}
               alt={`반찬 이미지 ${index + 1}`}
               fill
-              className="object-cover rounded"
+              className="object-cover rounded-lg"
             />
             {/* 삭제 버튼 */}
             <button
@@ -104,12 +126,12 @@ export default function AddImage({
             </button>
           </div>
         ))}
-        {/* 이미지 추가 버튼 - 최대 개수(현재 20개)미만일 때만 표시 */}
+        {/* 이미지 추가 버튼 */}
         {images.length < maxImages && (
           <button
             type="button"
             onClick={handleImageButtonClick}
-            className="w-17.5 h-17.5 rounded shrink-0 bg-gray-200 border-[0.5px] border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-400"
+            className="w-17.5 h-17.5 rounded-lg shrink-0 bg-gray-200 border-[0.5px] border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-400"
           >
             <svg
               width="24"

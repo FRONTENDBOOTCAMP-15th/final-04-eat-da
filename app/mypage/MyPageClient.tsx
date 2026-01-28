@@ -9,7 +9,7 @@ export default function MyPageClient() {
   const userEmail = "jubu@gmail.com";
 
   return (
-    <>
+    <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
       {/* 프로필 섹션 */}
       <section className="p-5 border border-gray-400 rounded-lg bg-gray-200">
         <div className="flex items-start gap-2.5">
@@ -17,13 +17,15 @@ export default function MyPageClient() {
           <div className="w-15 h-15 rounded-full bg-gray-600"></div>
 
           {/* 사용자 정보 */}
-          <div className="flex-1 flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <h2 className="font-bold text-gray-800">{userName}</h2>
-              <span className="text-xs text-gray-600">주부 9단</span>
+          <div className="flex-1 flex flex-col">
+            <div className="flex items-center gap-1">
+              <h2 className="text-display-3 font-semibold text-gray-800">
+                {userName}
+              </h2>
+              <span className="text-display-1 text-gray-600">주부 9단</span>
             </div>
-            <p className="text-sm text-gray-600">{userEmail}</p>
-            <div className="flex items-center">
+            <p className="text-display-2 text-gray-800">{userEmail}</p>
+            <div className="flex items-center mt-1">
               <svg
                 width="16"
                 height="16"
@@ -42,12 +44,12 @@ export default function MyPageClient() {
                   fill="white"
                 />
               </svg>
-              <span className="text-sm text-gray-700">서교동</span>
+              <span className="text-display-1 text-gray-800">서교동</span>
             </div>
           </div>
 
           {/* 로그아웃 */}
-          <button className="text-sm text-nowrap text-gray-600 hover:text-gray-700">
+          <button className="text-display-1 text-nowrap text-gray-600 hover:text-gray-700">
             로그아웃
           </button>
         </div>
@@ -56,22 +58,22 @@ export default function MyPageClient() {
         <div className="flex justify-around pt-4 gap-2.5">
           <Link
             href="/cart"
-            className="bg-white rounded-lg text-center flex items-center justify-center cursor-pointer flex-1 py-4"
+            className="bg-white rounded-lg text-center flex items-center justify-center cursor-pointer flex-1 py-2.5"
           >
             <div>
-              <p className="text-sm font-bold text-eatda-orange">0</p>
-              <p className="text-xs text-gray-600 group-hover:text-gray-700 mt-3">
+              <p className="text-display-3 font-bold text-eatda-orange">0</p>
+              <p className="text-display-1 text-gray-800 group-hover:text-gray-700 mt-1">
                 장바구니
               </p>
             </div>
           </Link>
           <Link
             href="/wishlist"
-            className="bg-white rounded-lg text-center flex items-center justify-center cursor-pointer flex-1 py-4"
+            className="bg-white rounded-lg text-center flex items-center justify-center cursor-pointer flex-1 py-2.5"
           >
             <div>
-              <p className="text-sm font-bold text-eatda-orange">0</p>
-              <p className="text-xs text-gray-600 group-hover:text-gray-700 mt-3">
+              <p className="text-display-3 font-bold text-eatda-orange">0</p>
+              <p className="text-display-1 text-gray-800 group-hover:text-gray-700 mt-1">
                 찜 목록
               </p>
             </div>
@@ -132,13 +134,13 @@ export default function MyPageClient() {
 
             <Link
               href="/mypage/support"
-              className="py-5 hover:bg-gray-200 cursor-pointer"
+              className="py-5 hover:bg-gray-200 cursor-pointer border-b border-gray-400"
             >
               <span className="text-gray-800">고객센터</span>
             </Link>
           </div>
         </ul>
       </nav>
-    </>
+    </div>
   );
 }

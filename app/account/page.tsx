@@ -121,15 +121,15 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <div className="flex-1 px-5 py-20 overflow-y-auto">
+      <div className="flex-1 px-5 mt-15 mb-24 overflow-y-auto min-h-[calc(100vh-10rem)">
         <div className="max-w-md mx-auto">
           {/* 헤더 */}
-          <Header title="개인 정보 설정" />
+          <Header title="개인 정보 설정" showCloseButton />
 
           <form
             id="account-form"
             onSubmit={handleSubmit}
-            className="flex flex-col gap-5"
+            className="flex flex-col gap-5 "
           >
             {/* 회원유형 (변경 불가) */}
             <div>
@@ -185,7 +185,7 @@ export default function AccountPage() {
                 onChange={(e) => handleChange("email", e.target.value)}
                 onBlur={() => handleBlur("email")}
                 placeholder="example@youremail.com"
-                className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-600 placeholder:text-display-2"
+                className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-500 placeholder:text-display-2"
               />
               {errors.email && (
                 <p className="text-eatda-orange text-x-small mt-2">
@@ -206,7 +206,7 @@ export default function AccountPage() {
                   onChange={(e) => handleChange("password", e.target.value)}
                   onBlur={() => handleBlur("password")}
                   placeholder="변경하실 비밀번호를 입력하세요"
-                  className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-600 placeholder:text-display-2"
+                  className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-500 placeholder:text-display-2"
                 />
                 {errors.password && (
                   <p className="text-eatda-orange text-x-small mt-2">
@@ -225,7 +225,7 @@ export default function AccountPage() {
                   }
                   onBlur={() => handleBlur("confirmPassword")}
                   placeholder="변경하실 비밀번호를 입력하세요"
-                  className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-600 placeholder:text-display-2"
+                  className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-500 placeholder:text-display-2"
                 />
                 {errors.confirmPassword && (
                   <p className="text-eatda-orange text-x-small mt-2">
@@ -245,7 +245,7 @@ export default function AccountPage() {
                 onChange={(e) => handleChange("phone", e.target.value)}
                 onBlur={() => handleBlur("phone")}
                 placeholder="010-0000-0000"
-                className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-600 placeholder:text-display-2"
+                className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-500 placeholder:text-display-2"
               />
               {errors.phone && (
                 <p className="text-eatda-orange text-x-small mt-2">
@@ -265,7 +265,7 @@ export default function AccountPage() {
                 onChange={(e) => handleChange("address", e.target.value)}
                 onBlur={() => handleBlur("address")}
                 placeholder="서울특별시 강남구 도곡동"
-                className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-600 placeholder:text-display-2"
+                className="w-full py-3 border-0 border-b border-gray-400 text-gray-800 text-display-2 focus:outline-none placeholder:text-gray-500 placeholder:text-display-2"
               />
               {errors.address && (
                 <p className="text-eatda-orange text-x-small mt-2">

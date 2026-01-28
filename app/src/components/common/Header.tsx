@@ -8,10 +8,12 @@ interface HeaderProps {
   showCloseButton?: boolean;
   showSearch?: boolean;
   showCart?: boolean;
+  showHome?: boolean; // 홈 버튼 추가
   onBack?: () => void;
   onClose?: () => void;
   onSearch?: () => void;
   onCart?: () => void;
+  onHome?: () => void; // 홈 핸들러 추가
 }
 
 export default function Header({
@@ -20,10 +22,12 @@ export default function Header({
   showCloseButton = false,
   showSearch = false,
   showCart = false,
+  showHome = false, // 기본값 false
   onBack,
   onClose,
   onSearch,
   onCart,
+  onHome,
 }: HeaderProps) {
   const router = useRouter();
 
@@ -59,6 +63,14 @@ export default function Header({
     }
   };
 
+  const handleHome = () => {
+    if (onHome) {
+      onHome();
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 bg-white px-4 pt-4 pb-3 z-50">
       <div className="flex items-center justify-between">
@@ -78,7 +90,7 @@ export default function Header({
           </h1>
         </div>
 
-        {/* 오른쪽: X, 검색, 장바구니 */}
+        {/* 오른쪽: X, 검색, 장바구니/홈 */}
         <div className="flex gap-4 items-center">
           {showCloseButton && (
             <button
@@ -103,7 +115,13 @@ export default function Header({
               <img src="/search.svg" alt="검색" width={21} height={21} />
             </button>
           )}
-          {showCart && (
+          {showHome ? (
+            // 홈 버튼 (장바구니 페이지용)
+            <button onClick={handleHome} className="text-gray-900">
+              <img src="/Home.svg" alt="홈" width={21} height={21} />
+            </button>
+          ) : showCart ? (
+            // 장바구니 버튼 (일반 페이지용)
             <button onClick={handleCart} className="text-gray-900 relative">
               <img
                 src="/shopping cart.svg"
@@ -112,7 +130,7 @@ export default function Header({
                 height={22}
               />
             </button>
-          )}
+          ) : null}
         </div>
       </div>
     </header>

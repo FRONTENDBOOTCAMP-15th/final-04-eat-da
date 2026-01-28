@@ -22,12 +22,8 @@ export default function NewBanchanClient() {
   };
 
   return (
-    <form
-      id="new-banchan-form"
-      onSubmit={handleSubmit}
-      className="flex flex-col"
-    >
-      <div className="flex-1 px-5 pt-5 pb-32.5 flex flex-col gap-7.5 overflow-y-auto">
+    <form id="new-banchan-form" onSubmit={handleSubmit}>
+      <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
         {/* 반찬 이름 */}
         <div>
           <label className="text-display-2 font-semibold text-gray-800 mb-2">
@@ -37,7 +33,7 @@ export default function NewBanchanClient() {
             type="text"
             name="name"
             placeholder="예: 불향 가득 제육볶음"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -54,7 +50,7 @@ export default function NewBanchanClient() {
             type="text"
             name="price"
             placeholder="5,000"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -68,7 +64,7 @@ export default function NewBanchanClient() {
             type="text"
             name="description"
             placeholder="반찬에 대한 소개를 작성해주세요"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -81,7 +77,7 @@ export default function NewBanchanClient() {
           <textarea
             name="ingredients"
             placeholder={`재료를 쉼표로 구분해주세요\n(예: 김치, 돼지고기, 두부)`}
-            className="resize-none w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
+            className="focus:outline-none resize-none w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
             required
           />
         </div>
@@ -95,7 +91,7 @@ export default function NewBanchanClient() {
             type="text"
             name="quantity"
             placeholder="2"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -109,7 +105,7 @@ export default function NewBanchanClient() {
             type="text"
             name="maxOrder"
             placeholder="20"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
@@ -123,7 +119,7 @@ export default function NewBanchanClient() {
             type="text"
             name="pickupLocation"
             placeholder="잇다 서교동 공유주방"
-            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500"
+            className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 focus:outline-none"
             required
           />
         </div>
