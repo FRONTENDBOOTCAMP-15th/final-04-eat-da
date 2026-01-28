@@ -4,7 +4,7 @@ const API_SERVER = "https://fesp-api.koyeb.app/market";
 
 // 개발용 임시 토큰 (나중에 로그인 기능 구현 후 제거)
 const TEMP_ACCESS_TOKEN =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsInR5cGUiOiJzZWxsZXIiLCJpYXQiOjE3Njk0ODk1NDIsImV4cCI6MTc2OTU3NTk0MiwiaXNzIjoiRkVCQyJ9.8NqXiibTcvwfuEJaRs1WHvwYe-XYqNLYgGsXa56hxNk";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEzLCJ0eXBlIjoic2VsbGVyIiwiaWF0IjoxNzY5NTc3MjcwLCJleHAiOjE3Njk2NjM2NzAsImlzcyI6IkZFQkMifQ.AU3bTDhARQ9phRqvp0B_l1IX8CwrrsfO54gHwQrksWw";
 
 export function getAxios() {
   const instance = axios.create({

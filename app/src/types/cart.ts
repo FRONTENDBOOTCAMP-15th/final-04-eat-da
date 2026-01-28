@@ -34,6 +34,10 @@ export interface CartProduct {
   seller_id: number;
   quantity: number;
   buyQuantity: number;
+  seller: {
+    name: string;
+    _id: number;
+  };
   image: {
     path: string;
     name: string;
