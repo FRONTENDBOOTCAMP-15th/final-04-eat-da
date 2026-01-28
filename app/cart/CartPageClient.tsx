@@ -79,7 +79,7 @@ export default function CartPageClient() {
         title="장바구니"
         showBackButton={true}
         showSearch={true}
-        showCart={true}
+        showHome={true}
       />
       <div className="min-h-screen flex flex-col">
         <div className="mt-6 mb-12 p-5 flex-1 flex flex-col">

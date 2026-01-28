@@ -106,7 +106,7 @@ export default function ReviewEditPage() {
         </div>
 
         {/* 별점 */}
-        <div className="py-6 border-b border-gray-400">
+        <div className="py-6 ">
           <h3 className="text-display-4 font-semibold text-gray-800 mb-3">
             반찬은 어떠셨나요? <span className="text-eatda-orange">*</span>
           </h3>
@@ -126,12 +126,17 @@ export default function ReviewEditPage() {
           </h3>
           <textarea
             value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
+            onChange={(e) => {
+              setReviewText(e.target.value);
+              // 자동 높이 조절
+              e.target.style.height = 'auto';
+              e.target.style.height = e.target.scrollHeight + 'px';
+            }}
             placeholder="솔직한 후기를 남겨주세요."
-            className="w-full min-h-[80px] text-paragraph text-gray-800 placeholder:text-gray-500 resize-none focus:outline-none"
+            className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2 resize-none overflow-hidden"
+            rows={1}
           />
         </div>
-        <div className="border-b border-gray-400"></div>
       </form>
 
       {/* 하단 고정 등록 버튼 */}

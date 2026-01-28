@@ -17,7 +17,7 @@ async function seed({ reset = false } = {}) {
     await client.connect();
     const db = client.db(dbName);
 
-    // ✅ 컬렉션명: 너희 Compass 기준
+    // ✅ 컬렉션명
     const productCol = db.collection("product");
     const userCol = db.collection("user");
 
@@ -40,11 +40,29 @@ async function seed({ reset = false } = {}) {
     }));
 
     if (sellerDocs.length) {
-      await userCol.insertMany(sellerDocs, { ordered: false });
+      await userCol.bulkWrite(
+        sellerDocs.map((seller) => ({
+          updateOne: {
+            filter: { seller_id: seller.seller_id },
+            update: { $set: seller },
+            upsert: true,
+          },
+        })),
+        { ordered: false },
+      );
     }
 
     if (products.length) {
-      await productCol.insertMany(products, { ordered: false });
+      await productCol.bulkWrite(
+        products.map((product) => ({
+          updateOne: {
+            filter: { _id: product._id }, // 또는 { seller_id, name }
+            update: { $set: product },
+            upsert: true,
+          },
+        })),
+        { ordered: false },
+      );
     }
 
     const productCount = await productCol.countDocuments();
