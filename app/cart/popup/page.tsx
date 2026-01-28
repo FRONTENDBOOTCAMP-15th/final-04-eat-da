@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CartItem } from "@/types/cart";
 import CartPopup from "@/app/cart/CartPopup";
+import { CartItem } from "@/app/src/types";
 
 export default function ProductPage() {
   const [isCartOpen, setIsCartOpen] = useState(false);
