@@ -95,6 +95,7 @@ export default function CartPageClient() {
                     cartId={item._id}
                     productId={item.product._id}
                     imageSrc={item.product.image.path}
+                    chefName={item.product.seller.name}
                     productName={item.product.name}
                     price={item.product.price}
                     quantity={item.quantity}

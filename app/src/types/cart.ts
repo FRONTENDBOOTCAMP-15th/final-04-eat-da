@@ -20,7 +20,7 @@ export interface CartItemProps {
   productId: number;
   imageSrc: string;
   productName: string;
-  chefName?: string;
+  chefName: string;
   price: number;
   quantity: number;
   onQuantityChange?: (cartId: number, newQuantity: number) => void;
@@ -33,6 +33,10 @@ export interface CartProduct {
   price: number;
   seller_id: number;
   quantity: number;
+  seller: {
+    name: string;
+    _id: number;
+  };
   buyQuantity: number;
   image: {
     path: string;
