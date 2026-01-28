@@ -1,7 +1,6 @@
-// components/CartPopupItem.tsx
 "use client";
 
-import { CartItem } from "@/types/cart";
+import { CartItem } from "@/app/src/types";
 
 interface CartPopupItemProps {
   item: CartItem;

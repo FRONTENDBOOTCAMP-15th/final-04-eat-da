@@ -3,7 +3,7 @@ import Header from "@/app/src/components/common/Header";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "잇다 주문 관리",
+  title: "주문 관리",
   openGraph: {
     title: "잇다 주문관리 목록",
     description: "주문관리 페이지",
@@ -32,13 +32,12 @@ export default function OrdersPage() {
   return (
     <>
       <Header
-        title="주문관리"
+        title={`${metadata.title}`}
         showBackButton={true}
         showSearch={true}
         showCart={true}
       />
-      <div className="flex flex-col gap-6 p-5">
-        <h2 className="text-display-6 font-semibold">주문관리</h2>
+      <div className="px-5 pt-16 pb-18 flex flex-col gap-5">
         <div className="grid grid-cols-2 gap-3">
           <button className="flex justify-between items-center px-3 py-4 border border-gray-300 bg-gray-200 rounded-lg">
             <span>대기중</span>

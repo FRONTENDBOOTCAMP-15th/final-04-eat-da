@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AddImage from "@/app/src/components/ui/AddImage";
+import ConfirmModal from "@/app/src/components/ui/ConfirmModal";
 
 interface EditBanchanClientProps {
   initialData: {
@@ -43,16 +44,16 @@ export default function EditBanchanClient({
       onSubmit={handleSubmit}
       className="flex flex-col"
     >
-      <div className="flex-1 px-5 pt-7.5 pb-32.5 flex flex-col gap-7.5 overflow-y-auto">
+      <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
         {/* 판매중/판매중지 버튼 */}
         <div className="flex gap-2.5">
           <button
             type="button"
             onClick={() => setIsOnSale(true)}
-            className={`flex-1 h-12.5 rounded text-display-1 font-semibold border ${
+            className={`flex-1 h-12 rounded-lg text-display-1 font-semibold border transition-colors ${
               isOnSale
                 ? "bg-eatda-orange text-white border-eatda-orange"
-                : "bg-white text-gray-500 border-gray-300"
+                : "bg-gray-200 text-gray-800 border-gray-300"
             }`}
           >
             판매중
@@ -60,10 +61,10 @@ export default function EditBanchanClient({
           <button
             type="button"
             onClick={() => setIsOnSale(false)}
-            className={`flex-1 h-12.5 rounded text-display-1 font-semibold border ${
+            className={`flex-1 h-12 rounded-lg text-display-1 font-semibold border transition-colors ${
               !isOnSale
                 ? "bg-eatda-orange text-white border-eatda-orange"
-                : "bg-white text-gray-500 border-gray-300"
+                : "bg-white text-gray-800 border-gray-300"
             }`}
           >
             판매중지
@@ -84,7 +85,7 @@ export default function EditBanchanClient({
               name="name"
               defaultValue={initialData.name}
               placeholder="예: 불향 가득 제육볶음"
-              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500"
+              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500 focus:outline-none"
               required
             />
           </div>
@@ -102,7 +103,7 @@ export default function EditBanchanClient({
               name="price"
               defaultValue={initialData.price}
               placeholder="5,000"
-              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500"
+              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500 focus:outline-none"
               required
             />
           </div>
@@ -117,7 +118,7 @@ export default function EditBanchanClient({
               name="description"
               defaultValue={initialData.description}
               placeholder="반찬에 대한 소개를 작성해주세요"
-              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500"
+              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500 focus:outline-none"
               required
             />
           </div>
@@ -131,7 +132,7 @@ export default function EditBanchanClient({
               name="ingredients"
               defaultValue={initialData.ingredients}
               placeholder={`재료를 쉼표로 구분해주세요\n(예: 김치, 돼지고기, 두부)`}
-              className="resize-none w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500"
+              className="resize-none w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500 focus:outline-none"
               required
             />
           </div>
@@ -146,7 +147,7 @@ export default function EditBanchanClient({
               name="servings"
               defaultValue={initialData.servings}
               placeholder="2"
-              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500"
+              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500 focus:outline-none"
               required
             />
           </div>
@@ -161,7 +162,7 @@ export default function EditBanchanClient({
               name="quantity"
               defaultValue={initialData.quantity}
               placeholder="20"
-              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500"
+              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500 focus:outline-none"
               required
             />
           </div>
@@ -176,34 +177,19 @@ export default function EditBanchanClient({
               name="pickupLocation"
               defaultValue={initialData.pickupLocation}
               placeholder="잇다 서교동 공유주방"
-              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500"
+              className="w-full py-2 border-b-[0.5px] border-gray-400 text-display-2 text-gray-800 placeholder:text-gray-500 disabled:text-gray-500 focus:outline-none"
               required
             />
           </div>
         </fieldset>
       </div>
 
-      {/* 모달 */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-5">
-          <div className="bg-white rounded w-[90vw] max-w-150 p-6 flex flex-col gap-6.5">
-            <div className="text-gray-800 text-center flex flex-col gap-4">
-              <p className="text-display-4 font-semibold">
-                반찬 정보가 변경되었습니다.
-              </p>
-              <p className="text-display-2">변경된 정보로 상품이 노출됩니다.</p>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleModalConfirm}
-              className="w-full py-3 rounded bg-eatda-orange text-white text-display-2 font-semibold hover:opacity-90"
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
+      <ConfirmModal
+        isOpen={showModal}
+        title="반찬 정보가 변경되었습니다."
+        description="변경된 정보로 상품이 노출됩니다."
+        onConfirm={handleModalConfirm}
+      />
     </form>
   );
 }

@@ -8,7 +8,14 @@ type BottomFixedButtonProps =
     }
   | {
       as: "button";
+      type?: "submit";
       formId: string;
+      children: React.ReactNode;
+    }
+  | {
+      as: "button";
+      type: "button";
+      onClick: () => void | Promise<void>;
       children: React.ReactNode;
     };
 
@@ -24,6 +31,16 @@ export default function BottomFixedButton(props: BottomFixedButtonProps) {
     );
   }
 
+  // 일반 클릭 버튼
+  if (props.type === "button") {
+    return (
+      <button type="button" onClick={props.onClick} className={className}>
+        {props.children}
+      </button>
+    );
+  }
+
+  // 폼 제출 버튼
   return (
     <button type="submit" form={props.formId} className={className}>
       {props.children}

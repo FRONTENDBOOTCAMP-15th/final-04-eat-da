@@ -8,7 +8,7 @@ export default function BanchanManagementClient() {
 
   return (
     <>
-      <section className="flex-1 flex flex-col">
+      <section className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
         {items.length > 0 ? (
           <div>
             <p className="text-display-3 font-semibold text-gray-800">

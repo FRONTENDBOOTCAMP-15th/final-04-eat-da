@@ -1,8 +1,10 @@
 "use client";
 import Image from "next/image";
 import HeartItem from "./HeartItem";
+import Link from "next/link";
 
 interface WishSmallItemProps {
+  productId: number;
   imageSrc: string;
   chefName: string;
   dishName: string;
@@ -12,7 +14,8 @@ interface WishSmallItemProps {
   initialWished?: boolean;
 }
 
-export default function WishSmallItem({
+export default function ProductCard({
+  productId,
   imageSrc,
   chefName,
   dishName,
@@ -22,18 +25,26 @@ export default function WishSmallItem({
   initialWished = false,
 }: WishSmallItemProps) {
   return (
-    <div className="flex flex-col">
+    <Link href={`/products/${productId}`} className="flex flex-col">
       <div className="relative w-full aspect-square">
         <Image src={imageSrc} fill alt={dishName} className="object-cover" />
-        <HeartItem
-          initialWished={initialWished}
-          lineColor="white"
-          size={25}
+        <div
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
           className="absolute bottom-2 right-1"
-        />
+        >
+          <HeartItem
+            initialWished={initialWished}
+            lineColor="white"
+            size={25}
+          />
+        </div>
       </div>
       <div className="pt-4 pb-5 px-2.5 space-y-1">
         <div className="flex gap-2 items-center">
+          {/* */}
           <p className="text-eatda-orange text-display-1 font-semibold">
             {chefName}
           </p>
@@ -54,7 +65,9 @@ export default function WishSmallItem({
           </svg>
         </div>
         <div className="flex items-center">
-          <p className="text-paragraph-sm mr-2">{dishName}</p>
+          {/* 메뉴명 */}
+          <p className="text-paragraph mr-2">{dishName}</p>
+          {/* 별점&리뷰 */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -75,6 +88,6 @@ export default function WishSmallItem({
           {price.toLocaleString()}원
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -1,70 +1,35 @@
-import CategoryTabs from "@/app/products/components/CategoryTabs";
 import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 import Header from "@/app/src/components/common/Header";
-import WishSmallItem from "@/app/src/components/ui/WishSmallItem";
+import ProductsListClient from "@/app/src/components/ui/ProductsListClient";
 
-export default function ProductsList() {
+async function getProducts() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/`, {
+    cache: "no-store",
+    headers: {
+      accept: "application/json",
+      "Client-Id": process.env.NEXT_PUBLIC_CLIENT_ID!,
+    },
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(res.status, body);
+    throw new Error("반찬 목록 불러오기 실패");
+  }
+
+  return res.json();
+}
+
+export default async function ProductsList() {
+  const data = await getProducts();
+  const products = data.item;
+
   return (
     <>
-      {/* 헤더 */}
-      <Header title="반찬 목록" showBackButton showSearch showCart />
-      <CategoryTabs />
-      <div className="mt-30 grid grid-cols-2">
-        <WishSmallItem
-          imageSrc="/food2.png"
-          chefName="김미숙 주부9단"
-          dishName="얼큰한 김치찌개"
-          rating={4.9}
-          reviewCount={13}
-          price={8500}
-          initialWished={true}
-        />
-        <WishSmallItem
-          imageSrc="/food1.png"
-          chefName="박영희 주부8단"
-          dishName="소고기 장조림"
-          rating={4.8}
-          reviewCount={25}
-          price={12000}
-          initialWished={false}
-        />
-        <WishSmallItem
-          imageSrc="/food2.png"
-          chefName="김미숙 주부9단"
-          dishName="얼큰한 김치찌개"
-          rating={4.9}
-          reviewCount={13}
-          price={8500}
-          initialWished={true}
-        />
-        <WishSmallItem
-          imageSrc="/food1.png"
-          chefName="박영희 주부8단"
-          dishName="소고기 장조림"
-          rating={4.8}
-          reviewCount={25}
-          price={12000}
-          initialWished={false}
-        />
-        <WishSmallItem
-          imageSrc="/food2.png"
-          chefName="김미숙 주부9단"
-          dishName="얼큰한 김치찌개"
-          rating={4.9}
-          reviewCount={13}
-          price={8500}
-          initialWished={true}
-        />
-        <WishSmallItem
-          imageSrc="/food1.png"
-          chefName="박영희 주부8단"
-          dishName="소고기 장조림"
-          rating={4.8}
-          reviewCount={25}
-          price={12000}
-          initialWished={false}
-        />
-      </div>
+      <Header title="서교동 공유주방" showBackButton showSearch showCart />
+
+      <ProductsListClient products={products} />
+
       <BottomNavigation />
     </>
   );

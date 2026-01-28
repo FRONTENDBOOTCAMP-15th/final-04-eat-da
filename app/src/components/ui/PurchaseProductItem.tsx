@@ -26,13 +26,13 @@ export default function PurchaseProductItem({
       />
       <div className="flex flex-col gap-0.5">
         <p className="text-paragraph-sm">{dishName}</p>
-        <p className="text-x-small text-gray-600">{chefName}</p>
+        <p className="text-x-small text-gray-600">{chefName} 주부</p>
         <div className="flex gap-1">
           <p className="text-x-small text-eatda-orange">
             {price.toLocaleString()}원
           </p>
-          <p className="text-x-small">|</p>
-          <p className="text-x-small text-gray-600">수량 {quantity}개</p>
+          <p className="text-x-small text-gray-400">|</p>
+          <p className="text-x-small">수량 {quantity}개</p>
         </div>
       </div>
     </div>
