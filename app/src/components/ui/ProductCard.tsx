@@ -4,6 +4,7 @@ import HeartItem from "./HeartItem";
 import Link from "next/link";
 
 interface WishSmallItemProps {
+  productId: number;
   imageSrc: string;
   chefName: string;
   dishName: string;
@@ -11,9 +12,11 @@ interface WishSmallItemProps {
   reviewCount: number;
   price: number;
   initialWished?: boolean;
+  isLcp?: boolean;
 }
 
 export default function ProductCard({
+  productId,
   imageSrc,
   chefName,
   dishName,
@@ -21,13 +24,27 @@ export default function ProductCard({
   reviewCount,
   price,
   initialWished = false,
+  isLcp = false,
 }: WishSmallItemProps) {
+  const safeImageSrc = imageSrc || "/food1.png";
+
   return (
-    <Link href="/products/1" className="flex flex-col">
+    <Link href={`/products/${productId}`} className="flex flex-col">
       <div className="relative w-full aspect-square">
-        <Image src={imageSrc} fill alt={dishName} className="object-cover" />
+        <Image
+          src={safeImageSrc}
+          fill
+          alt={dishName}
+          className="object-cover"
+          sizes="50vw"
+          loading={isLcp ? "eager" : "lazy"}
+          priority={isLcp}
+        />
         <div
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
           className="absolute bottom-2 right-1"
         >
           <HeartItem
@@ -40,7 +57,7 @@ export default function ProductCard({
       <div className="pt-4 pb-5 px-2.5 space-y-1">
         <div className="flex gap-2 items-center">
           <p className="text-eatda-orange text-display-1 font-semibold">
-            {chefName}
+            {chefName} 주부
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +76,7 @@ export default function ProductCard({
           </svg>
         </div>
         <div className="flex items-center">
-          <p className="text-paragraph-sm mr-2">{dishName}</p>
+          <p className="text-paragraph mr-2">{dishName}</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"

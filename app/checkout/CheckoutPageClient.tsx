@@ -3,13 +3,69 @@
 import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
 import Header from "@/app/src/components/common/Header";
 import PurchaseProductItem from "@/app/src/components/ui/PurchaseProductItem";
-import Image from "next/image";
-import { useState } from "react";
+import { CartItemType, CartResponse } from "@/app/src/types";
+import { getAxios } from "@/lib/axios";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+
+dayjs.locale("ko");
 
 export default function CheckoutPageClient() {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isProductInfoOpen, setIsProductInfoOpen] = useState(false);
+  const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const [cost, setCost] = useState<CartResponse["cost"] | null>(null);
+
+  const tomorrow = dayjs().add(1, "day");
+  const after_tomorrow = dayjs().add(2, "day");
+
+  useEffect(() => {
+    const fetchCart = async () => {
+      const axios = getAxios();
+      const response = await axios.get<CartResponse>("/carts");
+      setCartItems(response.data.item);
+      setCost(response.data.cost);
+    };
+    fetchCart();
+  }, []);
+
+  const handlePurchase = async () => {
+    if (!selectedDate || !selectedTime) {
+      alert("픽업 날짜와 시간을 선택해주세요.");
+      return;
+    }
+
+    try {
+      const axios = getAxios();
+
+      const pickupDateValue =
+        selectedDate === "tomorrow"
+          ? tomorrow.format("YYYY-MM-DD")
+          : after_tomorrow.format("YYYY-MM-DD");
+
+      const orderData = {
+        products: cartItems.map((item) => ({
+          _id: item.product._id,
+          quantity: item.quantity,
+        })),
+        extra: {
+          pickupDate: pickupDateValue,
+          pickupTime: selectedTime,
+        },
+      };
+      const response = await axios.post("/orders", orderData);
+      await axios.delete("/carts/cleanup");
+
+      router.push(`/checkout/complete?orderId=${response.data.item._id}`);
+    } catch (error) {
+      console.error("주문 실패:", error);
+      alert("주문에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
 
   return (
     <>
@@ -44,20 +100,16 @@ export default function CheckoutPageClient() {
 
           {isProductInfoOpen && (
             <div className="space-y-4 pt-3 pb-3">
-              <PurchaseProductItem
-                imageSrc="/food1.png"
-                dishName="김미숙님의 소고기 장조림"
-                chefName="김미숙 주부 9단"
-                price={8500}
-                quantity={2}
-              />
-              <PurchaseProductItem
-                imageSrc="/food1.png"
-                dishName="얼큰한 김치찌개"
-                chefName="김지유 주부 8단"
-                price={7000}
-                quantity={2}
-              />
+              {cartItems.map((item) => (
+                <PurchaseProductItem
+                  key={item._id}
+                  imageSrc={item.product.image.path}
+                  dishName={item.product.name}
+                  chefName={item.product.seller.name}
+                  price={item.product.price}
+                  quantity={item.quantity}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -97,17 +149,6 @@ export default function CheckoutPageClient() {
           </p>
           <div className="flex gap-2.5 w-full">
             <button
-              onClick={() => setSelectedDate("today")}
-              className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
-                selectedDate === "today"
-                  ? "shadow-[inset_0_0_0_2px_#FF6155]"
-                  : ""
-              }`}
-            >
-              <p className="text-paragraph font-semibold">오늘</p>
-              <p className="text-paragraph-sm">1월 19일 월요일</p>
-            </button>
-            <button
               onClick={() => setSelectedDate("tomorrow")}
               className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
                 selectedDate === "tomorrow"
@@ -116,7 +157,22 @@ export default function CheckoutPageClient() {
               }`}
             >
               <p className="text-paragraph font-semibold">내일</p>
-              <p className="text-paragraph-sm">1월 20일 화요일</p>
+              <p className="text-paragraph-sm">
+                {tomorrow.format("M월 D일 dddd")}
+              </p>
+            </button>
+            <button
+              onClick={() => setSelectedDate("after_tomorrow")}
+              className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
+                selectedDate === "after_tomorrow"
+                  ? "shadow-[inset_0_0_0_2px_#FF6155]"
+                  : ""
+              }`}
+            >
+              <p className="text-paragraph font-semibold">모레</p>
+              <p className="text-paragraph-sm">
+                {after_tomorrow.format("M월 D일 dddd")}
+              </p>
             </button>
           </div>
         </div>
@@ -164,11 +220,15 @@ export default function CheckoutPageClient() {
           <h2 className="text-display-3 font-semibold">결제 정보</h2>
           <div className="flex justify-between">
             <p className="text-paragraph">상품 금액</p>
-            <p className="text-paragraph text-gray-600">30,500원</p>
+            <p className="text-paragraph text-gray-600">
+              {cost?.products.toLocaleString() || "0"}원
+            </p>
           </div>
           <div className="flex justify-between">
             <p className="text-paragraph">수량</p>
-            <p className="text-paragraph text-gray-600">3개</p>
+            <p className="text-paragraph text-gray-600">
+              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}개
+            </p>
           </div>
           <div className="flex justify-between pb-1">
             <p className="text-paragraph">쿠폰</p>
@@ -177,7 +237,7 @@ export default function CheckoutPageClient() {
           <div className="flex justify-between border-t-[0.5px] border-gray-600 pt-4">
             <h2 className="text-paragraph-md font-semibold">총 결제 금액</h2>
             <p className="text-paragraph-md font-semibold text-eatda-orange">
-              30,500원
+              {cost?.total.toLocaleString() || "0"}원
             </p>
           </div>
         </div>
@@ -195,7 +255,7 @@ export default function CheckoutPageClient() {
         </div>
       </div>
 
-      <BottomFixedButton as="link" href="/checkout/complete">
+      <BottomFixedButton as="button" type="button" onClick={handlePurchase}>
         구매하기
       </BottomFixedButton>
     </>

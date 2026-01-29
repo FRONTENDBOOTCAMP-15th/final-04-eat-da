@@ -6,7 +6,7 @@ export default function CartItem({
   productId,
   imageSrc,
   productName,
-  chefName = "주부",
+  chefName,
   price,
   quantity,
   onQuantityChange,
@@ -69,7 +69,7 @@ export default function CartItem({
               </svg>
             </button>
           </div>
-          <p className="text-x-small text-gray-500">{chefName}</p>
+          <p className="text-x-small text-gray-500">{chefName} 주부</p>
           <p className="font-semibold text-paragraph-sm text-eatda-orange">
             {price.toLocaleString()}원
           </p>
