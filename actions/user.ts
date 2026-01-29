@@ -1,7 +1,6 @@
 'use server';
 
-const API_SERVER = 'https://fesp-api.koyeb.app/market';
-const CLIENT_ID = 'febc15-final04-ecad';
+import { getAxios } from '@/lib/axios';
 
 export interface LoginState {
   ok: 0 | 1;
@@ -51,16 +50,8 @@ export async function login(
   }
 
   try {
-    const response = await fetch(`${API_SERVER}/users/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Client-Id': CLIENT_ID,
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
+    const response = await getAxios().post('/users/login', { email, password });
+    const data = response.data;
 
     if (!data.ok) {
       return {
