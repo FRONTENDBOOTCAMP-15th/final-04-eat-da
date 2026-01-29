@@ -1,9 +1,6 @@
 'use server';
 
-import axios from 'axios';
-
-const API_SERVER = process.env.NEXT_PUBLIC_API_URL;
-const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID || '';
+import { getAxios } from '@/lib/axios';
 
 export interface LoginState {
   ok: 0 | 1;
@@ -53,17 +50,7 @@ export async function login(
   }
 
   try {
-    const response = await axios.post(
-      `${API_SERVER}/users/login`,
-      { email, password },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Client-Id': CLIENT_ID,
-        },
-      }
-    );
-
+    const response = await getAxios().post('/users/login', { email, password });
     const data = response.data;
 
     if (!data.ok) {
