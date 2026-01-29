@@ -11,6 +11,7 @@
     "seed:reset": "node scripts/seed/seed.js --reset"
   },
   "dependencies": {
+    "@channel.io/channel-web-sdk-loader": "^2.0.2",
     "dayjs": "^1.11.19",
     "dotenv": "^17.2.3",
     "mongodb": "^7.0.0",
