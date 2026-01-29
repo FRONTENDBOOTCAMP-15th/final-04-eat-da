@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_SERVER = "https://fesp-api.koyeb.app/market";
+const API_SERVER = process.env.NEXT_PUBLIC_API_URL;
 
 // 개발용 임시 토큰 (나중에 로그인 기능 구현 후 제거)
 const TEMP_ACCESS_TOKEN =
@@ -13,7 +13,7 @@ export function getAxios() {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Client-Id": "febc15-final04-ecad",
+      "Client-Id": process.env.NEXT_PUBLIC_CLIENT_ID || "",
     },
   });
 
