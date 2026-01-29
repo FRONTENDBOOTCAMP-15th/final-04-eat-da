@@ -25,7 +25,7 @@ export default function OrderProductItem({
       />
       <div className="flex flex-col gap-1">
         <p className="text-paragraph font-semibold">{dishName}</p>
-        <p className="text-x-small text-eatda-orange">{chefName}</p>
+        <p className="text-x-small text-eatda-orange">{chefName} 주부</p>
         <p className="text-paragraph-sm font-semibold text-gray-600">
           {price.toLocaleString()}원
         </p>

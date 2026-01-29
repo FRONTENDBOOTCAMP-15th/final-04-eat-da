@@ -20,8 +20,8 @@ export default function CheckoutPageClient() {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [cost, setCost] = useState<CartResponse["cost"] | null>(null);
 
-  const today = dayjs();
   const tomorrow = dayjs().add(1, "day");
+  const after_tomorrow = dayjs().add(2, "day");
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -43,9 +43,9 @@ export default function CheckoutPageClient() {
       const axios = getAxios();
 
       const pickupDateValue =
-        selectedDate === "today"
-          ? today.format("YYYY-MM-DD")
-          : tomorrow.format("YYYY-MM-DD");
+        selectedDate === "tomorrow"
+          ? tomorrow.format("YYYY-MM-DD")
+          : after_tomorrow.format("YYYY-MM-DD");
 
       const orderData = {
         products: cartItems.map((item) => ({
@@ -57,8 +57,9 @@ export default function CheckoutPageClient() {
           pickupTime: selectedTime,
         },
       };
-
       const response = await axios.post("/orders", orderData);
+      await axios.delete("/carts/cleanup");
+
       router.push(`/checkout/complete?orderId=${response.data.item._id}`);
     } catch (error) {
       console.error("주문 실패:", error);
@@ -148,19 +149,6 @@ export default function CheckoutPageClient() {
           </p>
           <div className="flex gap-2.5 w-full">
             <button
-              onClick={() => setSelectedDate("today")}
-              className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
-                selectedDate === "today"
-                  ? "shadow-[inset_0_0_0_2px_#FF6155]"
-                  : ""
-              }`}
-            >
-              <p className="text-paragraph font-semibold">오늘</p>
-              <p className="text-paragraph-sm">
-                {today.format("M월 D일 dddd")}
-              </p>
-            </button>
-            <button
               onClick={() => setSelectedDate("tomorrow")}
               className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
                 selectedDate === "tomorrow"
@@ -171,6 +159,19 @@ export default function CheckoutPageClient() {
               <p className="text-paragraph font-semibold">내일</p>
               <p className="text-paragraph-sm">
                 {tomorrow.format("M월 D일 dddd")}
+              </p>
+            </button>
+            <button
+              onClick={() => setSelectedDate("after_tomorrow")}
+              className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
+                selectedDate === "after_tomorrow"
+                  ? "shadow-[inset_0_0_0_2px_#FF6155]"
+                  : ""
+              }`}
+            >
+              <p className="text-paragraph font-semibold">모레</p>
+              <p className="text-paragraph-sm">
+                {after_tomorrow.format("M월 D일 dddd")}
               </p>
             </button>
           </div>
