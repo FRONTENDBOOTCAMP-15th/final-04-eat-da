@@ -55,3 +55,19 @@ export async function getUser(userId: number): Promise<UserInfo | null> {
     return null;
   }
 }
+
+// 찜 목록 개수 조회
+export async function getBookmarkCount(): Promise<number> {
+  try {
+    const axios = getAxios();
+    const response = await axios.get("/bookmarks/product");
+    if (response.data.ok) {
+      return response.data.item.length;
+    }
+    return 0;
+  } catch (error) {
+    console.error("찜 목록 조회 실패:", error);
+    return 0;
+  }
+}
+
