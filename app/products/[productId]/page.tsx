@@ -43,6 +43,15 @@ export default async function ProductDetailPage({
   }
   const reviews = product.replies ?? [];
 
+  {
+    /* 판매자 정보 */
+  }
+  const seller = product.seller ?? {};
+  const sellerName: string = seller.name ?? "주부";
+  const sellerDescription: string = seller.extra?.description;
+  const rating: number = product.rating ?? 0;
+  const reviewCount: number = reviews.length;
+
   return (
     <main className="flex flex-col mt-12.5 gap-5 pb-23">
       {/* 헤더 */}
@@ -55,7 +64,12 @@ export default async function ProductDetailPage({
         <HeartItem size={24} />
       </div>
       {/* 주부 소개 */}
-      <SellerProfileCard />
+      <SellerProfileCard
+        name={sellerName}
+        rating={rating}
+        reviewCount={reviewCount}
+        description={sellerDescription}
+      />
       {/* 메뉴 정보 */}
       <div className=" flex flex-col px-5 gap-4">
         <div className=" flex flex-col gap-1">
