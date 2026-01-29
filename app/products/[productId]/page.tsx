@@ -7,24 +7,12 @@ import ReviewList from "@/app/src/components/ui/ReviewList";
 import Header from "@/app/src/components/common/Header";
 import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
 import ProductDetailClient from "@/app/products/[productId]/ProductDetailClient";
+import { getAxios } from "@/lib/axios";
 
 async function getProduct(productId: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/products/${productId}/`,
-    {
-      cache: "no-store",
-      headers: {
-        accept: "application/json",
-        "Client-Id": process.env.NEXT_PUBLIC_CLIENT_ID!,
-      },
-    },
-  );
-
-  if (!res.ok) {
-    throw new Error(`상품 상세 불러오기 실패 (status: ${res.status})`);
-  }
-
-  return res.json();
+  const axios = getAxios();
+  const res = await axios.get(`/products/${productId}/`);
+  return res.data;
 }
 
 export default async function ProductDetailPage({
