@@ -1,4 +1,3 @@
-// /scripts/seed/seed.js
 require("dotenv").config({ path: ".env.local" });
 
 const { MongoClient } = require("mongodb");
@@ -44,7 +43,7 @@ async function seed({ reset = false } = {}) {
             reviewCount: 0,
           },
         };
-      })
+      }),
     );
 
     if (sellerDocs.length) {
