@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getTokenPayload } from "@/lib/axios";
-import { getUser, getCartItems } from "@/lib/mypage";
+import { getUser, getCartItems, getBookmarkCount } from "@/lib/mypage";
 
 type UserInfo = Awaited<ReturnType<typeof getUser>>;
 
@@ -13,6 +13,7 @@ export default function MyPageClient() {
   const router = useRouter();
   const [user, setUser] = useState<UserInfo>(null);
   const [cartCount, setCartCount] = useState(0);
+  const [bookmarkCount, setBookmarkCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,13 +24,15 @@ export default function MyPageClient() {
         return;
       }
 
-      const [userData, cartItems] = await Promise.all([
+      const [userData, cartItems, bmCount] = await Promise.all([
         getUser(tokenPayload._id),
         getCartItems(),
+        getBookmarkCount(),
       ]);
 
       setUser(userData);
       setCartCount(cartItems.length);
+      setBookmarkCount(bmCount);
       setLoading(false);
     };
 
@@ -38,7 +41,7 @@ export default function MyPageClient() {
 
   if (loading) {
     return (
-      <div className="px-5 mt-15 mb-24 flex flex-1 flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
+      <div className="px-5 mt-16 mb-24 flex flex-1 flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
         <p className="text-gray-600">로딩 중...</p>
       </div>
     );
@@ -113,7 +116,7 @@ export default function MyPageClient() {
           >
             <div>
               <p className="text-display-3 font-bold text-eatda-orange">
-                {user.bookmark.products}
+                {bookmarkCount}
               </p>
               <p className="text-display-1 text-gray-800 group-hover:text-gray-700 mt-1">
                 찜 목록
