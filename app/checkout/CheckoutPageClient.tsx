@@ -57,8 +57,9 @@ export default function CheckoutPageClient() {
           pickupTime: selectedTime,
         },
       };
-
       const response = await axios.post("/orders", orderData);
+      await axios.delete("/carts/cleanup");
+
       router.push(`/checkout/complete?orderId=${response.data.item._id}`);
     } catch (error) {
       console.error("주문 실패:", error);
