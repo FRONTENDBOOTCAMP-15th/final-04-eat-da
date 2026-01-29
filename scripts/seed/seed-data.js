@@ -257,6 +257,136 @@ const fallbackIngredientsByCategory = {
   fry: ["주재료", "튀김가루", "식용유"],
 };
 
+// ✅ 요리명 → 이미지 URL 매핑
+const imagesByName = {
+  // =========================
+  // 메인반찬 (main)
+  // =========================
+  제육볶음:
+    "https://zipbanchan.godohosting.com/800X800px/3_main/1339_ZIP_P_0088_T.jpg",
+  닭갈비: "/food/ChickenGalbi.jpg",
+  돈까스: "/food/DontGas.jpg",
+  떡갈비:
+    "https://zipbanchan.godohosting.com/800X800px/3_main/1688_ZIP_P_3142_T.jpg",
+  불고기:
+    "https://zipbanchan.godohosting.com/800X800px/3_main/1349_ZIP_P_0094_T.jpg",
+  고등어구이: "/food/koduengA.jpg",
+  삼겹김치볶음: "/food/PorkKimchi.jpg",
+  LA갈비: "/food/LA.jpg",
+  훈제오리볶음: "/food/Duck.jpg",
+  보쌈: "/food/Bossam.webp",
+
+  // =========================
+  // 국물 (soup)
+  // =========================
+  김치찌개:
+    "https://zipbanchan.godohosting.com/800X800px/9_soup/1364_ZIP_P_1043_T.jpg",
+  된장찌개:
+    "https://zipbanchan.godohosting.com/800X800px/9_soup/1362_ZIP_P_1041_T.jpg",
+  순두부찌개:
+    "https://zipbanchan.godohosting.com/800X800px/9_soup/ZIP_P_1077_T_3.png",
+  미역국:
+    "https://zipbanchan.godohosting.com/800X800px/9_soup/172_ZIP_P_2008_T_1.jpg",
+  떡국: "/food/TeokKuk.jpg",
+  육개장: "/food/6GaeJang.jpg",
+  콩나물국:
+    "https://zipbanchan.godohosting.com/800X800px/9_soup/175_ZIP_P_2005_T.jpg",
+  감자탕: "/food/GamZa.jpg",
+  갈비탕: "/food/GalbiTang.jpg",
+  북엇국: "/food/Bookeo.jpg",
+
+  // =========================
+  // 밑반찬 (side)
+  // =========================
+  오이무침: "/food/muchim.jpg",
+  콩자반:
+    "https://zipbanchan.godohosting.com/800X800px/6_jolim/1195_ZIP_P_4062_T.jpg",
+  무생채: "/food/Moomuchim.jpg",
+  시금치나물: "/food/ShiGumchi.jpg",
+  도라지무침:
+    "https://zipbanchan.godohosting.com/800X800px/8_muchim/129_ZIP_P_5010_T.jpg",
+  멸치볶음:
+    "https://zipbanchan.godohosting.com/800X800px/7_fry/1200_ZIP_P_6219_T.jpg",
+  계란말이:
+    "https://zipbanchan.godohosting.com/800X800px/5_kid/345_ZIP_P_3022_T.jpg",
+  진미채무침: "/food/Jinmichae.jpeg",
+  감자샐러드: "/food/potatoSalad.jpg",
+  고사리나물:
+    "https://zipbanchan.godohosting.com/800X800px/7_fry/1190_ZIP_P_6208_T.jpg",
+
+  // =========================
+  // 볶음 (stir)
+  // =========================
+  소시지야채볶음:
+    "https://zipbanchan.godohosting.com//800X800px/7_fry/2361_ZIP_P_6233_T_2.jpg",
+  새우볶음:
+    "https://zipbanchan.godohosting.com/800X800px/7_fry/160_ZIP_P_6030_T_re.jpg",
+  오징어볶음:
+    "https://zipbanchan.godohosting.com/800X800px/8_muchim/48_ZIP_P_5008_T.jpg",
+  김치볶음:
+    "https://zipbanchan.godohosting.com/800X800px/7_fry/1207_ZIP_P_6222_T.jpg",
+  버섯볶음:
+    "https://zipbanchan.godohosting.com/800X800px/5_kid/1731_ZIP_P_6292_T.jpg",
+  어묵볶음:
+    "https://zipbanchan.godohosting.com//800X800px/7_fry/2359_ZIP_P_6431_T_2.png",
+  두부김치: "/food/TofuKimchi.jpg",
+  가지볶음:
+    "https://zipbanchan.godohosting.com/800X800px/7_fry/1692_ZIP_P_6291_T.jpg",
+  닭똥집볶음: "/food/Dakddongzip.jpg",
+  주꾸미볶음: "/food/jukkumi.jpg",
+
+  // =========================
+  // 조림 (braise)
+  // =========================
+  장조림:
+    "https://zipbanchan.godohosting.com/800X800px/6_jolim/32_ZIP_P_4002_T.jpg",
+  감자조림:
+    "https://zipbanchan.godohosting.com/800X800px/6_jolim/208_ZIP_P_4020_T_1.jpg",
+  꽁치김치조림: "/food/kkongchi.jpg",
+  두부조림:
+    "https://zipbanchan.godohosting.com/800X800px/6_jolim/268_ZIP_P_4023_T.jpg",
+  코다리조림: "/food/kodari.jpg",
+  메추리알장조림:
+    "https://zipbanchan.godohosting.com/800X800px/low_sugar/2442_ZIP_P_4111_T_2.jpg",
+  갈치조림: "/food/kalchi.jpg",
+  연근조림:
+    "https://zipbanchan.godohosting.com/800X800px/6_jolim/52_ZIP_P_4007_T.jpg",
+  무조림:
+    "https://zipbanchan.godohosting.com/800X800px/6_jolim/1613_ZIP_P_4075_T.jpg",
+  우엉조림:
+    "https://zipbanchan.godohosting.com/800X800px/6_jolim/56_ZIP_P_4009_T.jpg",
+
+  // =========================
+  // 찜 (steam)
+  // =========================
+  계란찜:
+    "https://zipbanchan.godohosting.com/800X800px/5_kid/717_ZIP_P_3055_T.jpg",
+  갈비찜: "/food/GalbiZzim.jpg",
+  닭찜: "/food/ChickenZzim.jpg",
+  등갈비찜: "/food/DeungGalbiZzim.jpg",
+  아구찜:
+    "https://thingool123.godohosting.com/data/goods/21/02/08/1000019180/1000019180_detail_091.jpg",
+  콩나물찜: "/food/KongZZim.jpg",
+  해물찜: "/food/SeafoodZZim.jpg",
+  단호박찜: "/food/PumpkinZZim.jpg",
+  만두찜: "/food/Mandu.jpg",
+  수육찜: "/food/Su6.jpg",
+
+  // =========================
+  // 튀김 (fry)
+  // =========================
+  새우튀김: "/food/ShrimpFry.jpg",
+  김말이튀김: "/food/GimMalee.jpeg",
+  고구마튀김: "/food/sweetPotato.jpg",
+  오징어튀김: "/food/SquidFry.jpeg",
+  야채튀김: "/food/VegFry.jpg",
+  만두튀김: "/food/ManduFry.jpg",
+  닭강정: "/food/ChiGang.jpg",
+  돈가스: "/food/PorkFry.png",
+  치킨가라아게: "/food/garage.jpg",
+  고추튀김: "/food/PepperFry.jpg",
+};
+
 function getIngredients(name, categoryKey) {
   return (
     ingredientsByName[name] ??
@@ -267,6 +397,22 @@ function getIngredients(name, categoryKey) {
 function makeImageUrl(categoryKey, index) {
   // 외부 이미지 placeholder (프론트에서 쓸 경우 next/image remotePatterns 설정 필요)
   return `https://picsum.photos/seed/eatda-${categoryKey}-${index}/600/600`;
+}
+
+function getImage(name, categoryKey, index) {
+  const mapped = imagesByName[name];
+  if (mapped) {
+    return {
+      path: mapped,
+      name: `${name}.webp`, // 파일명은 원하는 규칙으로 바꿔도 됨
+    };
+  }
+
+  // fallback (매핑 없으면 기존 picsum)
+  return {
+    path: makeImageUrl(categoryKey, index),
+    name: `banchan_${categoryKey}_${String(index).padStart(2, "0")}.png`,
+  };
 }
 
 function randomBetween(min, max) {
@@ -317,12 +463,7 @@ function createProducts({ startId = 1 } = {}) {
         name,
         quantity: randomBetween(30, 300),
         buyQuantity: randomBetween(0, 30),
-        mainImages: [
-          {
-            path: makeImageUrl(cat.key, idx + 1),
-            name: `banchan_${cat.key}_${String(idx + 1).padStart(2, "0")}.png`,
-          },
-        ],
+        mainImages: [getImage(name, cat.key, idx + 1)],
         content: `${sellers[sellerId - 1].name} 주부님이 만든 ${name}`,
         extra: {
           isNew: idx < 3,

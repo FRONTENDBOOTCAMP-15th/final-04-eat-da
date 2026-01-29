@@ -1,16 +1,32 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "picsum.photos",
+        pathname: "/**",
       },
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "zipbanchan.godohosting.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn-ddanzi.bizhost.kr",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "thingool123.godohosting.com",
+        pathname: "/**",
       },
       {
         protocol: "https",
@@ -20,4 +36,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-module.exports = nextConfig;
+export default nextConfig;
