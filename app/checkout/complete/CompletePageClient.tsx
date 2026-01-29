@@ -89,7 +89,7 @@ export default function CompletePageClient() {
               key={product._id}
               imageSrc={product.image.path}
               dishName={product.name}
-              chefName="주부"
+              chefName={product.seller.name}
               price={product.price}
             />
           ))}
@@ -118,7 +118,7 @@ export default function CompletePageClient() {
                 />
               </svg>
               <p className="text-paragraph font-semibold">
-                {orderData.products[0]?.extra?.pickupLocation}
+                {orderData.products[0]?.extra?.pickupPlace}
               </p>
             </div>
           </div>
