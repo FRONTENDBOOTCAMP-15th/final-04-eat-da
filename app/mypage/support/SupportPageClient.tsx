@@ -2,6 +2,11 @@
 
 import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 import { useState } from "react";
+import * as ChannelService from "@channel.io/channel-web-sdk-loader";
+import { useEffect } from "react";
+import Image from "next/image";
+
+ChannelService.loadScript();
 
 interface FAQ {
   question: string;
@@ -62,6 +67,16 @@ export default function SupportPageClient() {
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+  useEffect(() => {
+    ChannelService.boot({
+      pluginKey: "67502dfa-39a4-4d1e-8332-59d195da33a7",
+      hideChannelButtonOnBoot: true,
+    });
+
+    return () => {
+      ChannelService.shutdown();
+    };
+  }, []);
 
   return (
     <>
@@ -78,11 +93,11 @@ export default function SupportPageClient() {
 
         <div className="space-y-1 border-b-[0.5px] border-gray-300 pb-2">
           <div>
-            <p className="text-paragraph font-semibold">이메일 문의</p>
+            <p className="text-paragraph font-semibold">채널톡 문의</p>
             <p className="text-paragraph text-gray-600">24시간 접수</p>
           </div>
           <p className="text-paragraph font-semibold text-eatda-orange">
-            support@eatda.com
+            하단의 메시지 버튼을 클릭해주세요
           </p>
         </div>
 
@@ -138,6 +153,13 @@ export default function SupportPageClient() {
           </div>
         </div>
       </div>
+      <button
+        type="button"
+        onClick={() => ChannelService.showMessenger()}
+        className="fixed bg-white bottom-20 right-5 z-50 w-12 h-12 rounded-2xl shadow flex items-center justify-center"
+      >
+        <Image src="/Message.svg" alt="채널톡 문의" width={28} height={28} />
+      </button>
       <BottomNavigation />
     </>
   );
