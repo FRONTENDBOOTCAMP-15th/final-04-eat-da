@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@channel.io/channel-web-sdk-loader": "^2.0.2",
+    "bcryptjs": "^3.0.3",
     "dayjs": "^1.11.19",
     "dotenv": "^17.2.3",
     "mongodb": "^7.0.0",
