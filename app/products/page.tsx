@@ -1,23 +1,12 @@
 import BottomNavigation from "@/app/src/components/common/BottomNavigation";
 import Header from "@/app/src/components/common/Header";
 import ProductsListClient from "@/app/src/components/ui/ProductsListClient";
+import { getAxios } from "@/lib/axios";
 
 async function getProducts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products/`, {
-    cache: "no-store",
-    headers: {
-      accept: "application/json",
-      "Client-Id": process.env.NEXT_PUBLIC_CLIENT_ID!,
-    },
-  });
-
-  if (!res.ok) {
-    const body = await res.text();
-    console.error(res.status, body);
-    throw new Error("반찬 목록 불러오기 실패");
-  }
-
-  return res.json();
+  const axios = getAxios();
+  const res = await axios.get("/products/");
+  return res.data;
 }
 
 export default async function ProductsList() {

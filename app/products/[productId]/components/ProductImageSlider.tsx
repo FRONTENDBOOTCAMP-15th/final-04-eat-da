@@ -47,12 +47,14 @@ export default function ProductImageSlider({
         ))}
       </Swiper>
 
-      {/* 페이지 인디케이터 (1 / 8) */}
-      <div className="absolute right-5 bottom-5 z-10 flex justify-center items-center px-2 py-2 gap-1 w-auto h-6 bg-black/40 rounded-full">
-        <span className="text-paragraph-sm font-regular text-white leading-4">
-          {currentIndex} / {images.length}
-        </span>
-      </div>
+      {/* 페이지 인디케이터 (1 / 8) - 이미지가 2장 이상일 때만 표시 */}
+      {images.length > 1 && (
+        <div className="absolute right-5 bottom-5 z-10 flex justify-center items-center px-2 py-2 gap-1 w-auto h-6 bg-black/40 rounded-full">
+          <span className="text-paragraph-sm font-regular text-white leading-4">
+            {currentIndex} / {images.length}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
