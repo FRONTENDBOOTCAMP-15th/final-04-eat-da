@@ -1,16 +1,30 @@
-export default function SellerProfileCard() {
+interface SellerProfileCardProps {
+  name: string;
+  rating?: number;
+  reviewCount?: number;
+  profileImage?: string;
+  description?: string;
+}
+
+export default function SellerProfileCard({
+  name,
+  rating = 0,
+  reviewCount = 0,
+  profileImage = "/seller/seller1.png",
+  description = "정성스럽게 만든 집밥을 나눕니다.",
+}: SellerProfileCardProps) {
   return (
     <article className="flex items-start mx-5 gap-2.5 self-stretch rounded-lg border border-gray-300 bg-gray-200 px-2.5 py-5">
       <img
-        src="/seller/seller1.png"
-        alt="김미숙 주부 프로필 이미지"
+        src={profileImage}
+        alt={`${name} 주부 프로필 이미지`}
         className="h-15 w-15 flex-none rounded-full object-cover"
       />
 
       <div className="flex min-w-0 flex-1 flex-col gap-1">
         <header className="flex flex-col gap-0">
           <h3 className="text-paragraph-lg font-semibold text-gray-800">
-            김미숙 주부9단
+            {name} 주부9단
           </h3>
 
           <div className="flex items-center gap-1 text-paragraph font-regular text-gray-700">
@@ -26,15 +40,16 @@ export default function SellerProfileCard() {
                 fill="#FF6155"
               />
             </svg>
-            <span className="text-eatda-orange">4.9</span>
-            <span className="text-gray-500 text-x-small">(329)</span>
-            <span className="sr-only">평점 5점 만점에 4.9점, 리뷰 329개</span>
+            <span className="text-eatda-orange">{rating.toFixed(1)}</span>
+            <span className="text-gray-500 text-x-small">({reviewCount})</span>
+            <span className="sr-only">
+              평점 5점 만점에 {rating.toFixed(1)}점, 리뷰 {reviewCount}개
+            </span>
           </div>
         </header>
 
         <p className="text-paragraph font-regular text-gray-600">
-          30년 주부 경력으로 정성스럽게 만든 집밥을 나눕니다. 아들 둘을 키우며
-          매일 해온 손맛 그대로 담았어요.
+          {description}
         </p>
       </div>
     </article>

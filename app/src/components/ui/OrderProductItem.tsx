@@ -1,12 +1,5 @@
+import { OrderProductItemProps } from "@/app/src/types";
 import Image from "next/image";
-
-interface OrderProductItemProps {
-  imageSrc: string;
-  dishName: string;
-  chefName: string;
-  price: number;
-  quantity?: number;
-}
 
 export default function OrderProductItem({
   imageSrc,

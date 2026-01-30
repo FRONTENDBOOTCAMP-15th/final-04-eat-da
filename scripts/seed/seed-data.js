@@ -1,5 +1,3 @@
-// /scripts/seed/seed-data.js
-
 function formatKST(date = new Date()) {
   // "2026.1.27 11:46:37" 형식 맞추기
   const pad = (n) => String(n).padStart(2, "0");
@@ -24,6 +22,10 @@ const sellers = [
     address: "서울시 마포구 서교동 123",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=misook",
+    extra: {
+      description:
+        "30년 주부 경력으로 정성스럽게 만든 집밥을 나눕니다. 아들 둘을 키우며 매일 해온 손맛 그대로 담았어요.",
+    },
   },
   {
     _id: 2,
@@ -35,6 +37,10 @@ const sellers = [
     address: "서울시 강남구 역삼동 456",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=junghee",
+    extra: {
+      description:
+        "어머니께 배운 전통 레시피로 건강한 밥상을 차립니다. 조미료 없이 자연 재료로만 맛을 내요.",
+    },
   },
   {
     _id: 3,
@@ -46,6 +52,10 @@ const sellers = [
     address: "서울시 송파구 잠실동 789",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=sunyoung",
+    extra: {
+      description:
+        "요리학원 강사 출신입니다. 맛있고 예쁜 반찬으로 식탁에 행복을 더해드릴게요.",
+    },
   },
   {
     _id: 4,
@@ -57,6 +67,10 @@ const sellers = [
     address: "서울시 서초구 반포동 101",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=eunji",
+    extra: {
+      description:
+        "세 아이 엄마로 아이들 입맛에 맞는 건강 반찬을 연구합니다. 편식하는 아이도 맛있게 먹어요.",
+    },
   },
   {
     _id: 5,
@@ -68,6 +82,10 @@ const sellers = [
     address: "서울시 용산구 이태원동 202",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=haneul",
+    extra: {
+      description:
+        "매일 새벽 시장에서 신선한 재료를 직접 골라요. 좋은 재료가 맛있는 음식의 비결입니다.",
+    },
   },
   {
     _id: 6,
@@ -79,6 +97,10 @@ const sellers = [
     address: "서울시 종로구 삼청동 303",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=minsu",
+    extra: {
+      description:
+        "호텔 조리사 출신으로 은퇴 후 집밥의 따뜻함을 전하고 있어요. 정갈한 한 끼를 약속드립니다.",
+    },
   },
   {
     _id: 7,
@@ -90,6 +112,10 @@ const sellers = [
     address: "서울시 성동구 성수동 404",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=junho",
+    extra: {
+      description:
+        "1인 가구를 위한 소포장 반찬을 준비합니다. 혼밥도 든든하고 맛있게 드세요.",
+    },
   },
   {
     _id: 8,
@@ -101,6 +127,10 @@ const sellers = [
     address: "서울시 광진구 건대입구동 505",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=doyun",
+    extra: {
+      description:
+        "건강을 생각하는 저염식 반찬을 만듭니다. 맛은 유지하면서 나트륨은 줄였어요.",
+    },
   },
   {
     _id: 9,
@@ -112,17 +142,25 @@ const sellers = [
     address: "서울시 영등포구 여의도동 606",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=jaehyun",
+    extra: {
+      description:
+        "직장인 도시락 전문입니다. 바쁜 하루, 따뜻한 집밥 한 끼로 힘내세요.",
+    },
   },
   {
     _id: 10,
     seller_id: 10,
-    name: "서지훈",
+    name: "문정미",
     email: "jihoon@eatda.com",
     password: "eatda1234",
     phone: "01010101010",
     address: "서울시 중구 명동 707",
     type: "seller",
     image: "https://api.dicebear.com/7.x/avataaars/svg?seed=jihoon",
+    extra: {
+      description:
+        "할머니 손맛을 이어받아 옛날 방식 그대로 반찬을 만들어요. 추억의 맛을 느껴보세요.",
+    },
   },
 ];
 
@@ -749,6 +787,7 @@ function createProducts({ startId = 1 } = {}) {
 
           // ✅ 상세용 확장 데이터
           ingredients: getIngredients(name, cat.key),
+          description: getContent(name, cat.key),
           serving: defaultServing,
           pickupPlace: defaultPickupPlace,
         },

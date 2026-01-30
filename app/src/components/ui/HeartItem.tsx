@@ -1,9 +1,6 @@
 "use client";
+import { HeartProps, WishButtonProps } from "@/app/src/types";
 import { useState } from "react";
-
-interface HeartProps {
-  size?: number;
-}
 
 const FilledHeart = ({ size = 20 }: HeartProps) => (
   <svg width={size} height={size * 0.9} viewBox="0 0 20 18" fill="none">
@@ -40,24 +37,27 @@ const EmptyHeart = ({
   </svg>
 );
 
-interface WishButtonProps {
-  initialWished?: boolean;
-  lineColor?: "black" | "white";
-  size?: number;
-  className?: string;
-}
-
 export default function HeartItem({
   initialWished = false,
   lineColor = "black",
   size = 20,
   className = "",
+  onToggle,
 }: WishButtonProps) {
   const [isWished, setIsWished] = useState(initialWished);
 
+  const handleClick = () => {
+    const newWishedState = !isWished;
+    setIsWished(newWishedState);
+
+    if (onToggle) {
+      onToggle(newWishedState);
+    }
+  };
+
   return (
     <button
-      onClick={() => setIsWished(!isWished)}
+      onClick={handleClick}
       className={`p-2 hover:scale-110 transition-transform ${className}`}
     >
       {isWished ? (
