@@ -185,7 +185,7 @@ export default async function ProductDetailPage({
         />
       </div>
 
-      <ProductDetailClient />
+      <ProductDetailClient product={product} />
     </main>
   );
 }
