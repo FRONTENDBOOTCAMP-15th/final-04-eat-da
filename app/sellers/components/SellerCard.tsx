@@ -36,6 +36,8 @@ export default function SellerCard({
                 src={dish.imageSrc}
                 alt={`${dish.name} 이미지`}
                 fill
+                sizes="112px"
+                unoptimized
                 className="object-cover"
               />
             </div>

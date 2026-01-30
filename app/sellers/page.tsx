@@ -41,17 +41,32 @@ async function getSellers(): Promise<Seller[]> {
   }
 }
 
-async function getSellerProducts(sellerId: number): Promise<ProductSummary[]> {
+async function getAllProducts(): Promise<ProductSummary[]> {
   try {
     const axios = getAxios();
-    const res = await axios.get('/products', {
-      params: { seller_id: sellerId },
-    });
+    const res = await axios.get('/products');
     return res.data.item || [];
   } catch (error) {
-    console.error('판매자 상품 조회 실패:', error);
+    console.error('상품 목록 조회 실패:', error);
     return [];
   }
+}
+
+function groupProductsBySeller(
+  products: ProductSummary[]
+): Record<number, ProductSummary[]> {
+  return products.reduce(
+    (acc, product) => {
+      const sellerId = (product as ProductSummary & { seller_id?: number })
+        .seller_id;
+      if (sellerId) {
+        if (!acc[sellerId]) acc[sellerId] = [];
+        acc[sellerId].push(product);
+      }
+      return acc;
+    },
+    {} as Record<number, ProductSummary[]>
+  );
 }
 
 function getProductImage(product: ProductSummary): string | null {
@@ -97,24 +112,29 @@ function getSellerRating(products: ProductSummary[]) {
 }
 
 export default async function SellersList() {
-  const sellers = await getSellers();
-  const sellerCards = await Promise.all(
-    sellers.map(async (seller) => {
-      const sellerId = seller._id ?? seller.seller_id ?? 0;
-      const products = sellerId ? await getSellerProducts(sellerId) : [];
-      const topDishes = getTopDishes(products);
-      const { rating, reviewCount } = getSellerRating(products);
+  // API 호출을 2번으로 최적화 (기존: 판매자 수 + 1번)
+  const [sellers, allProducts] = await Promise.all([
+    getSellers(),
+    getAllProducts(),
+  ]);
 
-      return {
-        sellerId,
-        seller,
-        topDishes,
-        rating,
-        reviewCount,
-        productCount: products.length,
-      };
-    })
-  );
+  const productsBySeller = groupProductsBySeller(allProducts);
+
+  const sellerCards = sellers.map((seller) => {
+    const sellerId = seller._id ?? seller.seller_id ?? 0;
+    const products = productsBySeller[sellerId] || [];
+    const topDishes = getTopDishes(products);
+    const { rating, reviewCount } = getSellerRating(products);
+
+    return {
+      sellerId,
+      seller,
+      topDishes,
+      rating,
+      reviewCount,
+      productCount: products.length,
+    };
+  });
   const visibleSellerCards = sellerCards
     .filter((card) => card.productCount > 0)
     .sort((a, b) => b.rating - a.rating);
