@@ -83,6 +83,7 @@ export default function MyPageClient() {
               width={60}
               height={60}
               className="w-15 h-15 rounded-full object-cover"
+              unoptimized={user.image.includes("dicebear.com")}
             />
           ) : (
             <div className="w-15 h-15 rounded-full bg-gray-600"></div>
