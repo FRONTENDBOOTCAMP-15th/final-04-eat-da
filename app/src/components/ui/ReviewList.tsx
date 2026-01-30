@@ -1,7 +1,13 @@
 import ReviewItem from "@/app/src/components/ui/ReviewItem";
 
-interface Review {
+export interface Review {
   id: string;
+  userName?: string;
+  rating?: number;
+  createdAt?: string;
+  productName?: string;
+  content?: string;
+  images?: string[];
 }
 
 interface ReviewListProps {
@@ -21,7 +27,15 @@ export default function ReviewList({ reviews }: ReviewListProps) {
 
           return (
             <li key={review.id}>
-              <ReviewItem showDivider={!isLast} />
+              <ReviewItem
+                showDivider={!isLast}
+                userName={review.userName}
+                rating={review.rating}
+                createdAt={review.createdAt}
+                productName={review.productName}
+                content={review.content}
+                images={review.images}
+              />
             </li>
           );
         })}
