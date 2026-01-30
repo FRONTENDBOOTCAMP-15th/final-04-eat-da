@@ -1,7 +1,7 @@
-// /scripts/seed/seed.js
 require("dotenv").config({ path: ".env.local" });
 
 const { MongoClient } = require("mongodb");
+const bcrypt = require("bcryptjs");
 const { sellers, products } = require("./seed-data");
 
 const uri = process.env.MONGODB_URI;
@@ -27,17 +27,24 @@ async function seed({ reset = false } = {}) {
     }
 
     // sellers는 user 컬렉션에 type: "seller"로 저장(프로젝트에서 쓰기 좋게)
-    const sellerDocs = sellers.map((s) => ({
-      ...s,
-      type: "seller",
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      extra: {
-        intro: `${s.name}의 집밥을 정성껏 담아드려요.`,
-        rating: 4.6,
-        reviewCount: 0,
-      },
-    }));
+    // 비밀번호를 해시해서 저장 (로그인 가능하도록)
+    const sellerDocs = await Promise.all(
+      sellers.map(async (s) => {
+        const hashedPassword = await bcrypt.hash(s.password, 10);
+        return {
+          ...s,
+          password: hashedPassword,
+          type: "seller",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          extra: {
+            intro: `${s.name}의 집밥을 정성껏 담아드려요.`,
+            rating: 4.6,
+            reviewCount: 0,
+          },
+        };
+      }),
+    );
 
     if (sellerDocs.length) {
       await userCol.bulkWrite(

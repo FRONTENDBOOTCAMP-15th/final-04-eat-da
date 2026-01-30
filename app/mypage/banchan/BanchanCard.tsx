@@ -8,6 +8,7 @@ interface BanchanCardProps {
 
 // 반찬 상태 계산 함수
 const getBanchanStatus = (item: BanchanItem): string => {
+  if (item.show === false) return "판매중지";
   if (item.quantity === 0) return "품절";
   return "판매중";
 };
@@ -15,7 +16,8 @@ const getBanchanStatus = (item: BanchanItem): string => {
 export default function BanchanCard({ item }: BanchanCardProps) {
   const status = getBanchanStatus(item);
   const price = item.price.toLocaleString();
-  const imgSrc = item.mainImages[0]?.path;
+  const imagePath = item.mainImages[0]?.path;
+  const imgSrc = imagePath || null;
 
   return (
     <Link
