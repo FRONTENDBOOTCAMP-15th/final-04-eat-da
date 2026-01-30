@@ -17,7 +17,7 @@ async function getProduct(productId: string) {
         accept: "application/json",
         "Client-Id": process.env.NEXT_PUBLIC_CLIENT_ID!,
       },
-    },
+    }
   );
 
   if (!res.ok) {
@@ -47,7 +47,7 @@ export default async function ProductDetailPage({
     /* 반찬 이미지 */
   }
   const productImages = product.mainImages?.map(
-    (img: { path: string }) => img.path,
+    (img: { path: string }) => img.path
   ) ?? ["/food/food_01.png"];
 
   {
@@ -104,7 +104,7 @@ export default async function ProductDetailPage({
         <ReviewList reviews={reviews} />
       </div>
 
-      <ProductDetailClient />
+      <ProductDetailClient product={product} />
     </main>
   );
 }
