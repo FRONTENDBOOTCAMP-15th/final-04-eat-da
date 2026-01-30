@@ -107,7 +107,7 @@ export default function EditBanchanClient({
         name: formData.name,
         category: formData.category,
         price: Number(formData.price.replace(/,/g, "")),
-        quantity: Number(formData.quantity),
+        quantity: Number(formData.quantity) + initialData.buyQuantity,
         description: formData.description,
         ingredients: formData.ingredients,
         servings: formData.servings,
