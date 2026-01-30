@@ -103,7 +103,16 @@ export default async function ProductDetailPage({
       </div>
       {/* 리뷰 */}
       <div className="gap-0">
-        <ReviewList reviews={reviews} />
+        <ReviewList
+          reviews={reviews.map((r: { _id: number; user?: { name?: string }; rating?: number; createdAt?: string; content?: string; extra?: { images?: string[] } }) => ({
+            id: String(r._id),
+            userName: r.user?.name ?? "익명",
+            rating: r.rating,
+            createdAt: r.createdAt,
+            content: r.content,
+            images: r.extra?.images ?? [],
+          }))}
+        />
       </div>
 
       <ProductDetailClient />
