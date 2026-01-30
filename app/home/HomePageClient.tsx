@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import HomeHeader from "@/app/home/HomeHeader";
-import RecommendProduct from "@/app/home/RecommendProduct";
-import BottomNavigation from "@/app/src/components/common/BottomNavigation";
-import SellerProfileClear from "@/app/src/components/ui/SellerProfileClear";
-import ProductCard from "@/app/src/components/ui/ProductCard";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { getAxios } from "@/lib/axios";
-import { Product } from "@/app/src/types";
+import HomeHeader from '@/app/home/HomeHeader';
+import RecommendProduct from '@/app/home/RecommendProduct';
+import BottomNavigation from '@/app/src/components/common/BottomNavigation';
+import SellerProfileClear from '@/app/src/components/ui/SellerProfileClear';
+import ProductCard from '@/app/src/components/ui/ProductCard';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { getAxios } from '@/lib/axios';
+import { Product } from '@/app/src/types';
 
 export default function HomePageClient() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -18,10 +18,10 @@ export default function HomePageClient() {
     const fetchProducts = async () => {
       try {
         const axios = getAxios();
-        const response = await axios.get("/products");
+        const response = await axios.get('/products');
         setProducts(response.data.item || []);
       } catch (error) {
-        console.error("상품 조회 실패:", error);
+        console.error('상품 조회 실패:', error);
       } finally {
         setIsLoading(false);
       }
@@ -99,8 +99,8 @@ export default function HomePageClient() {
               <ProductCard
                 key={product._id}
                 productId={product._id}
-                imageSrc={product.mainImages?.[0]?.path ?? "/food1.png"}
-                chefName={`${product.seller?.name ?? "주부"}`}
+                imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
+                chefName={`${product.seller?.name ?? '주부'}`}
                 dishName={product.name}
                 rating={product.rating ?? 0}
                 reviewCount={product.replies ?? 0}
