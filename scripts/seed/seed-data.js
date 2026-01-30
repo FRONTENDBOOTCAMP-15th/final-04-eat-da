@@ -21,7 +21,8 @@ const sellers = [
     phone: '01011111111',
     address: '서울시 마포구 서교동 123',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=misook',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=misook&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '30년 주부 경력으로 정성스럽게 만든 집밥을 나눕니다. 아들 둘을 키우며 매일 해온 손맛 그대로 담았어요.',
@@ -36,7 +37,8 @@ const sellers = [
     phone: '01022222222',
     address: '서울시 강남구 역삼동 456',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=junghee',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=jungh&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '어머니께 배운 전통 레시피로 건강한 밥상을 차립니다. 조미료 없이 자연 재료로만 맛을 내요.',
@@ -51,7 +53,8 @@ const sellers = [
     phone: '01033333333',
     address: '서울시 송파구 잠실동 789',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sunyoung',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=sunyoung&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '요리학원 강사 출신입니다. 맛있고 예쁜 반찬으로 식탁에 행복을 더해드릴게요.',
@@ -66,7 +69,8 @@ const sellers = [
     phone: '01044444444',
     address: '서울시 서초구 반포동 101',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=eunji',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=eunji&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '세 아이 엄마로 아이들 입맛에 맞는 건강 반찬을 연구합니다. 편식하는 아이도 맛있게 먹어요.',
@@ -81,7 +85,8 @@ const sellers = [
     phone: '01055555555',
     address: '서울시 용산구 이태원동 202',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=haneul',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=skyhanlllllllllllllllllllll&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '매일 새벽 시장에서 신선한 재료를 직접 골라요. 좋은 재료가 맛있는 음식의 비결입니다.',
@@ -96,7 +101,8 @@ const sellers = [
     phone: '01066666666',
     address: '서울시 종로구 삼청동 303',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=minsu',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=minsusedc&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '호텔 조리사 출신으로 은퇴 후 집밥의 따뜻함을 전하고 있어요. 정갈한 한 끼를 약속드립니다.',
@@ -111,7 +117,8 @@ const sellers = [
     phone: '01077777777',
     address: '서울시 성동구 성수동 404',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=junho',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Brian&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '1인 가구를 위한 소포장 반찬을 준비합니다. 혼밥도 든든하고 맛있게 드세요.',
@@ -126,7 +133,8 @@ const sellers = [
     phone: '01088888888',
     address: '서울시 광진구 건대입구동 505',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=doyun',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Sophia&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '건강을 생각하는 저염식 반찬을 만듭니다. 맛은 유지하면서 나트륨은 줄였어요.',
@@ -141,7 +149,8 @@ const sellers = [
     phone: '01099999999',
     address: '서울시 영등포구 여의도동 606',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=jaehyun',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=jaehyun&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '직장인 도시락 전문입니다. 바쁜 하루, 따뜻한 집밥 한 끼로 힘내세요.',
@@ -156,7 +165,8 @@ const sellers = [
     phone: '01010101010',
     address: '서울시 중구 명동 707',
     type: 'seller',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=jihoon',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=jungmiaalk&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
     extra: {
       description:
         '할머니 손맛을 이어받아 옛날 방식 그대로 반찬을 만들어요. 추억의 맛을 느껴보세요.',
@@ -174,7 +184,8 @@ const users = [
     phone: '01012340001',
     address: '서울시 강남구 논현동 11',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user1',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Sophia&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 22,
@@ -184,7 +195,8 @@ const users = [
     phone: '01012340002',
     address: '서울시 서초구 서초동 22',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user2',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Sophia&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 23,
@@ -194,7 +206,8 @@ const users = [
     phone: '01012340003',
     address: '서울시 마포구 합정동 33',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user3',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Eliza&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 24,
@@ -204,7 +217,8 @@ const users = [
     phone: '01012340004',
     address: '서울시 송파구 방이동 44',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user4',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Valentina&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 25,
@@ -214,7 +228,8 @@ const users = [
     phone: '01012340005',
     address: '서울시 영등포구 당산동 55',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user5',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Valentina&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 26,
@@ -224,7 +239,8 @@ const users = [
     phone: '01012340006',
     address: '서울시 용산구 한남동 66',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user6',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Valentina&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 27,
@@ -234,7 +250,8 @@ const users = [
     phone: '01012340007',
     address: '서울시 성동구 왕십리동 77',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user7',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=sunyoung&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 28,
@@ -244,7 +261,8 @@ const users = [
     phone: '01012340008',
     address: '서울시 광진구 자양동 88',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user8',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=Nolan&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 29,
@@ -254,7 +272,8 @@ const users = [
     phone: '01012340009',
     address: '서울시 종로구 평창동 99',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user9',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=yer&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
   {
     _id: 30,
@@ -264,7 +283,8 @@ const users = [
     phone: '01012340010',
     address: '서울시 중구 을지로동 100',
     type: 'user',
-    image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=user10',
+    image:
+      'https://api.dicebear.com/9.x/avataaars/svg?seed=%EB%AC%B8%EC%A4%80%EC%84%9C&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf',
   },
 ];
 

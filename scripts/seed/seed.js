@@ -41,7 +41,8 @@ async function seed({ reset = false } = {}) {
           createdAt: new Date(),
           updatedAt: new Date(),
           extra: {
-            intro: `${s.name}의 집밥을 정성껏 담아드려요.`,
+            ...s.extra,
+            intro: s.extra?.description ?? `${s.name}의 집밥을 정성껏 담아드려요.`,
             rating: 4.6,
             reviewCount: 0,
           },
