@@ -3,7 +3,7 @@
 import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
 import Header from "@/app/src/components/common/Header";
 import PurchaseProductItem from "@/app/src/components/ui/PurchaseProductItem";
-import { CartItemType, CartResponse } from "@/app/src/types";
+import { CartItemType, CartResponse, Product } from "@/app/src/types";
 import { getAxios } from "@/lib/axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,13 +12,24 @@ import "dayjs/locale/ko";
 
 dayjs.locale("ko");
 
+interface DirectPurchaseData {
+  productId: number;
+  quantity: number;
+  totalAmount: number;
+}
+
 export default function CheckoutPageClient() {
+  const axios = getAxios();
   const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isProductInfoOpen, setIsProductInfoOpen] = useState(false);
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [cost, setCost] = useState<CartResponse["cost"] | null>(null);
+  const [directProduct, setDirectProduct] = useState<Product | null>(null);
+  const [directQuantity, setDirectQuantity] = useState(0);
+  const [directTotalAmount, setDirectTotalAmount] = useState(0);
+
   const searchParams = useSearchParams();
   const isDirect = searchParams.get("direct") === "true";
 
@@ -26,14 +37,40 @@ export default function CheckoutPageClient() {
   const after_tomorrow = dayjs().add(2, "day");
 
   useEffect(() => {
-    const fetchCart = async () => {
-      const axios = getAxios();
-      const response = await axios.get<CartResponse>("/carts");
-      setCartItems(response.data.item);
-      setCost(response.data.cost);
+    const fetchData = async () => {
+      if (isDirect) {
+        const directPurchaseStr = localStorage.getItem("directPurchase");
+        if (!directPurchaseStr) {
+          console.log("상품 정보를 찾을 수 없습니다.");
+          router.push("/");
+          return;
+        }
+
+        const directPurchase: DirectPurchaseData =
+          JSON.parse(directPurchaseStr);
+
+        try {
+          const response = await axios.get<{ item: Product }>(
+            `/products/${directPurchase.productId}`
+          );
+
+          setDirectProduct(response.data.item);
+          setDirectQuantity(directPurchase.quantity);
+          setDirectTotalAmount(directPurchase.totalAmount);
+        } catch (error) {
+          console.error("상품 정보 로드 실패:", error);
+          console.log("상품 정보를 불러올 수 없습니다.");
+          router.push("/");
+        }
+      } else {
+        const response = await axios.get<CartResponse>("/carts");
+        setCartItems(response.data.item);
+        setCost(response.data.cost);
+      }
     };
-    fetchCart();
-  }, []);
+
+    fetchData();
+  }, [isDirect, router]);
 
   const handlePurchase = async () => {
     if (!selectedDate || !selectedTime) {
@@ -42,29 +79,40 @@ export default function CheckoutPageClient() {
     }
 
     try {
-      const axios = getAxios();
-
       const pickupDateValue =
         selectedDate === "tomorrow"
           ? tomorrow.format("YYYY-MM-DD")
           : after_tomorrow.format("YYYY-MM-DD");
 
-      const orderData = {
-        products: cartItems.map((item) => ({
-          _id: item.product._id,
-          quantity: item.quantity,
-        })),
-        extra: {
-          pickupDate: pickupDateValue,
-          pickupTime: selectedTime,
-        },
-      };
+      const orderData = isDirect
+        ? {
+            products: [
+              {
+                _id: directProduct!._id,
+                quantity: directQuantity,
+              },
+            ],
+            extra: {
+              pickupDate: pickupDateValue,
+              pickupTime: selectedTime,
+            },
+          }
+        : {
+            products: cartItems.map((item) => ({
+              _id: item.product._id,
+              quantity: item.quantity,
+            })),
+            extra: {
+              pickupDate: pickupDateValue,
+              pickupTime: selectedTime,
+            },
+          };
+
       const response = await axios.post("/orders", orderData);
-      // 바로 구매인 경우에만 localStorage 정리
+
       if (isDirect) {
         localStorage.removeItem("directPurchase");
       } else {
-        // 장바구니에서 구매한 경우에만 장바구니 비우기
         await axios.delete("/carts/cleanup");
       }
 
@@ -108,16 +156,26 @@ export default function CheckoutPageClient() {
 
           {isProductInfoOpen && (
             <div className="space-y-4 pt-3 pb-3">
-              {cartItems.map((item) => (
-                <PurchaseProductItem
-                  key={item._id}
-                  imageSrc={item.product.image.path}
-                  dishName={item.product.name}
-                  chefName={item.product.seller.name}
-                  price={item.product.price}
-                  quantity={item.quantity}
-                />
-              ))}
+              {isDirect
+                ? directProduct && (
+                    <PurchaseProductItem
+                      imageSrc={directProduct.mainImages?.[0]?.path || ""}
+                      dishName={directProduct.name}
+                      chefName={directProduct.seller?.name || ""}
+                      price={directProduct.price}
+                      quantity={directQuantity}
+                    />
+                  )
+                : cartItems.map((item) => (
+                    <PurchaseProductItem
+                      key={item._id}
+                      imageSrc={item.product.image.path}
+                      dishName={item.product.name}
+                      chefName={item.product.seller.name}
+                      price={item.product.price}
+                      quantity={item.quantity}
+                    />
+                  ))}
             </div>
           )}
         </div>
@@ -229,13 +287,19 @@ export default function CheckoutPageClient() {
           <div className="flex justify-between">
             <p className="text-paragraph">상품 금액</p>
             <p className="text-paragraph text-gray-600">
-              {cost?.products.toLocaleString() || "0"}원
+              {isDirect
+                ? directTotalAmount.toLocaleString()
+                : (cost?.products || 0).toLocaleString()}
+              원
             </p>
           </div>
           <div className="flex justify-between">
             <p className="text-paragraph">수량</p>
             <p className="text-paragraph text-gray-600">
-              {cartItems.reduce((sum, item) => sum + item.quantity, 0)}개
+              {isDirect
+                ? directQuantity
+                : cartItems.reduce((sum, item) => sum + item.quantity, 0)}
+              개
             </p>
           </div>
           <div className="flex justify-between pb-1">
@@ -244,8 +308,11 @@ export default function CheckoutPageClient() {
           </div>
           <div className="flex justify-between border-t-[0.5px] border-gray-600 pt-4">
             <h2 className="text-paragraph-md font-semibold">총 결제 금액</h2>
-            <p className="text-paragraph-md font-semibold text-eatda-orange">
-              {cost?.total.toLocaleString() || "0"}원
+            <p className="text-paragraph text-gray-600">
+              {isDirect
+                ? directTotalAmount.toLocaleString()
+                : (cost?.products || 0).toLocaleString()}
+              원
             </p>
           </div>
         </div>
