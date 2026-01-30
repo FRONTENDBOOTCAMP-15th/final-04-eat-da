@@ -5,21 +5,7 @@ import CategoryTabs, {
   CategoryLabel,
 } from "@/app/products/components/CategoryTabs";
 import ProductCard from "@/app/src/components/ui/ProductCard";
-
-type Product = {
-  _id: number;
-  name: string;
-  price: number;
-  mainImages?: { path: string; name: string }[];
-  seller?: { name?: string };
-  rating?: number;
-  replies?: number;
-  myBookmarkId?: unknown;
-  extra?: {
-    category?: string[];
-    categoryLabel?: string;
-  };
-};
+import { Product } from "@/app/src/types";
 
 const labelToKey: Record<Exclude<CategoryLabel, "전체">, string> = {
   메인반찬: "main",
