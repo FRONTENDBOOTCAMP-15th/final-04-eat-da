@@ -3,6 +3,7 @@ import Image from "next/image";
 export interface ReviewItemProps {
   showDivider?: boolean;
   userName?: string;
+  profileImage?: string;
   rating?: number;
   createdAt?: string;
   productName?: string;
@@ -13,60 +14,33 @@ export interface ReviewItemProps {
 export default function ReviewItem({
   showDivider = true,
   userName = "익명",
+  profileImage = "/seller/seller1.png",
   rating = 5,
   createdAt = "",
   productName = "",
   content = "",
   images = [],
 }: ReviewItemProps) {
-  // 날짜 포맷팅
   const formatDate = (dateString: string) => {
     if (!dateString) return "";
-    const date = new Date(dateString);
+    const normalized = dateString.includes(".")
+      ? dateString.replace(/\./g, "-").replace(" ", "T")
+      : dateString;
+    const date = new Date(normalized);
+    if (Number.isNaN(date.getTime())) return dateString;
     return date.toISOString().split("T")[0];
   };
 
   return (
-    <article className="flex flex-col w-full gap-2.5  pt-5">
+    <article className="flex flex-col w-full gap-2.5 pt-5">
       {/* 리뷰 콘텐츠 */}
       <div className="w-full flex flex-1 px-5 items-center gap-2">
         {/* 프로필 아이콘 */}
-        <svg
-          width="30"
-          height="30"
-          viewBox="0 0 30 30"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <mask
-            id="mask0_519_3399"
-            style={{ maskType: "alpha" }}
-            maskUnits="userSpaceOnUse"
-            x="0"
-            y="0"
-            width="30"
-            height="30"
-          >
-            <path
-              d="M15 30C23.2843 30 30 23.2843 30 15C30 6.71573 23.2843 0 15 0C6.71573 0 0 6.71573 0 15C0 23.2843 6.71573 30 15 30Z"
-              fill="#353E5C"
-            />
-          </mask>
-          <g mask="url(#mask0_519_3399)">
-            <path
-              d="M15 31.0712C23.876 31.0712 31.0714 23.8758 31.0714 14.9998C31.0714 6.12386 23.876 -1.07153 15 -1.07153C6.12401 -1.07153 -1.07141 6.12386 -1.07141 14.9998C-1.07141 23.8758 6.12401 31.0712 15 31.0712Z"
-              fill="#353E5C"
-            />
-            <path
-              d="M14.9995 16.2213C17.8929 16.2213 20.2385 13.8757 20.2385 10.9824C20.2385 8.08896 17.8929 5.74341 14.9995 5.74341C12.1061 5.74341 9.76056 8.08896 9.76056 10.9824C9.76056 13.8757 12.1061 16.2213 14.9995 16.2213Z"
-              fill="#F1F3F7"
-            />
-            <path
-              d="M26.7915 25.052C26.2553 24.4038 25.6689 23.7985 25.0379 23.2418C22.3526 20.5858 18.7402 19.0718 14.9597 19.0178C11.1792 19.0718 7.56678 20.5858 4.88143 23.2418C4.27667 23.8145 3.71733 24.4332 3.20845 25.0922C3.09358 25.2514 3.00511 25.428 2.94641 25.6152C3.66282 26.4173 4.45232 27.1512 5.30472 27.8076C8.10672 29.9253 11.5254 31.0713 15.0403 31.0713C18.5552 31.0713 21.9739 29.9253 24.7759 27.8076C25.6003 27.1474 26.3627 26.4136 27.0536 25.6152C26.999 25.414 26.9104 25.2235 26.7915 25.052Z"
-              fill="#F1F3F7"
-            />
-          </g>
-        </svg>
+        <img
+          src={profileImage}
+          alt={`${userName} 프로필 이미지`}
+          className="h-7.5 w-7.5 flex-none rounded-full object-cover"
+        />
 
         {/* 상단: 이름 + 날짜 */}
         <div className="w-full flex flex-col items-start">
@@ -102,14 +76,14 @@ export default function ReviewItem({
       <div className="flex flex-col gap-1">
         {/* 메뉴명 */}
         {productName && (
-          <p className="text-paragraph-sm px-5  text-gray-600 font-regular">
+          <p className="text-paragraph-sm px-5 text-gray-600 font-regular">
             {productName}
           </p>
         )}
 
         {/* 리뷰 내용 */}
         {content && (
-          <p className="w-full text-paragraph px-5  text-gray-800 font-regular">
+          <p className="w-full text-paragraph px-5 text-gray-800 font-regular">
             {content}
           </p>
         )}
@@ -124,7 +98,7 @@ export default function ReviewItem({
               >
                 <Image
                   src={imageSrc}
-                  alt={`${productName} 리뷰 이미지 ${index + 1}`}
+                  alt={`${productName || "리뷰"} 이미지 ${index + 1}`}
                   fill
                   className="object-cover"
                 />

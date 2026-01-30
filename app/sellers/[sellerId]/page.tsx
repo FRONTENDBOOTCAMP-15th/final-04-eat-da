@@ -13,6 +13,7 @@ interface Seller {
   image?: string;
   extra?: {
     description?: string;
+    intro?: string;
     profileImage?: string;
   };
 }
@@ -23,7 +24,9 @@ interface Review {
   rating: number;
   createdAt: string;
   user?: {
+    _id?: number;
     name: string;
+    image?: string;
   };
   product?: {
     name: string;
@@ -86,6 +89,34 @@ async function getSellerReviews(productIds: number[]): Promise<Review[]> {
   }
 }
 
+async function getUserImageMap(userIds: number[]) {
+  if (userIds.length === 0) return new Map<number, string>();
+
+  try {
+    const axios = getAxios();
+    const responses = await Promise.all(
+      userIds.map((userId) =>
+        axios
+          .get(`/users/${userId}`)
+          .then((res) => ({
+            userId,
+            image: res.data.item?.image as string | undefined,
+          }))
+          .catch(() => ({ userId, image: undefined }))
+      )
+    );
+
+    return new Map(
+      responses
+        .filter((item) => item.image)
+        .map((item) => [item.userId, item.image!])
+    );
+  } catch (error) {
+    console.error("유저 이미지 조회 실패:", error);
+    return new Map();
+  }
+}
+
 export default async function SellersDetailPage({
   params,
 }: {
@@ -101,10 +132,18 @@ export default async function SellersDetailPage({
   // 상품 ID 목록으로 리뷰 가져오기
   const productIds = products.map((p) => p._id);
   const reviews = await getSellerReviews(productIds);
+  const userIds = Array.from(
+    new Set(
+      reviews
+        .map((review) => review.user?._id)
+        .filter((id): id is number => typeof id === "number")
+    )
+  );
+  const userImageMap = await getUserImageMap(userIds);
 
   const sellerName = seller?.name ?? "주부";
   const sellerDescription =
-    seller?.extra?.description ?? "정성스럽게 만든 집밥을 나눕니다.";
+    seller?.extra?.description ?? seller?.extra?.intro ?? "정성스럽게 만든 집밥을 나눕니다.";
   const sellerProfileImage =
     seller?.extra?.profileImage ?? seller?.image ?? "/seller/seller1.png";
 
@@ -156,7 +195,11 @@ export default async function SellersDetailPage({
         <ReviewList
           reviews={reviews.map((r) => ({
             id: String(r._id),
+            userId: r.user?._id,
             userName: r.user?.name ?? "익명",
+            profileImage:
+              (r.user?._id ? userImageMap.get(r.user._id) : undefined) ??
+              r.user?.image,
             rating: r.rating,
             createdAt: r.createdAt,
             productName: r.product?.name,
