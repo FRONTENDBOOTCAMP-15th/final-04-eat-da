@@ -81,6 +81,7 @@ export interface EditBanchanClientProps {
     ingredients: string;
     servings: string;
     quantity: string;
+    buyQuantity: number;
     pickupPlace: string;
     images: string[];
     show: boolean;
