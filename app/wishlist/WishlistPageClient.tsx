@@ -17,7 +17,6 @@ export default function WishlistPageClient() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 토큰으로 로그인 체크 (더 확실한 방법)
     const tokenPayload = getTokenPayload();
 
     if (!tokenPayload && !loggedInUser) {
@@ -32,10 +31,9 @@ export default function WishlistPageClient() {
     try {
       const axios = getAxios();
       const response = await axios.get('/bookmarks/product');
-      setBookmarks(response.data.item || []);
+      setBookmarks((response.data.item || []).reverse());
     } catch (error) {
       console.error('북마크 목록 조회 실패:', error);
-      // 401 에러면 로그인 페이지로
       if ((error as any)?.response?.status === 401) {
         router.replace('/login?redirect=/wishlist');
       }
@@ -48,7 +46,6 @@ export default function WishlistPageClient() {
     fetchBookmarks();
   };
 
-  // 로그인하지 않은 경우 아무것도 렌더링하지 않음
   if (!loggedInUser && !getTokenPayload()) {
     return null;
   }
