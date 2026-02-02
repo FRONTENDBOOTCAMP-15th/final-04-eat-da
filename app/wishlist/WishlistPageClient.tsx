@@ -1,35 +1,57 @@
-"use client";
+'use client';
 
-import ProductCard from "@/app/src/components/ui/ProductCard";
-import Header from "@/app/src/components/common/Header";
-import BottomNavigation from "@/app/src/components/common/BottomNavigation";
-import { getAxios } from "@/lib/axios";
-import { useEffect, useState } from "react";
-import { BookmarkProduct } from "@/app/src/types";
+import ProductCard from '@/app/src/components/ui/ProductCard';
+import Header from '@/app/src/components/common/Header';
+import BottomNavigation from '@/app/src/components/common/BottomNavigation';
+import { getAxios, getTokenPayload } from '@/lib/axios';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { BookmarkProduct } from '@/app/src/types';
+import useUserStore from '@/zustand/userStore';
 
 export default function WishlistPageClient() {
+  const router = useRouter();
+  const loggedInUser = useUserStore((state) => state.user);
+
   const [bookmarks, setBookmarks] = useState<BookmarkProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // 토큰으로 로그인 체크 (더 확실한 방법)
+    const tokenPayload = getTokenPayload();
+
+    if (!tokenPayload && !loggedInUser) {
+      router.replace('/login?redirect=/wishlist');
+      return;
+    }
+
+    fetchBookmarks();
+  }, [loggedInUser, router]);
 
   const fetchBookmarks = async () => {
     try {
       const axios = getAxios();
-      const response = await axios.get("/bookmarks/product");
+      const response = await axios.get('/bookmarks/product');
       setBookmarks(response.data.item || []);
     } catch (error) {
-      console.error("북마크 목록 조회 실패:", error);
+      console.error('북마크 목록 조회 실패:', error);
+      // 401 에러면 로그인 페이지로
+      if ((error as any)?.response?.status === 401) {
+        router.replace('/login?redirect=/wishlist');
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchBookmarks();
-  }, []);
-
   const handleBookmarkDeleted = () => {
     fetchBookmarks();
   };
+
+  // 로그인하지 않은 경우 아무것도 렌더링하지 않음
+  if (!loggedInUser && !getTokenPayload()) {
+    return null;
+  }
 
   return (
     <>
@@ -55,9 +77,9 @@ export default function WishlistPageClient() {
                 key={bookmark._id}
                 productId={bookmark.product._id}
                 imageSrc={
-                  bookmark.product.mainImages?.[0]?.path || "/food1.png"
+                  bookmark.product.mainImages?.[0]?.path || '/food1.png'
                 }
-                chefName={bookmark.product.seller?.name || "주부"}
+                chefName={bookmark.product.seller?.name || '주부'}
                 dishName={bookmark.product.name}
                 rating={bookmark.product.extra?.rating || 0}
                 reviewCount={bookmark.product.extra?.replies || 0}
