@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { getTokenPayload } from "@/lib/axios";
-import { getUser, getCartItems, getBookmarkCount } from "@/lib/mypage";
-import useUserStore from "@/zustand/userStore";
+import Link from 'next/link';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getTokenPayload } from '@/lib/axios';
+import { getUser, getCartItems, getBookmarkCount } from '@/lib/mypage';
+import useUserStore from '@/zustand/userStore';
+import { fetchSellerTier } from '@/lib/tier';
 
 type UserInfo = Awaited<ReturnType<typeof getUser>>;
 
@@ -17,16 +18,17 @@ export default function MyPageClient() {
 
   const handleLogout = () => {
     clearUser();
-    router.replace("/login");
+    router.replace('/login');
   };
   const [user, setUser] = useState<UserInfo>(null);
   const [cartCount, setCartCount] = useState(0);
   const [bookmarkCount, setBookmarkCount] = useState(0);
+  const [tierLabel, setTierLabel] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!loggedInUser) {
-      router.replace("/login?redirect=/mypage");
+      router.replace('/login?redirect=/mypage');
       return;
     }
 
@@ -46,6 +48,12 @@ export default function MyPageClient() {
       setUser(userData);
       setCartCount(cartItems.length);
       setBookmarkCount(bmCount);
+
+      if (userData?.type === 'seller') {
+        const { label } = await fetchSellerTier(tokenPayload._id);
+        setTierLabel(label);
+      }
+
       setLoading(false);
     };
 
@@ -68,7 +76,7 @@ export default function MyPageClient() {
     return null;
   }
 
-  const isSeller = user.type === "seller";
+  const isSeller = user.type === 'seller';
 
   return (
     <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
@@ -83,7 +91,7 @@ export default function MyPageClient() {
               width={60}
               height={60}
               className="w-15 h-15 rounded-full object-cover"
-              unoptimized={user.image.includes("dicebear.com")}
+              unoptimized={user.image.includes('dicebear.com')}
             />
           ) : (
             <div className="w-15 h-15 rounded-full bg-gray-600"></div>
@@ -95,7 +103,11 @@ export default function MyPageClient() {
               <h2 className="text-display-3 font-semibold text-gray-800">
                 {user.name}
               </h2>
-              <span className="text-display-1 text-gray-600">주부 9단</span>
+              {tierLabel && (
+                <span className="text-display-1 text-gray-600">
+                  {tierLabel}
+                </span>
+              )}
             </div>
             <p className="text-display-2 text-gray-800">{user.email}</p>
             <div className="flex items-center mt-1">
