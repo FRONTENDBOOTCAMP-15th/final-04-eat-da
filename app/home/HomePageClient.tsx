@@ -8,19 +8,29 @@ import ProductCard from '@/app/src/components/ui/ProductCard';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getAxios } from '@/lib/axios';
-import { Product } from '@/app/src/types';
+import { Product, Seller, SellerWithStats } from '@/app/src/types';
 
 export default function HomePageClient() {
   const [products, setProducts] = useState<Product[]>([]);
   const [recommendProducts, setRecommendProducts] = useState<Product[]>([]);
+  const [recommendSeller, setRecommendSeller] =
+    useState<SellerWithStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
         const axios = getAxios();
-        const response = await axios.get('/products');
-        const allProducts = response.data.item || [];
+        const [productsRes, usersRes] = await Promise.all([
+          axios.get('/products'),
+          axios.get('/users/'),
+        ]);
+
+        const allProducts = productsRes.data.item || [];
+        const allUsers = usersRes.data.item || [];
+        const sellers = allUsers.filter(
+          (user: Seller) => user.type === 'seller'
+        );
 
         setProducts(allProducts);
 
@@ -39,37 +49,107 @@ export default function HomePageClient() {
 
             if (validProducts.length > 0) {
               setRecommendProducts(validProducts);
+            }
+          }
+        }
+
+        if (recommendProducts.length === 0) {
+          const shuffled = [...allProducts].sort(() => Math.random() - 0.5);
+          const selected = shuffled.slice(0, 6);
+          setRecommendProducts(selected);
+
+          localStorage.setItem(
+            'dailyRecommend',
+            JSON.stringify({
+              date: today,
+              products: selected.map((p: Product) => p._id),
+            })
+          );
+        }
+
+        const storedSeller = localStorage.getItem('dailyRecommendSeller');
+
+        if (storedSeller) {
+          const { date, sellerId } = JSON.parse(storedSeller);
+          if (date === today) {
+            const seller = sellers.find((s: Seller) => s._id === sellerId);
+            if (seller) {
+              const sellerWithStats = calculateSellerStats(seller, allProducts);
+              setRecommendSeller(sellerWithStats);
               setIsLoading(false);
               return;
             }
           }
         }
-        const shuffled = [...allProducts].sort(() => Math.random() - 0.5);
-        const selected = shuffled.slice(0, 6);
-        setRecommendProducts(selected);
 
-        localStorage.setItem(
-          'dailyRecommend',
-          JSON.stringify({
-            date: today,
-            products: selected.map((p: Product) => p._id),
-          })
-        );
+        if (sellers.length > 0) {
+          const randomSeller =
+            sellers[Math.floor(Math.random() * sellers.length)];
+          const sellerWithStats = calculateSellerStats(
+            randomSeller,
+            allProducts
+          );
+          setRecommendSeller(sellerWithStats);
+
+          localStorage.setItem(
+            'dailyRecommendSeller',
+            JSON.stringify({
+              date: today,
+              sellerId: randomSeller._id,
+            })
+          );
+        }
       } catch (error) {
-        console.error('상품 조회 실패:', error);
+        console.error('데이터 조회 실패:', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, []);
+
+  const calculateSellerStats = (
+    seller: Seller,
+    allProducts: Product[]
+  ): SellerWithStats => {
+    const sellerProducts = allProducts.filter(
+      (p) => (p as any).seller_id === seller._id
+    );
+
+    const rating =
+      sellerProducts.length > 0
+        ? sellerProducts.reduce((sum, p) => sum + (p.rating ?? 0), 0) /
+          sellerProducts.length
+        : 0;
+
+    const reviewCount = sellerProducts.reduce(
+      (sum, p) => sum + (p.replies ?? 0),
+      0
+    );
+
+    const topDishes = sellerProducts
+      .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
+      .slice(0, 4)
+      .map((p) => ({
+        imageSrc: p.mainImages?.[0]?.path ?? '/food1.png',
+        name: p.name,
+      }));
+
+    return {
+      ...seller,
+      rating,
+      reviewCount,
+      topDishes,
+    };
+  };
 
   return (
     <>
       <HomeHeader />
       <div className="p-5 flex flex-col gap-6 mt-12 mb-10">
         <Image src="/Hero.png" alt="banner" height={460} width={350}></Image>
+
         <div>
           <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
           <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
@@ -89,49 +169,67 @@ export default function HomePageClient() {
             )}
           </div>
         </div>
+
         <div className="border-b-[0.5px] border-gray-400 pb-4">
           <p className="text-display-5 font-semibold pb-4">
             오늘의 추천 주부님
           </p>
-          <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
-            <div className="shrink-0 w-28">
-              <Image
-                src="/food2.png"
-                alt="음식"
-                width={120}
-                height={120}
-                className="object-cover"
-              />
+
+          {isLoading ? (
+            <div className="animate-pulse">
+              <div className="h-20 bg-gray-200 rounded-lg mb-4" />
             </div>
-            <div className="shrink-0 w-28">
-              <Image
-                src="/food2.png"
-                alt="음식"
-                width={120}
-                height={120}
-                className="object-cover"
+          ) : recommendSeller ? (
+            <>
+              <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
+                {recommendSeller.topDishes.map((dish, index) => (
+                  <div key={index} className="shrink-0 w-28">
+                    <Image
+                      src={dish.imageSrc}
+                      alt={dish.name}
+                      width={120}
+                      height={120}
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                ))}
+                {[
+                  ...Array(Math.max(0, 4 - recommendSeller.topDishes.length)),
+                ].map((_, i) => (
+                  <div key={`placeholder-${i}`} className="shrink-0 w-28">
+                    <Image
+                      src="/food2.png"
+                      alt="음식"
+                      width={120}
+                      height={120}
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <SellerProfileClear
+                sellerId={recommendSeller._id}
+                sellerName={recommendSeller.name}
+                rating={recommendSeller.rating}
+                reviewCount={recommendSeller.reviewCount}
+                profileImage={
+                  recommendSeller.extra?.profileImage ??
+                  recommendSeller.image ??
+                  '/seller/seller1.png'
+                }
+                description={
+                  recommendSeller.extra?.description ??
+                  recommendSeller.extra?.intro ??
+                  '정성스럽게 만든 집밥을 나눕니다.'
+                }
               />
-            </div>
-            <div className="shrink-0 w-28">
-              <Image
-                src="/food2.png"
-                alt="음식"
-                width={120}
-                height={120}
-                className="object-cover"
-              />
-            </div>
-            <div className="shrink-0 w-28">
-              <Image
-                src="/food2.png"
-                alt="음식"
-                width={120}
-                height={120}
-                className="object-cover"
-              />
-            </div>
-          </div>
-          <SellerProfileClear />
+            </>
+          ) : (
+            <p className="text-center text-gray-500 py-4">
+              추천 주부가 없습니다.
+            </p>
+          )}
         </div>
 
         {isLoading ? (
