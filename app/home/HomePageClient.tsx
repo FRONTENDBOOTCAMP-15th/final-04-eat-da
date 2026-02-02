@@ -9,6 +9,9 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getAxios } from '@/lib/axios';
 import { Product } from '@/app/src/types';
+import * as ChannelService from '@channel.io/channel-web-sdk-loader';
+
+ChannelService.loadScript();
 
 export default function HomePageClient() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -63,6 +66,17 @@ export default function HomePageClient() {
     };
 
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    ChannelService.boot({
+      pluginKey: '67502dfa-39a4-4d1e-8332-59d195da33a7',
+      hideChannelButtonOnBoot: true,
+    });
+
+    return () => {
+      ChannelService.shutdown();
+    };
   }, []);
 
   return (
@@ -156,6 +170,13 @@ export default function HomePageClient() {
           </div>
         )}
       </div>
+      <button
+        type="button"
+        onClick={() => ChannelService.showMessenger()}
+        className="fixed bg-white bottom-20 right-2 z-50 w-12 h-12 rounded-2xl shadow flex items-center justify-center"
+      >
+        <Image src="/Message.svg" alt="채널톡 문의" width={28} height={28} />
+      </button>
       <BottomNavigation />
     </>
   );
