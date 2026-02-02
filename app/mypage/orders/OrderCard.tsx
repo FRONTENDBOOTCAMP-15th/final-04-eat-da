@@ -1,6 +1,6 @@
 import PurchaseProductItem from '@/app/src/components/ui/PurchaseProductItem';
 import GrayButton from '@/app/src/components/ui/GrayButton';
-import type { OrderStatus } from '@/app/src/types/orderManagement';
+import type { OrderStatus } from '@/app/src/types';
 
 interface Product {
   imageSrc: string;
