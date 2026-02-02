@@ -4,6 +4,7 @@ import ProductCard from "@/app/src/components/ui/ProductCard";
 import SellerProfileCard from "@/app/src/components/ui/SellerProfileCard";
 import ReviewList from "@/app/src/components/ui/ReviewList";
 import { getAxios } from "@/lib/axios";
+import { fetchSellerTier } from "@/lib/tier";
 import { Product } from "@/app/src/types";
 
 interface Seller {
@@ -124,9 +125,10 @@ export default async function SellersDetailPage({
 }) {
   const { sellerId } = await params;
 
-  const [seller, products] = await Promise.all([
+  const [seller, products, sellerTier] = await Promise.all([
     getSeller(sellerId),
     getSellerProducts(sellerId),
+    fetchSellerTier(Number(sellerId)),
   ]);
 
   // 상품 ID 목록으로 리뷰 가져오기
@@ -159,9 +161,10 @@ export default async function SellersDetailPage({
 
   return (
     <div className="flex flex-col gap-7.5 mt-15 pt-7.5 pb-23">
-      <Header title={`${sellerName} 주부9단`} showBackButton showSearch showCart />
+      <Header title={`${sellerName} ${sellerTier.label}`} showBackButton showSearch showCart />
       <SellerProfileCard
         name={sellerName}
+        tier={sellerTier.label}
         rating={totalRating}
         reviewCount={totalReviewCount}
         profileImage={sellerProfileImage}

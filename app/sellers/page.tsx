@@ -2,6 +2,7 @@ import SellerCard from '@/app/sellers/components/SellerCard';
 import BottomNavigation from '@/app/src/components/common/BottomNavigation';
 import Header from '@/app/src/components/common/Header';
 import { getAxios } from '@/lib/axios';
+import { getTier } from '@/lib/tier';
 
 interface Seller {
   _id?: number;
@@ -9,6 +10,7 @@ interface Seller {
   name: string;
   type?: string;
   image?: string;
+  totalSales?: number;
   extra?: {
     description?: string;
     intro?: string;
@@ -133,6 +135,7 @@ export default async function SellersList() {
       rating,
       reviewCount,
       productCount: products.length,
+      tier: getTier(seller.totalSales as number).label,
     };
   });
   const visibleSellerCards = sellerCards
@@ -160,6 +163,7 @@ export default async function SellersList() {
               key={card.sellerId}
               sellerId={card.sellerId}
               sellerName={sellerName}
+              tier={card.tier}
               rating={card.rating}
               reviewCount={card.reviewCount}
               profileImage={sellerProfileImage}

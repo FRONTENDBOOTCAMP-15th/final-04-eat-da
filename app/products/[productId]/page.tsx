@@ -8,6 +8,7 @@ import Header from '@/app/src/components/common/Header';
 import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient';
 import { getAxios } from '@/lib/axios';
+import { fetchSellerTier } from '@/lib/tier';
 
 async function getProduct(productId: string) {
   const axios = getAxios();
@@ -117,6 +118,11 @@ export default async function ProductDetailPage({
     ? await getSellerImage(seller._id)
     : undefined;
 
+  // 셀러 티어 가져오기
+  const sellerTier = seller._id
+    ? await fetchSellerTier(seller._id)
+    : undefined;
+
   return (
     <main className="flex flex-col mt-12.5 gap-5 pb-23">
       {/* 헤더 */}
@@ -131,6 +137,7 @@ export default async function ProductDetailPage({
       {/* 주부 소개 */}
       <SellerProfileCard
         name={sellerName}
+        tier={sellerTier?.label}
         rating={rating}
         reviewCount={reviewCount}
         profileImage={sellerProfileImage}
