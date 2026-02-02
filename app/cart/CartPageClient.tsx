@@ -1,32 +1,47 @@
-"use client";
+'use client';
 
-import Header from "@/app/src/components/common/Header";
-import CartItem from "./CartItem";
-import Link from "next/link";
-import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
-import { useEffect, useState } from "react";
-import { getAxios } from "@/lib/axios";
-import { CartItemType, CartResponse } from "@/app/src/types";
+import Header from '@/app/src/components/common/Header';
+import CartItem from './CartItem';
+import Link from 'next/link';
+import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getAxios, getTokenPayload } from '@/lib/axios';
+import { CartItemType, CartResponse } from '@/app/src/types';
+import useUserStore from '@/zustand/userStore';
 
 export default function CartPageClient() {
+  const router = useRouter();
+  const loggedInUser = useUserStore((state) => state.user);
+
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const tokenPayload = getTokenPayload();
+
+    if (!tokenPayload && !loggedInUser) {
+      router.replace('/login?redirect=/cart');
+      return;
+    }
+
+    fetchCart();
+  }, [loggedInUser, router]);
 
   const fetchCart = async () => {
     try {
       const axios = getAxios();
-      const response = await axios.get<CartResponse>("/carts");
+      const response = await axios.get<CartResponse>('/carts');
       setCartItems(response.data.item);
     } catch (error) {
-      console.error("장바구니 조회 실패:", error);
+      console.error('장바구니 조회 실패:', error);
+      if ((error as any)?.response?.status === 401) {
+        router.replace('/login?redirect=/cart');
+      }
     } finally {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchCart();
-  }, []);
 
   const handleQuantityChange = async (cartId: number, newQuantity: number) => {
     try {
@@ -34,7 +49,7 @@ export default function CartPageClient() {
       await axios.patch(`/carts/${cartId}`, { quantity: newQuantity });
       await fetchCart();
     } catch (error) {
-      console.error("수량 변경 실패:", error);
+      console.error('수량 변경 실패:', error);
     }
   };
 
@@ -44,9 +59,13 @@ export default function CartPageClient() {
       await axios.delete(`/carts/${cartId}`);
       await fetchCart();
     } catch (error) {
-      console.error("삭제 실패:", error);
+      console.error('삭제 실패:', error);
     }
   };
+
+  if (!loggedInUser && !getTokenPayload()) {
+    return null;
+  }
 
   if (isLoading) {
     return (
