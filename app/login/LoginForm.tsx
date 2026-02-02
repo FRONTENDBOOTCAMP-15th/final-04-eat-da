@@ -40,21 +40,48 @@ export default function LoginForm() {
       setModalMessage(state.message || '');
     }
     if (state?.ok === 1 && state.item) {
+      const item = state.item;
+
       // zustand에 유저 정보 저장
       setUser({
-        _id: state.item._id,
-        email: state.item.email,
-        name: state.item.name,
-        type: state.item.type,
-        loginType: state.item.loginType,
-        image: state.item.image,
+        _id: item._id,
+        email: item.email,
+        name: item.name,
+        type: item.type,
+        loginType: item.loginType,
+        image: item.image,
         token: {
-          accessToken: state.item.token.accessToken,
-          refreshToken: state.item.token.refreshToken,
+          accessToken: item.token.accessToken,
+          refreshToken: item.token.refreshToken,
         },
       });
-      const redirect = searchParams.get('redirect') || '/home';
-      router.replace(redirect);
+
+      // 유저 주소를 API로 가져와서 localStorage에 저장 후 리다이렉트
+      const handlePostLogin = async () => {
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/users/${item._id}/address`,
+            {
+              headers: {
+                'Authorization': `Bearer ${item.token.accessToken}`,
+                'Content-Type': 'application/json',
+                'Client-Id': process.env.NEXT_PUBLIC_CLIENT_ID || '',
+              },
+            }
+          );
+          const data = await res.json();
+          if (data.ok && data.item?.address) {
+            localStorage.setItem('user-address', data.item.address);
+          }
+        } catch (error) {
+          console.error('주소 정보 가져오기 실패:', error);
+        }
+
+        const redirect = searchParams.get('redirect') || '/home';
+        router.replace(redirect);
+      };
+
+      handlePostLogin();
     }
   }, [state, router, setUser, searchParams]);
 
