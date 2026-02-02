@@ -14,6 +14,7 @@ export default function RecommendProduct({ product }: RecommendProductProps) {
         <Image
           src={product.mainImages?.[0]?.path || '/food1.png'}
           fill
+          sizes="(max-width: 768px) 50vw, 300px"
           alt={product.name}
           className="object-cover rounded-lg"
         />
