@@ -6,11 +6,12 @@ import type {
   SellerOrderData,
   OrderStatus,
   OrderStateCode,
-} from '@/app/src/types/orderManagement';
-import { orderState } from '@/app/src/types/orderManagement';
+} from '@/app/src/types';
+import { orderState } from '@/app/src/types';
 import { fetchSellerOrders, updateOrderState } from '@/lib/orders';
 import { getUser } from '@/lib/mypage';
 import { getTokenPayload } from '@/lib/axios';
+import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
 
 const statusList: OrderStatus[] = ['대기중', '승인됨', '조리완료', '픽업완료'];
 
@@ -30,7 +31,7 @@ const nextStatusTextMap: Record<OrderStatus, string> = {
 const pickupTimeMap: Record<string, string> = {
   '9-12': '9:00-12:00',
   '12-16': '12:00-16:00',
-  '16-19': '16:00-19:00',
+  '16-20': '16:00-20:00',
 };
 
 const getStatus = (order: SellerOrderData) =>
@@ -51,7 +52,7 @@ const formatOrderTime = (dateStr: string) =>
 const formatPickupDate = (date?: string) =>
   date ? date.replace(/-0?/g, '.') : '-';
 
-const formatPickupTime = (time?: string) =>
+export const formatPickupTime = (time?: string) =>
   time ? (pickupTimeMap[time] ?? time) : '-';
 
 export default function OrdersClient() {
@@ -61,6 +62,8 @@ export default function OrdersClient() {
   );
   const [sellerName, setSellerName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [modalMessage, setModalMessage] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const fetchOrders = async () => {
     try {
@@ -95,13 +98,16 @@ export default function OrdersClient() {
     [orders]
   );
 
-  const filteredOrders = useMemo(
-    () =>
-      selectedStatus
-        ? orders.filter((order) => getStatus(order) === selectedStatus)
-        : orders,
-    [orders, selectedStatus]
-  );
+  const filteredOrders = useMemo(() => {
+    const base = selectedStatus
+      ? orders.filter((order) => getStatus(order) === selectedStatus)
+      : orders;
+    return [...base].sort((a, b) => {
+      const aComplete = a.state === 'OS080' ? 1 : 0;
+      const bComplete = b.state === 'OS080' ? 1 : 0;
+      return aComplete - bComplete;
+    });
+  }, [orders, selectedStatus]);
 
   const handleAdvance = async (orderId: number, currentState: string) => {
     const nextState = nextStateMap[currentState];
@@ -109,6 +115,8 @@ export default function OrdersClient() {
     try {
       await updateOrderState(orderId, nextState);
       await fetchOrders();
+      setModalMessage(`상태가 변경되었습니다.`);
+      setShowModal(true);
     } catch (e) {
       console.error('주문 상태 변경 실패', e);
     }
@@ -175,6 +183,11 @@ export default function OrdersClient() {
           );
         })
       )}
+      <ConfirmModal
+        isOpen={showModal}
+        title={modalMessage}
+        onConfirm={() => setShowModal(false)}
+      />
     </div>
   );
 }

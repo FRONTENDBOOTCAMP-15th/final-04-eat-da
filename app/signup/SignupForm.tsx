@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { signup, SignupState } from '@/actions/user';
+import useUserStore from '@/zustand/userStore';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
 
 type ClientErrors = {
@@ -19,6 +20,7 @@ type ClientErrors = {
 export default function SignupForm() {
   const [state, formAction, isPending] = useActionState<SignupState | null, FormData>(signup, null);
   const router = useRouter();
+  const setUser = useUserStore((state) => state.setUser);
   const [selectedType, setSelectedType] = useState<'user' | 'seller'>('user');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
@@ -61,9 +63,48 @@ export default function SignupForm() {
     }
   }, [state]);
 
-  const handleModalConfirm = () => {
+  const handleModalConfirm = async () => {
     setIsModalOpen(false);
-    if (modalType === 'success') {
+    if (modalType === 'success' && state?.item) {
+      const item = state.item;
+
+      // Zustand에 유저 정보 저장 (자동 로그인)
+      setUser({
+        _id: item._id,
+        email: item.email,
+        name: item.name,
+        type: item.type,
+        loginType: item.loginType,
+        image: item.image,
+        token: {
+          accessToken: item.token.accessToken,
+          refreshToken: item.token.refreshToken,
+        },
+      });
+
+      // 유저 주소를 API로 가져와서 localStorage에 저장
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/${item._id}/address`,
+          {
+            headers: {
+              'Authorization': `Bearer ${item.token.accessToken}`,
+              'Content-Type': 'application/json',
+              'Client-Id': process.env.NEXT_PUBLIC_CLIENT_ID || '',
+            },
+          }
+        );
+        const data = await res.json();
+        if (data.ok && data.item?.address) {
+          localStorage.setItem('user-address', data.item.address);
+        }
+      } catch (error) {
+        console.error('주소 정보 가져오기 실패:', error);
+      }
+
+      router.replace('/home');
+    } else if (modalType === 'success') {
+      // 자동 로그인 데이터가 없으면 로그인 페이지로
       router.push('/login');
     }
   };

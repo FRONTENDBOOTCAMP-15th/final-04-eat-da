@@ -9,6 +9,7 @@ import ReviewList from '@/app/src/components/ui/ReviewList';
 import Header from '@/app/src/components/common/Header';
 import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient';
 import { getAxios } from '@/lib/axios';
+import { fetchSellerTier } from '@/lib/tier';
 
 interface Reply {
   _id: number;
@@ -167,6 +168,16 @@ export default function ProductDetailPage({
   const rating: number = product.rating ?? 0;
   const reviewCount: number = reviews.length;
 
+  // 셀러 이미지 가져오기
+  const sellerProfileImage = seller._id
+    ? await getSellerImage(seller._id)
+    : undefined;
+
+  // 셀러 티어 가져오기
+  const sellerTier = seller._id
+    ? await fetchSellerTier(seller._id)
+    : undefined;
+
   return (
     <main className="flex flex-col mt-12.5 gap-5 pb-23">
       <Header title=" " showBackButton showSearch showCart />
@@ -184,6 +195,7 @@ export default function ProductDetailPage({
 
       <SellerProfileCard
         name={sellerName}
+        tier={sellerTier?.label}
         rating={rating}
         reviewCount={reviewCount}
         profileImage={sellerProfileImage}
