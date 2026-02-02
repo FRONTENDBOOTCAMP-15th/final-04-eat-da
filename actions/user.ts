@@ -42,6 +42,18 @@ export interface SignupState {
     address: string;
     introduction: string;
   };
+  item?: {
+    _id: number;
+    email: string;
+    name: string;
+    type?: string;
+    loginType?: string;
+    image?: string;
+    token: {
+      accessToken: string;
+      refreshToken: string;
+    };
+  };
 }
 
 export async function signup(
@@ -123,6 +135,33 @@ export async function signup(
         errors: data.errors,
         values,
       };
+    }
+
+    // 회원가입 성공 후 자동 로그인
+    try {
+      const loginResponse = await getAxios().post('/users/login', { email, password });
+      const loginData = loginResponse.data;
+
+      if (loginData.ok) {
+        return {
+          ok: 1,
+          message: '회원가입 성공',
+          item: {
+            _id: loginData.item._id,
+            email: loginData.item.email,
+            name: loginData.item.name,
+            type: loginData.item.type,
+            loginType: loginData.item.loginType,
+            image: loginData.item.image,
+            token: {
+              accessToken: loginData.item.token.accessToken,
+              refreshToken: loginData.item.token.refreshToken,
+            },
+          },
+        };
+      }
+    } catch {
+      // 자동 로그인 실패 시 회원가입 성공만 반환
     }
 
     return {
