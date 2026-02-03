@@ -127,10 +127,15 @@ export default function HomePageClient() {
           sellerProducts.length
         : 0;
 
-    const reviewCount = sellerProducts.reduce(
-      (sum, p) => sum + (p.replies ?? 0),
-      0
-    );
+    const reviewCount = sellerProducts.reduce((sum, p) => {
+      const replies = p.replies;
+      if (Array.isArray(replies)) {
+        return sum + replies.length;
+      } else if (typeof replies === 'number') {
+        return sum + replies;
+      }
+      return sum;
+    }, 0);
 
     const topDishes = sellerProducts
       .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
@@ -203,6 +208,7 @@ export default function HomePageClient() {
                       alt={dish.name}
                       width={120}
                       height={120}
+                      sizes="50vw"
                       className="object-cover rounded-lg"
                     />
                   </div>
@@ -216,6 +222,7 @@ export default function HomePageClient() {
                       alt="음식"
                       width={120}
                       height={120}
+                      sizes="50vw"
                       className="object-cover rounded-lg"
                     />
                   </div>
@@ -252,19 +259,27 @@ export default function HomePageClient() {
           </div>
         ) : (
           <div className="grid grid-cols-2 -mx-5">
-            {products.map((product) => (
-              <ProductCard
-                key={product._id}
-                productId={product._id}
-                imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
-                chefName={`${product.seller?.name ?? '주부'}`}
-                dishName={product.name}
-                rating={product.rating ?? 0}
-                reviewCount={product.replies ?? 0}
-                price={product.price}
-                initialWished={Boolean(product.myBookmarkId)}
-              />
-            ))}
+            {products.map((product) => {
+              const reviewCount = Array.isArray(product.replies)
+                ? product.replies.length
+                : typeof product.replies === 'number'
+                  ? product.replies
+                  : 0;
+
+              return (
+                <ProductCard
+                  key={product._id}
+                  productId={product._id}
+                  imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
+                  chefName={`${product.seller?.name ?? '주부'}`}
+                  dishName={product.name}
+                  rating={product.rating ?? 0}
+                  reviewCount={reviewCount}
+                  price={product.price}
+                  initialWished={Boolean(product.myBookmarkId)}
+                />
+              );
+            })}
           </div>
         )}
       </div>
