@@ -4,6 +4,8 @@ export interface Product {
   price: number;
   content?: string;
   quantity?: number;
+  buyQuantity?: number;
+  createdAt?: string;
   mainImages?: { path: string; name: string }[];
   seller?: {
     _id?: number;
