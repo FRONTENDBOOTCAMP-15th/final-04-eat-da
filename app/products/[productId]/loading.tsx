@@ -70,6 +70,32 @@ function ReviewSkeleton() {
   );
 }
 
+export function ProductDetailSkeleton() {
+  return (
+    <main className="flex flex-col mt-12.5 gap-5 pb-23">
+      <Header title=" " showBackButton showSearch showCart />
+
+      <ImageSliderSkeleton />
+
+      <div className="flex mx-5 items-center animate-pulse">
+        <div className="h-7 bg-gray-200 rounded w-48" />
+        <div className="ml-auto w-6 h-6 bg-gray-200 rounded" />
+      </div>
+
+      <SellerProfileSkeleton />
+
+      <ProductInfoSkeleton />
+
+      <div className="px-5">
+        <div className="h-5 bg-gray-200 rounded w-24 mb-4 animate-pulse" />
+        {Array.from({ length: 2 }).map((_, i) => (
+          <ReviewSkeleton key={i} />
+        ))}
+      </div>
+    </main>
+  );
+}
+
 export default function Loading() {
   return (
     <main className="flex flex-col mt-12.5 gap-5 pb-23">

@@ -11,6 +11,7 @@ import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient'
 import { getAxios } from '@/lib/axios';
 import { getTierFromSales } from '@/lib/tier';
 import { Product, Reply } from '@/app/src/types/product';
+import { ProductDetailSkeleton } from './loading';
 
 export default function ProductDetailPage({
   params,
@@ -143,14 +144,7 @@ export default function ProductDetailPage({
   };
 
   if (isLoading || !product) {
-    return (
-      <>
-        <Header title=" " showBackButton showSearch showCart />
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-gray-600">로딩 중...</p>
-        </div>
-      </>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   const extra = product.extra ?? {};
