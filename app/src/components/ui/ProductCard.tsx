@@ -1,15 +1,16 @@
-"use client";
-import Image from "next/image";
-import HeartItem from "./HeartItem";
-import Link from "next/link";
-import { getAxios } from "@/lib/axios";
-import { useState } from "react";
-import { ProductCardProps } from "@/app/src/types";
+'use client';
+import Image from 'next/image';
+import HeartItem from './HeartItem';
+import Link from 'next/link';
+import { getAxios } from '@/lib/axios';
+import { useState } from 'react';
+import { ProductCardProps } from '@/app/src/types';
 
 export default function ProductCard({
   productId,
   imageSrc,
   chefName,
+  tier,
   dishName,
   rating,
   reviewCount,
@@ -19,7 +20,7 @@ export default function ProductCard({
   isLcp = false,
   onBookmarkChange,
 }: ProductCardProps) {
-  const safeImageSrc = imageSrc || "/food1.png";
+  const safeImageSrc = imageSrc || '/food1.png';
   const [currentBookmarkId, setCurrentBookmarkId] = useState(bookmarkId);
 
   const handleToggleWish = async (isWished: boolean) => {
@@ -31,12 +32,12 @@ export default function ProductCard({
           target_id: productId,
         });
         setCurrentBookmarkId(response.data.item._id);
-        console.log("북마크 추가 성공");
+        console.log('북마크 추가 성공');
       } else {
         if (currentBookmarkId) {
           await axios.delete(`/bookmarks/${currentBookmarkId}`);
           setCurrentBookmarkId(undefined);
-          console.log("북마크 삭제 성공");
+          console.log('북마크 삭제 성공');
         }
       }
 
@@ -44,7 +45,7 @@ export default function ProductCard({
         onBookmarkChange();
       }
     } catch (error) {
-      console.error("북마크 에러:", error);
+      console.error('북마크 에러:', error);
     }
   };
 
@@ -57,7 +58,7 @@ export default function ProductCard({
           alt={dishName}
           className="object-cover"
           sizes="50vw"
-          loading={isLcp ? "eager" : "lazy"}
+          loading={isLcp ? 'eager' : 'lazy'}
           priority={isLcp}
         />
         <div
@@ -78,7 +79,7 @@ export default function ProductCard({
       <div className="pt-4 pb-5 px-2.5 space-y-1">
         <div className="flex gap-2 items-center">
           <p className="text-eatda-orange text-display-1 font-semibold">
-            {chefName}
+            {chefName} {tier}
           </p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +98,7 @@ export default function ProductCard({
           </svg>
         </div>
         <div className="flex items-center">
-          <p className="text-paragraph mr-2">{dishName}</p>
+          <p className="text-paragraph font-regular mr-2">{dishName}</p>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -110,8 +111,9 @@ export default function ProductCard({
               fill="#FF6155"
             />
           </svg>
-          <p className="text-x-small ml-1">
-            {rating.toFixed(1)}({reviewCount})
+          <p className="flex leading-none items-center ml-0.5 gap-0.5">
+            <span className="text-[13px] font-light">{rating.toFixed(1)}</span>
+            <span className="text-[11px] text-gray-600">({reviewCount})</span>
           </p>
         </div>
         <p className="text-paragraph-md font-semibold">

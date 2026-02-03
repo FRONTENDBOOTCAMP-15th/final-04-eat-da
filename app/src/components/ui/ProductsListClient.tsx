@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CategoryTabs, {
   CategoryLabel,
 } from "@/app/products/components/CategoryTabs";
 import ProductCard from "@/app/src/components/ui/ProductCard";
 import { Product } from "@/app/src/types";
+import { getTier } from "@/lib/tier";
 
 const labelToKey: Record<Exclude<CategoryLabel, "전체">, string> = {
   메인반찬: "main",
@@ -40,6 +41,10 @@ export default function ProductsListClient({
     return products.filter((p) => matchesCategory(p, selected));
   }, [products, selected]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [selected]);
+
   return (
     <>
       <CategoryTabs value={selected} onChange={setSelected} />
@@ -51,9 +56,10 @@ export default function ProductsListClient({
             productId={product._id}
             imageSrc={product.mainImages?.[0]?.path ?? "/food1.png"}
             chefName={`${product.seller?.name ?? "주부"}`}
+            tier={getTier(product.seller?.totalSales ?? 0).label}
             dishName={product.name}
             rating={product.rating ?? 0}
-            reviewCount={product.replies ?? 0}
+            reviewCount={typeof product.replies === 'number' ? product.replies : (product.replies?.length ?? 0)}
             price={product.price}
             initialWished={Boolean(product.myBookmarkId)}
             isLcp={index === 0}

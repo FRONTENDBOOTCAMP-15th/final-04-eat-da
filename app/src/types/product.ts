@@ -8,10 +8,11 @@ export interface Product {
   seller?: {
     _id?: number;
     name?: string;
+    totalSales?: number;
     extra?: { description?: string; intro?: string };
   };
   rating?: number;
-  replies?: Reply[];
+  replies?: Reply[] | number;
   myBookmarkId?: number;
   extra?: {
     category?: string[];
@@ -35,6 +36,7 @@ export interface ProductCardProps {
   productId: number;
   imageSrc: string;
   chefName: string;
+  tier?: string;
   dishName: string;
   rating: number;
   reviewCount: number;
