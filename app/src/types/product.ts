@@ -2,15 +2,33 @@ export interface Product {
   _id: number;
   name: string;
   price: number;
+  content?: string;
+  quantity?: number;
   mainImages?: { path: string; name: string }[];
-  seller?: { name?: string };
+  seller?: {
+    _id?: number;
+    name?: string;
+    extra?: { description?: string; intro?: string };
+  };
   rating?: number;
-  replies?: number;
-  myBookmarkId?: unknown;
+  replies?: Reply[];
+  myBookmarkId?: number;
   extra?: {
     category?: string[];
     categoryLabel?: string;
+    ingredients?: string[];
+    serving?: string;
+    pickupPlace?: string;
   };
+}
+
+export interface Reply {
+  _id: number;
+  user?: { _id?: number; name?: string; image?: string };
+  rating?: number;
+  createdAt?: string;
+  content?: string;
+  extra?: { images?: string[] };
 }
 
 export interface ProductCardProps {
