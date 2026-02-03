@@ -9,9 +9,9 @@ import ReviewList from '@/app/src/components/ui/ReviewList';
 import Header from '@/app/src/components/common/Header';
 import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient';
 import { getAxios } from '@/lib/axios';
-import { fetchSellerTier } from '@/lib/tier';
+import { getTierFromSales } from '@/lib/tier';
 import { Product, Reply } from '@/app/src/types/product';
-import { getImageUrl } from '@/lib/review';
+import { ProductDetailSkeleton } from './loading';
 
 export default function ProductDetailPage({
   params,
@@ -67,12 +67,10 @@ export default function ProductDetailPage({
       }
 
       if (productData.seller?._id) {
-        // 셀러 이미지 가져오기
-        const sellerImg = await getSellerImage(productData.seller._id);
-        setSellerProfileImage(sellerImg);
-        // 셀러 티어 가져오기
-        const tier = await fetchSellerTier(productData.seller._id);
-        setSellerTier(tier);
+        // 셀러 이미지와 티어를 한 번의 API 호출로 가져오기
+        const sellerInfo = await getSellerInfo(productData.seller._id);
+        setSellerProfileImage(sellerInfo.image);
+        setSellerTier(sellerInfo.tier);
       }
     } catch (error) {
       console.error('상품 조회 실패:', error);
@@ -81,17 +79,23 @@ export default function ProductDetailPage({
     }
   };
 
-  const getSellerImage = async (
+  const getSellerInfo = async (
     sellerId: number
-  ): Promise<string | undefined> => {
+  ): Promise<{
+    image: string | undefined;
+    tier: { level: number; label: string };
+  }> => {
     try {
       const axios = getAxios();
       const res = await axios.get(`/users/${sellerId}`);
       const seller = res.data.item;
-      return seller?.extra?.profileImage ?? seller?.image;
+      return {
+        image: seller?.extra?.profileImage ?? seller?.image,
+        tier: getTierFromSales(seller?.totalSales ?? 0),
+      };
     } catch (error) {
-      console.error('판매자 이미지 조회 실패:', error);
-      return undefined;
+      console.error('판매자 정보 조회 실패:', error);
+      return { image: undefined, tier: getTierFromSales(0) };
     }
   };
 
@@ -140,14 +144,7 @@ export default function ProductDetailPage({
   };
 
   if (isLoading || !product) {
-    return (
-      <>
-        <Header title=" " showBackButton showSearch showCart />
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-gray-600">로딩 중...</p>
-        </div>
-      </>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   const extra = product.extra ?? {};
