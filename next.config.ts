@@ -38,6 +38,16 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "fesp-api.koyeb.app",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "static.wtable.co.kr",
+        pathname: "/**",
+      },
     ],
   },
 };
