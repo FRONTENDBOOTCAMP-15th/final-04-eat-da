@@ -1,6 +1,7 @@
 import SellerCard from '@/app/sellers/components/SellerCard';
 import BottomNavigation from '@/app/src/components/common/BottomNavigation';
 import Header from '@/app/src/components/common/Header';
+import ScrollToTop from '@/app/src/components/common/ScrollToTop';
 import { getAxios } from '@/lib/axios';
 import { getTier } from '@/lib/tier';
 
@@ -144,6 +145,7 @@ export default async function SellersList() {
 
   return (
     <div className="flex flex-col gap-7.5 mt-15 pb-23">
+      <ScrollToTop />
       <Header title="주부 목록" showBackButton showSearch showCart />
       <div>
         {visibleSellerCards.map((card, index) => {
