@@ -20,7 +20,7 @@ export interface Product {
     category?: string[];
     categoryLabel?: string;
     ingredients?: string[];
-    serving?: string;
+    servings?: string;
     pickupPlace?: string;
   };
 }

@@ -89,9 +89,9 @@ export default function ReviewItem({
         )}
 
         {/* 리뷰 이미지 */}
-        {images.length > 0 && (
+        {images.filter(Boolean).length > 0 && (
           <section className="mt-4 flex px-5 gap-1 overflow-x-auto scrollbar-hide">
-            {images.map((imageSrc, index) => (
+            {images.filter(Boolean).map((imageSrc, index) => (
               <div
                 key={index}
                 className="relative aspect-square w-28 shrink-0 overflow-hidden"

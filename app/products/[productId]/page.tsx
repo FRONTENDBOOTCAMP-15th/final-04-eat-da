@@ -9,7 +9,7 @@ import ReviewList from '@/app/src/components/ui/ReviewList';
 import Header from '@/app/src/components/common/Header';
 import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient';
 import { getAxios } from '@/lib/axios';
-import { getTierFromSales } from '@/lib/tier';
+import { getTier } from '@/lib/tier';
 import { Product, Reply } from '@/app/src/types/product';
 import { getImageUrl } from '@/lib/review';
 import { ProductDetailSkeleton } from './loading';
@@ -68,7 +68,7 @@ export default function ProductDetailPage({
       }
 
       if (productData.seller?._id) {
-        // 셀러 이미지와 티어를 한 번의 API 호출로 가져오기
+        // 셀러 이미지와 티어 가져오기
         const sellerInfo = await getSellerInfo(productData.seller._id);
         setSellerProfileImage(sellerInfo.image);
         setSellerTier(sellerInfo.tier);
@@ -88,15 +88,27 @@ export default function ProductDetailPage({
   }> => {
     try {
       const axios = getAxios();
-      const res = await axios.get(`/users/${sellerId}`);
-      const seller = res.data.item;
+      // /users/ API에서 seller 목록을 가져와서 totalSales 조회 (반찬 목록 페이지와 동일한 방식)
+      const [sellerRes, usersRes] = await Promise.all([
+        axios.get(`/users/${sellerId}`),
+        axios.get('/users/'),
+      ]);
+      const seller = sellerRes.data.item;
+      const users = usersRes.data.item || [];
+      const sellerFromList = users.find(
+        (u: { _id?: number; seller_id?: number; type?: string }) =>
+          (u._id === sellerId || u.seller_id === sellerId) &&
+          u.type === 'seller'
+      );
+      const totalSales = sellerFromList?.totalSales ?? 0;
+
       return {
         image: seller?.extra?.profileImage ?? seller?.image,
-        tier: getTierFromSales(seller?.totalSales ?? 0),
+        tier: getTier(totalSales),
       };
     } catch (error) {
       console.error('판매자 정보 조회 실패:', error);
-      return { image: undefined, tier: getTierFromSales(0) };
+      return { image: undefined, tier: getTier(0) };
     }
   };
 
@@ -150,7 +162,7 @@ export default function ProductDetailPage({
 
   const extra = product.extra ?? {};
   const ingredients: string[] = extra.ingredients ?? [];
-  const serving: string = extra.serving ?? '2인분';
+  const serving: string = `${extra.servings ?? 2}인분`;
   const pickupPlace: string = extra.pickupPlace ?? '서교동 공유주방';
   const stock: number = product.quantity ?? 0;
   const productImages = product.mainImages?.map(
@@ -186,6 +198,7 @@ export default function ProductDetailPage({
         reviewCount={reviewCount}
         profileImage={sellerProfileImage}
         description={sellerDescription}
+        sellerId={product.seller?._id}
       />
 
       <div className="flex flex-col px-5 gap-4">
@@ -232,7 +245,9 @@ export default function ProductDetailPage({
             createdAt: r.createdAt,
             content: r.content,
             images: (r.extra?.images ?? []).map((img: unknown) =>
-              typeof img === 'string' ? img : getImageUrl((img as { path: string }).path)
+              typeof img === 'string'
+                ? img
+                : getImageUrl((img as { path: string }).path)
             ),
           }))}
         />
