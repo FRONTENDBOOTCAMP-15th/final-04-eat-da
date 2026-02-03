@@ -11,6 +11,7 @@ import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient'
 import { getAxios } from '@/lib/axios';
 import { getTierFromSales } from '@/lib/tier';
 import { Product, Reply } from '@/app/src/types/product';
+import { getImageUrl } from '@/lib/review';
 import { ProductDetailSkeleton } from './loading';
 
 export default function ProductDetailPage({
