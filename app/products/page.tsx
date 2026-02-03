@@ -1,28 +1,37 @@
-'use client';
-
 import BottomNavigation from '@/app/src/components/common/BottomNavigation';
 import Header from '@/app/src/components/common/Header';
 import ProductsListClient from '@/app/src/components/ui/ProductsListClient';
-import { getAxios } from '@/lib/axios';
-import { useEffect, useState } from 'react';
 import { Product } from '@/app/src/types';
 
-export default function ProductsList() {
-  const [products, setProducts] = useState<Product[]>([]);
+const API_SERVER = process.env.NEXT_PUBLIC_API_URL;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID || '';
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const axios = getAxios();
-        const res = await axios.get('/products/');
-        setProducts(res.data.item || []);
-      } catch (error) {
-        console.error('상품 조회 실패:', error);
-      }
-    };
+async function getProducts(): Promise<Product[]> {
+  try {
+    const res = await fetch(`${API_SERVER}/products/`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Client-Id': CLIENT_ID,
+      },
+      next: { revalidate: 60 },
+    });
 
-    fetchProducts();
-  }, []);
+    if (!res.ok) {
+      console.error('상품 조회 실패:', res.status);
+      return [];
+    }
+
+    const data = await res.json();
+    return data.item || [];
+  } catch (error) {
+    console.error('상품 조회 실패:', error);
+    return [];
+  }
+}
+
+export default async function ProductsList() {
+  const products = await getProducts();
 
   return (
     <>
