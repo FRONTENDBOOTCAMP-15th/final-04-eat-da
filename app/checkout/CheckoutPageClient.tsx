@@ -29,6 +29,7 @@ export default function CheckoutPageClient() {
   const [directProduct, setDirectProduct] = useState<Product | null>(null);
   const [directQuantity, setDirectQuantity] = useState(0);
   const [directTotalAmount, setDirectTotalAmount] = useState(0);
+  const [pickupPlace, setPickupPlace] = useState('공유주방');
 
   const searchParams = useSearchParams();
   const isDirect = searchParams.get('direct') === 'true';
@@ -54,9 +55,12 @@ export default function CheckoutPageClient() {
             `/products/${directPurchase.productId}`
           );
 
-          setDirectProduct(response.data.item);
+          const product = response.data.item;
+          setDirectProduct(product);
           setDirectQuantity(directPurchase.quantity);
           setDirectTotalAmount(directPurchase.totalAmount);
+
+          setPickupPlace(product.extra?.pickupPlace || '공유주방');
         } catch (error) {
           console.error('상품 정보 로드 실패:', error);
           alert('상품 정보를 불러올 수 없습니다.');
@@ -67,12 +71,17 @@ export default function CheckoutPageClient() {
           const response = await axios.get<CartResponse>('/carts');
           setCartItems(response.data.item || []);
           setCost(response.data.cost || { products: 0 });
+
+          if (response.data.item && response.data.item.length > 0) {
+            const firstProduct = response.data.item[0].product;
+            setPickupPlace(firstProduct.extra?.pickupPlace || '공유주방');
+          }
         } catch (error) {
           console.error('장바구니 정보 로드 실패:', error);
           alert(
             '장바구니 정보를 불러올 수 없습니다. 로그인이 필요할 수 있습니다.'
           );
-          router.push('/login'); // 또는 적절한 경로로
+          router.push('/login');
         }
       }
     };
@@ -210,7 +219,7 @@ export default function CheckoutPageClient() {
               />
             </svg>
             <div>
-              <p className="text-paragraph font-semibold">서교동 공유주방</p>
+              <p className="text-paragraph font-semibold">{pickupPlace}</p>
               <p className="text-paragraph-sm">서울시 마포구 동교로 15길</p>
             </div>
           </div>
