@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CategoryTabs, {
   CategoryLabel,
 } from "@/app/products/components/CategoryTabs";
@@ -40,6 +40,10 @@ export default function ProductsListClient({
     return products.filter((p) => matchesCategory(p, selected));
   }, [products, selected]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [selected]);
+
   return (
     <>
       <CategoryTabs value={selected} onChange={setSelected} />
@@ -53,7 +57,7 @@ export default function ProductsListClient({
             chefName={`${product.seller?.name ?? "주부"}`}
             dishName={product.name}
             rating={product.rating ?? 0}
-            reviewCount={product.replies ?? 0}
+            reviewCount={product.replies?.length ?? 0}
             price={product.price}
             initialWished={Boolean(product.myBookmarkId)}
             isLcp={index === 0}
