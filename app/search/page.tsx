@@ -14,10 +14,6 @@ export default function SearchPage() {
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    searchInputRef.current?.focus();
-  }, []);
-
-  useEffect(() => {
     if (!searchQuery.trim()) {
       setSearchResults([]);
       return;
@@ -65,7 +61,7 @@ export default function SearchPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="반찬 이름을 검색하세요"
-              className="flex-1 bg-transparent outline-none text-paragraph placeholder:text-gray-500"
+              className="flex-1 bg-transparent outline-none text-base placeholder:text-gray-500"
             />
             {searchQuery && (
               <button
