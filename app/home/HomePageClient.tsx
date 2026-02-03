@@ -202,28 +202,34 @@ export default function HomePageClient() {
             <>
               <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
                 {recommendSeller.topDishes.map((dish, index) => (
-                  <div key={index} className="shrink-0 w-28">
+                  <div
+                    key={index}
+                    className="shrink-0 w-28 h-28 overflow-hidden"
+                  >
                     <Image
                       src={dish.imageSrc}
                       alt={dish.name}
                       width={120}
                       height={120}
                       sizes="50vw"
-                      className="object-cover rounded-lg"
+                      className="object-cover rounded-lg w-full h-full"
                     />
                   </div>
                 ))}
                 {[
                   ...Array(Math.max(0, 4 - recommendSeller.topDishes.length)),
                 ].map((_, i) => (
-                  <div key={`placeholder-${i}`} className="shrink-0 w-28">
+                  <div
+                    key={`placeholder-${i}`}
+                    className="shrink-0 overflow-hidden w-28 h-28"
+                  >
                     <Image
                       src="/food2.png"
                       alt="음식"
                       width={120}
                       height={120}
                       sizes="50vw"
-                      className="object-cover rounded-lg"
+                      className="object-cover rounded-lg w-full h-full"
                     />
                   </div>
                 ))}
