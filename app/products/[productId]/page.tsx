@@ -230,7 +230,9 @@ export default function ProductDetailPage({
             rating: r.rating,
             createdAt: r.createdAt,
             content: r.content,
-            images: r.extra?.images ?? [],
+            images: (r.extra?.images ?? []).map((img: unknown) =>
+              typeof img === 'string' ? img : getImageUrl((img as { path: string }).path)
+            ),
           }))}
         />
       </div>
