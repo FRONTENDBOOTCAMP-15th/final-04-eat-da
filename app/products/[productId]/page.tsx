@@ -10,23 +10,14 @@ import Header from '@/app/src/components/common/Header';
 import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient';
 import { getAxios } from '@/lib/axios';
 import { fetchSellerTier } from '@/lib/tier';
-
-interface Reply {
-  _id: number;
-  user?: { _id?: number; name?: string; image?: string };
-  rating?: number;
-  createdAt?: string;
-  content?: string;
-  extra?: { images?: string[] };
-}
+import { Product, Reply } from '@/app/src/types/product';
 
 export default function ProductDetailPage({
   params,
 }: {
   params: Promise<{ productId: string }>;
 }) {
-  const [productId, setProductId] = useState<string>('');
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Reply[]>([]);
   const [userImageMap, setUserImageMap] = useState<Map<number, string>>(
     new Map()
@@ -34,15 +25,18 @@ export default function ProductDetailPage({
   const [sellerProfileImage, setSellerProfileImage] = useState<
     string | undefined
   >();
+  const [sellerTier, setSellerTier] = useState<
+    { level: number; label: string } | undefined
+  >();
   const [bookmarkId, setBookmarkId] = useState<number | undefined>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     params.then(({ productId: id }) => {
-      setProductId(id);
       fetchProductData(id);
     });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params]);
 
   const fetchProductData = async (id: string) => {
     try {
@@ -71,10 +65,13 @@ export default function ProductDetailPage({
         setUserImageMap(imageMap);
       }
 
-      // 셀러 이미지 가져오기
       if (productData.seller?._id) {
+        // 셀러 이미지 가져오기
         const sellerImg = await getSellerImage(productData.seller._id);
         setSellerProfileImage(sellerImg);
+        // 셀러 티어 가져오기
+        const tier = await fetchSellerTier(productData.seller._id);
+        setSellerTier(tier);
       }
     } catch (error) {
       console.error('상품 조회 실패:', error);
@@ -132,7 +129,7 @@ export default function ProductDetailPage({
         setBookmarkId(undefined);
       } else if (newWishedState) {
         const response = await axios.post('/bookmarks/product', {
-          product_id: product._id,
+          product_id: product!._id,
         });
         setBookmarkId(response.data.item._id);
       }
@@ -164,19 +161,9 @@ export default function ProductDetailPage({
   const seller = product.seller ?? {};
   const sellerName: string = seller.name ?? '주부';
   const sellerDescription: string =
-    seller.extra?.description ?? seller.extra?.intro;
+    seller.extra?.description ?? seller.extra?.intro ?? '';
   const rating: number = product.rating ?? 0;
   const reviewCount: number = reviews.length;
-
-  // 셀러 이미지 가져오기
-  const sellerProfileImage = seller._id
-    ? await getSellerImage(seller._id)
-    : undefined;
-
-  // 셀러 티어 가져오기
-  const sellerTier = seller._id
-    ? await fetchSellerTier(seller._id)
-    : undefined;
 
   return (
     <main className="flex flex-col mt-12.5 gap-5 pb-23">
