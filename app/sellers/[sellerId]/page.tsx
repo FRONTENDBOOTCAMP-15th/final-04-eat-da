@@ -1,11 +1,11 @@
-import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
-import Header from "@/app/src/components/common/Header";
-import ProductCard from "@/app/src/components/ui/ProductCard";
-import SellerProfileCard from "@/app/src/components/ui/SellerProfileCard";
-import ReviewList from "@/app/src/components/ui/ReviewList";
-import { getAxios } from "@/lib/axios";
-import { fetchSellerTier } from "@/lib/tier";
-import { Product } from "@/app/src/types";
+import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
+import Header from '@/app/src/components/common/Header';
+import ProductCard from '@/app/src/components/ui/ProductCard';
+import SellerProfileCard from '@/app/src/components/ui/SellerProfileCard';
+import ReviewList from '@/app/src/components/ui/ReviewList';
+import { getAxios } from '@/lib/axios';
+import { fetchSellerTier } from '@/lib/tier';
+import { Product } from '@/app/src/types';
 
 interface Seller {
   _id: number;
@@ -43,7 +43,7 @@ async function getSeller(sellerId: string): Promise<Seller | null> {
     const res = await axios.get(`/users/${sellerId}`);
     return res.data.item;
   } catch (error) {
-    console.error("판매자 정보 조회 실패:", error);
+    console.error('판매자 정보 조회 실패:', error);
     return null;
   }
 }
@@ -56,7 +56,7 @@ async function getSellerProducts(sellerId: string): Promise<Product[]> {
     });
     return res.data.item || [];
   } catch (error) {
-    console.error("판매자 상품 조회 실패:", error);
+    console.error('판매자 상품 조회 실패:', error);
     return [];
   }
 }
@@ -85,7 +85,7 @@ async function getSellerReviews(productIds: number[]): Promise<Review[]> {
 
     return allReviews;
   } catch (error) {
-    console.error("리뷰 조회 실패:", error);
+    console.error('리뷰 조회 실패:', error);
     return [];
   }
 }
@@ -113,7 +113,7 @@ async function getUserImageMap(userIds: number[]) {
         .map((item) => [item.userId, item.image!])
     );
   } catch (error) {
-    console.error("유저 이미지 조회 실패:", error);
+    console.error('유저 이미지 조회 실패:', error);
     return new Map();
   }
 }
@@ -138,16 +138,18 @@ export default async function SellersDetailPage({
     new Set(
       reviews
         .map((review) => review.user?._id)
-        .filter((id): id is number => typeof id === "number")
+        .filter((id): id is number => typeof id === 'number')
     )
   );
   const userImageMap = await getUserImageMap(userIds);
 
-  const sellerName = seller?.name ?? "주부";
+  const sellerName = seller?.name ?? '주부';
   const sellerDescription =
-    seller?.extra?.description ?? seller?.extra?.intro ?? "정성스럽게 만든 집밥을 나눕니다.";
+    seller?.extra?.description ??
+    seller?.extra?.intro ??
+    '정성스럽게 만든 집밥을 나눕니다.';
   const sellerProfileImage =
-    seller?.extra?.profileImage ?? seller?.image ?? "/seller/seller1.png";
+    seller?.extra?.profileImage ?? seller?.image ?? '/seller/seller1.png';
 
   // 판매자의 총 평점과 리뷰 수 계산
   const totalRating =
@@ -155,13 +157,18 @@ export default async function SellersDetailPage({
       ? products.reduce((sum, p) => sum + (p.rating ?? 0), 0) / products.length
       : 0;
   const totalReviewCount = products.reduce(
-    (sum, p) => sum + (p.replies ?? 0),
+    (sum, p) => sum + (p.replies?.length ?? 0),
     0
   );
 
   return (
     <div className="flex flex-col gap-7.5 mt-15 pt-7.5 pb-23">
-      <Header title={`${sellerName} ${sellerTier.label}`} showBackButton showSearch showCart />
+      <Header
+        title={`${sellerName} ${sellerTier.label}`}
+        showBackButton
+        showSearch
+        showCart
+      />
       <SellerProfileCard
         name={sellerName}
         tier={sellerTier.label}
@@ -177,11 +184,11 @@ export default async function SellersDetailPage({
             <ProductCard
               key={product._id}
               productId={product._id}
-              imageSrc={product.mainImages?.[0]?.path ?? "/food1.png"}
+              imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
               chefName={`${sellerName}`}
               dishName={product.name}
               rating={product.rating ?? 0}
-              reviewCount={product.replies ?? 0}
+              reviewCount={product.replies?.length ?? 0}
               price={product.price}
               initialWished={Boolean(product.myBookmarkId)}
             />
@@ -199,7 +206,7 @@ export default async function SellersDetailPage({
           reviews={reviews.map((r) => ({
             id: String(r._id),
             userId: r.user?._id,
-            userName: r.user?.name ?? "익명",
+            userName: r.user?.name ?? '익명',
             profileImage:
               (r.user?._id ? userImageMap.get(r.user._id) : undefined) ??
               r.user?.image,
