@@ -2,7 +2,8 @@
 
 import { CartPopupProps } from "@/app/src/types";
 import CartPopupItem from "./CartPopupItem";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import useUserStore from "@/zustand/userStore";
 
 export default function CartPopup({
   isOpen,
@@ -14,6 +15,8 @@ export default function CartPopup({
   onBuyNow,
 }: CartPopupProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const user = useUserStore((state) => state.user);
 
   if (!isOpen) return null;
 
@@ -28,6 +31,10 @@ export default function CartPopup({
   };
 
   const handleBuyNow = async () => {
+    if (!user) {
+      router.push(`/login?redirect=${encodeURIComponent(pathname)}`);
+      return;
+    }
     onBuyNow();
   };
 
