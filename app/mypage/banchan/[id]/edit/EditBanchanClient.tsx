@@ -197,13 +197,13 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
 
   const handleModalConfirm = () => {
     setShowModal(false);
-    router.push('/mypage/banchan');
+    router.replace('/mypage/banchan');
   };
 
   const handleDelete = async () => {
     try {
       await deleteBanchan(Number(id));
-      router.push('/mypage/banchan');
+      router.replace('/mypage/banchan');
     } catch {
       alert('반찬 삭제에 실패했습니다. 다시 시도해주세요.');
     }

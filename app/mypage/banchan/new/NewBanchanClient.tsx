@@ -173,7 +173,7 @@ export default function NewBanchanClient() {
   // 모달 확인 버튼
   const handleModalConfirm = () => {
     setShowModal(false);
-    router.push('/mypage/banchan');
+    router.replace('/mypage/banchan');
   };
 
   return (
