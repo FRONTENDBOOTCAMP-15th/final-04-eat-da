@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import { BanchanItem } from "./BanchanData";
+import Image from 'next/image';
+import Link from 'next/link';
+import { BanchanItem } from '@/app/src/types/banchan';
 
 interface BanchanCardProps {
   item: BanchanItem;
@@ -8,15 +8,15 @@ interface BanchanCardProps {
 
 // 반찬 상태 계산 함수
 const getBanchanStatus = (item: BanchanItem): string => {
-  if (item.show === false) return "판매중지";
-  if (item.quantity - item.buyQuantity <= 0) return "품절";
-  return "판매중";
+  if (item.show === false) return '판매중지';
+  if (item.quantity - item.buyQuantity <= 0) return '품절';
+  return '판매중';
 };
 
 export default function BanchanCard({ item }: BanchanCardProps) {
   const status = getBanchanStatus(item);
   const price = item.price.toLocaleString();
-  const imagePath = item.mainImages[0]?.path;
+  const imagePath = item.mainImages?.[0]?.path;
   const imgSrc = imagePath || null;
 
   return (
@@ -33,6 +33,7 @@ export default function BanchanCard({ item }: BanchanCardProps) {
             width={70}
             height={70}
             className="w-full h-full object-cover"
+            unoptimized
           />
         )}
       </div>
@@ -50,7 +51,7 @@ export default function BanchanCard({ item }: BanchanCardProps) {
 
           {/* 상태 */}
           <span
-            className={`text-display-2 font-semibold ${status === "판매중" ? "text-eatda-orange" : "text-gray-500"}`}
+            className={`text-display-2 font-semibold ${status === '판매중' ? 'text-eatda-orange' : 'text-gray-500'}`}
           >
             {status}
           </span>
