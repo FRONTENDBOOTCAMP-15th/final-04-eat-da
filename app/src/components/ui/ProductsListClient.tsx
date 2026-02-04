@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import CategoryTabs, {
   CategoryLabel,
 } from '@/app/products/components/CategoryTabs';
@@ -92,6 +92,8 @@ export default function ProductsListClient({
   const [selected, setSelected] = useState<CategoryLabel>('전체');
   const [sortBy, setSortBy] = useState<SortOption>('recommend');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
 
   const filtered = useMemo(() => {
     const categoryFiltered = products.filter((p) =>
@@ -112,11 +114,34 @@ export default function ProductsListClient({
     return () => document.removeEventListener('click', handleClickOutside);
   }, [isDropdownOpen]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 10) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY.current) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <>
       <CategoryTabs value={selected} onChange={setSelected} />
 
-      <div className="fixed top-28 z-10 flex place-self-end mr-3">
+      <div
+        className={`fixed top-28 z-15 flex place-self-end mr-3 transition-transform duration-300 ${
+          isVisible ? 'translate-y-0' : '-translate-y-20'
+        }`}
+      >
         <div className="relative">
           <button
             onClick={(e) => {
