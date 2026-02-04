@@ -96,7 +96,7 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
     const selectedKitchen = sessionStorage.getItem('selectedKitchen');
     if (selectedKitchen) {
       const kitchen = JSON.parse(selectedKitchen);
-      setFormData((prev) => ({ ...prev, pickupPlace: kitchen.name }));
+      setFormData((prev) => ({ ...prev, pickupPlace: kitchen.name, pickupAddress: kitchen.address }));
       setPickupAddress(kitchen.address);
       sessionStorage.removeItem('selectedKitchen');
     }
@@ -380,9 +380,13 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
               )}
             </button>
 
-            <p className="text-x-small text-eatda-orange mt-1">
-              {getError('pickupPlace')}
-            </p>
+            {(getError('pickupPlace') || getError('pickupAddress')) && (
+              <p className="text-x-small text-eatda-orange mt-1">
+                {!formData.pickupPlace
+                  ? '필수 입력 사항입니다'
+                  : '공유주방을 다시 선택해주세요'}
+              </p>
+            )}
           </div>
         </fieldset>
 
