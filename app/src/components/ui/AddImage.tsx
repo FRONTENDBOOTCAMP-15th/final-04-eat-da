@@ -7,6 +7,7 @@ interface AddImageProps {
   onChange?: (images: string[], files: File[]) => void;
   maxImages?: number;
   initialImages?: string[];
+  initialFiles?: File[];
   showLabel?: boolean; // 라벨 표시 여부 추가
 }
 
@@ -14,10 +15,11 @@ export default function AddImage({
   onChange,
   maxImages = 20,
   initialImages = [],
+  initialFiles = [],
   showLabel = true, // 기본값 true (기존 동작 유지)
 }: AddImageProps) {
   const [images, setImages] = useState<string[]>(initialImages);
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>(initialFiles);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
