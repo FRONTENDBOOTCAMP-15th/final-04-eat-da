@@ -7,6 +7,7 @@ import CategoryTabs, {
 import ProductCard from '@/app/src/components/ui/ProductCard';
 import { Product } from '@/app/src/types';
 import { getTier } from '@/lib/tier';
+import { getAxios } from '@/lib/axios';
 
 type SortOption = 'recommend' | 'rating' | 'purchase' | 'latest';
 
@@ -46,15 +47,12 @@ function sortProducts(products: Product[], sortBy: SortOption): Product[] {
 
   switch (sortBy) {
     case 'rating':
-      // 별점 높은 순
       return sorted.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
 
     case 'purchase':
-      // 구매 많은 순
       return sorted.sort((a, b) => (b.buyQuantity ?? 0) - (a.buyQuantity ?? 0));
 
     case 'latest':
-      // 최신순 (ID가 클수록 최신, 또는 createdAt 비교)
       return sorted.sort((a, b) => {
         if (a.createdAt && b.createdAt) {
           return (
@@ -66,7 +64,6 @@ function sortProducts(products: Product[], sortBy: SortOption): Product[] {
 
     case 'recommend':
     default:
-      // 추천순: 별점과 구매수를 종합 (정규화 후 평균)
       return sorted.sort((a, b) => {
         const maxRating = 5;
         const maxPurchase = Math.max(
@@ -87,11 +84,65 @@ function sortProducts(products: Product[], sortBy: SortOption): Product[] {
 }
 
 export default function ProductsListClient({
-  products,
+  products: initialProducts,
 }: ProductsListClientProps) {
   const [selected, setSelected] = useState<CategoryLabel>('전체');
   const [sortBy, setSortBy] = useState<SortOption>('recommend');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [products, setProducts] = useState(initialProducts);
+
+  useEffect(() => {
+    const fetchBookmarks = async () => {
+      try {
+        const axios = getAxios();
+        const bookmarksRes = await axios.get('/bookmarks/product');
+        const bookmarks = bookmarksRes.data.item || [];
+
+        const productsWithBookmarks = initialProducts.map((product) => {
+          const bookmark = bookmarks.find((b: any) => {
+            const targetId = b.product?._id ?? b.target_id ?? b.productId;
+            return targetId === product._id;
+          });
+
+          return {
+            ...product,
+            myBookmarkId: bookmark?._id,
+          };
+        });
+
+        setProducts(productsWithBookmarks);
+      } catch (error) {
+        console.error('북마크 조회 실패:', error);
+        setProducts(initialProducts);
+      }
+    };
+
+    fetchBookmarks();
+  }, [initialProducts]);
+
+  const handleBookmarkChange = async () => {
+    try {
+      const axios = getAxios();
+      const bookmarksRes = await axios.get('/bookmarks/product');
+      const bookmarks = bookmarksRes.data.item || [];
+
+      const productsWithBookmarks = products.map((product) => {
+        const bookmark = bookmarks.find((b: any) => {
+          const targetId = b.product?._id ?? b.target_id ?? b.productId;
+          return targetId === product._id;
+        });
+
+        return {
+          ...product,
+          myBookmarkId: bookmark?._id,
+        };
+      });
+
+      setProducts(productsWithBookmarks);
+    } catch (error) {
+      console.error('북마크 재조회 실패:', error);
+    }
+  };
 
   const filtered = useMemo(() => {
     const categoryFiltered = products.filter((p) =>
@@ -180,6 +231,7 @@ export default function ProductsListClient({
             price={product.price}
             initialWished={Boolean(product.myBookmarkId)}
             isLcp={index === 0}
+            onBookmarkChange={handleBookmarkChange}
           />
         ))}
       </div>

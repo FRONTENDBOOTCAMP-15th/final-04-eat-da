@@ -3,7 +3,7 @@ import Image from 'next/image';
 import HeartItem from './HeartItem';
 import Link from 'next/link';
 import { getAxios } from '@/lib/axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductCardProps } from '@/app/src/types';
 
 export default function ProductCard({
@@ -22,6 +22,15 @@ export default function ProductCard({
 }: ProductCardProps) {
   const safeImageSrc = imageSrc || '/food1.png';
   const [currentBookmarkId, setCurrentBookmarkId] = useState(bookmarkId);
+  const [isWished, setIsWished] = useState(initialWished);
+
+  useEffect(() => {
+    setIsWished(initialWished);
+  }, [initialWished]);
+
+  useEffect(() => {
+    setCurrentBookmarkId(bookmarkId);
+  }, [bookmarkId]);
 
   const handleToggleWish = async (isWished: boolean) => {
     try {
@@ -69,7 +78,7 @@ export default function ProductCard({
           className="absolute bottom-2 right-1"
         >
           <HeartItem
-            initialWished={initialWished}
+            initialWished={isWished}
             lineColor="white"
             size={25}
             onToggle={handleToggleWish}

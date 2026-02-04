@@ -10,7 +10,7 @@ export interface BookmarkProduct {
     name: string;
     price: number;
     mainImages?: { path: string; name: string }[];
-    seller?: { name?: string };
+    seller?: { name?: string; totalSales?: number };
     extra?: {
       rating?: number;
       replies?: number;
@@ -23,7 +23,7 @@ export interface HeartProps {
 }
 export interface WishButtonProps {
   initialWished?: boolean;
-  lineColor?: "black" | "white";
+  lineColor?: 'black' | 'white';
   size?: number;
   className?: string;
   onToggle?: (isWished: boolean) => void;

@@ -38,7 +38,6 @@ async function getSellers(): Promise<Seller[]> {
 async function getProductsWithSellerTier(): Promise<Product[]> {
   const [products, sellers] = await Promise.all([getProducts(), getSellers()]);
 
-  // seller별 totalSales 맵 생성
   const sellerSalesMap = new Map<number, number>();
   sellers.forEach((seller) => {
     const sellerId = seller._id ?? seller.seller_id;
@@ -47,7 +46,6 @@ async function getProductsWithSellerTier(): Promise<Product[]> {
     }
   });
 
-  // products에 seller.totalSales 추가
   return products.map((product) => {
     const sellerId = product.seller?._id;
     if (sellerId && sellerSalesMap.has(sellerId)) {
