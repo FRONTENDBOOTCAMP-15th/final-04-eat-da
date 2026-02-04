@@ -74,7 +74,9 @@ async function getSellerProducts(sellerId: string): Promise<Product[]> {
     const res = await axios.get(`/products`, {
       params: { seller_id: sellerId },
     });
-    return res.data.item || [];
+    const products = res.data.item || [];
+    // 구독권 제외
+    return products.filter((p: Product) => !p.extra?.isSubscription);
   } catch (error) {
     console.error('판매자 상품 조회 실패:', error);
     return [];

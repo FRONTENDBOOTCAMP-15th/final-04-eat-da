@@ -26,8 +26,11 @@ export default function SearchPage() {
       try {
         const productResponse = await axios.get('/products');
         const products = productResponse.data.item || [];
-        const matchedProducts = products.filter((product: Product) =>
-          product.name?.toLowerCase().includes(searchQuery.toLowerCase())
+        // 구독권 제외 후 검색어 필터링
+        const matchedProducts = products.filter(
+          (product: Product) =>
+            !product.extra?.isSubscription &&
+            product.name?.toLowerCase().includes(searchQuery.toLowerCase())
         );
 
         setSearchResults(matchedProducts);
