@@ -157,51 +157,49 @@ export default function ReviewList({ reviews }: ReviewListProps) {
           리뷰 ({sortedReviews.length})
         </h3>
         <div className="flex items-center gap-3">
-          {isExpanded && (
-            <div className="relative">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsDropdownOpen(!isDropdownOpen);
-                }}
-                className="flex items-center gap-1  text-paragraph  text-gray-800 rounded-full hover:bg-gray-100 transition-colors"
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsDropdownOpen(!isDropdownOpen);
+              }}
+              className="flex items-center gap-1 text-paragraph text-gray-800 rounded-full hover:bg-gray-100 transition-colors"
+            >
+              {sortLabels[sortBy]}
+              <svg
+                className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                {sortLabels[sortBy]}
-                <svg
-                  className={`w-4 h-4 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
 
-              {isDropdownOpen && (
-                <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg overflow-hidden z-10">
-                  {(Object.keys(sortLabels) as SortOption[])
-                    .filter((option) => option !== sortBy)
-                    .map((option) => (
-                      <button
-                        key={option}
-                        onClick={() => {
-                          setSortBy(option);
-                          setIsDropdownOpen(false);
-                        }}
-                        className="block w-full px-4 py-2 text-paragraph text-gray-800 hover:bg-gray-100 text-left whitespace-nowrap"
-                      >
-                        {sortLabels[option]}
-                      </button>
-                    ))}
-                </div>
-              )}
-            </div>
-          )}
+            {isDropdownOpen && (
+              <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-lg overflow-hidden z-10">
+                {(Object.keys(sortLabels) as SortOption[])
+                  .filter((option) => option !== sortBy)
+                  .map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => {
+                        setSortBy(option);
+                        setIsDropdownOpen(false);
+                      }}
+                      className="block w-full px-4 py-2 text-paragraph text-gray-800 hover:bg-gray-100 text-left whitespace-nowrap"
+                    >
+                      {sortLabels[option]}
+                    </button>
+                  ))}
+              </div>
+            )}
+          </div>
           {hasMoreReviews && (
             <button
               type="button"
