@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { BookmarkProduct } from '@/app/src/types';
 import useUserStore from '@/zustand/userStore';
+import { getTier } from '@/lib/tier';
 
 export default function WishlistPageClient() {
   const router = useRouter();
@@ -15,6 +16,9 @@ export default function WishlistPageClient() {
 
   const [bookmarks, setBookmarks] = useState<BookmarkProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [sellerTotalSales, setSellerTotalSales] = useState<
+    Record<number, number>
+  >({});
 
   useEffect(() => {
     const tokenPayload = getTokenPayload();
@@ -24,16 +28,33 @@ export default function WishlistPageClient() {
       return;
     }
 
-    fetchBookmarks();
+    fetchData();
   }, [loggedInUser, router]);
 
-  const fetchBookmarks = async () => {
+  const fetchData = async () => {
     try {
       const axios = getAxios();
-      const response = await axios.get('/bookmarks/product');
-      setBookmarks((response.data.item || []).reverse());
+
+      const usersResponse = await axios.get('/users/');
+      const users = usersResponse.data.item || [];
+
+      const salesMap: Record<number, number> = {};
+      users.forEach((user: any) => {
+        if (user.type === 'seller') {
+          const sellerId = user._id || user.seller_id;
+          if (sellerId) {
+            salesMap[sellerId] = user.totalSales ?? 0;
+          }
+        }
+      });
+
+      console.log('seller totalSales 맵:', salesMap);
+      setSellerTotalSales(salesMap);
+
+      const bookmarksResponse = await axios.get('/bookmarks/product');
+      setBookmarks((bookmarksResponse.data.item || []).reverse());
     } catch (error) {
-      console.error('북마크 목록 조회 실패:', error);
+      console.error('데이터 조회 실패:', error);
       if ((error as any)?.response?.status === 401) {
         router.replace('/login?redirect=/wishlist');
       }
@@ -43,7 +64,7 @@ export default function WishlistPageClient() {
   };
 
   const handleBookmarkDeleted = () => {
-    fetchBookmarks();
+    fetchData();
   };
 
   if (!loggedInUser && !getTokenPayload()) {
@@ -69,23 +90,29 @@ export default function WishlistPageClient() {
           </div>
         ) : (
           <div className="grid grid-cols-2">
-            {bookmarks.map((bookmark) => (
-              <ProductCard
-                key={bookmark._id}
-                productId={bookmark.product._id}
-                imageSrc={
-                  bookmark.product.mainImages?.[0]?.path || '/food1.png'
-                }
-                chefName={bookmark.product.seller?.name || '주부'}
-                dishName={bookmark.product.name}
-                rating={bookmark.product.extra?.rating || 0}
-                reviewCount={bookmark.product.extra?.replies || 0}
-                price={bookmark.product.price}
-                initialWished={true}
-                bookmarkId={bookmark._id}
-                onBookmarkChange={handleBookmarkDeleted}
-              />
-            ))}
+            {bookmarks.map((bookmark) => {
+              const sellerId = (bookmark.product.seller as any)?._id;
+              const totalSales = sellerTotalSales[sellerId] ?? 0;
+
+              return (
+                <ProductCard
+                  key={bookmark._id}
+                  productId={bookmark.product._id}
+                  imageSrc={
+                    bookmark.product.mainImages?.[0]?.path || '/food1.png'
+                  }
+                  chefName={bookmark.product.seller?.name || '주부'}
+                  tier={getTier(totalSales).label}
+                  dishName={bookmark.product.name}
+                  rating={bookmark.product.extra?.rating || 0}
+                  reviewCount={bookmark.product.extra?.replies || 0}
+                  price={bookmark.product.price}
+                  initialWished={true}
+                  bookmarkId={bookmark._id}
+                  onBookmarkChange={handleBookmarkDeleted}
+                />
+              );
+            })}
           </div>
         )}
       </div>
