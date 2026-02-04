@@ -1,6 +1,9 @@
 'use client';
 
+import { getAxios } from '@/lib/axios';
+import useCartStore from '@/zustand/cartStore';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 interface HeaderProps {
   title: string;
@@ -30,6 +33,25 @@ export default function Header({
   onHome,
 }: HeaderProps) {
   const router = useRouter();
+  const { cartCount, setCartCount } = useCartStore();
+
+  useEffect(() => {
+    if (showCart) {
+      fetchCartCount();
+    }
+  }, [showCart]);
+
+  const fetchCartCount = async () => {
+    try {
+      const axios = getAxios();
+      const response = await axios.get('/carts');
+      const items = response.data.item || [];
+      setCartCount(items.length);
+    } catch (error) {
+      console.error('장바구니 개수 조회 실패:', error);
+      setCartCount(0);
+    }
+  };
 
   const handleBack = () => {
     if (onBack) {
@@ -127,6 +149,11 @@ export default function Header({
                 width={22}
                 height={22}
               />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-eatda-orange text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
             </button>
           ) : null}
         </div>

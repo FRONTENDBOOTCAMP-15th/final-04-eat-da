@@ -6,6 +6,7 @@ import CartPopup from '@/app/cart/CartPopup';
 import { CartItem } from '@/app/src/types';
 import { getAxios } from '@/lib/axios';
 import { useRouter } from 'next/navigation';
+import useCartStore from '@/zustand/cartStore';
 
 interface ProductDetailClientProps {
   product: {
@@ -23,6 +24,7 @@ export default function ProductDetailClient({
   product,
 }: ProductDetailClientProps) {
   const router = useRouter();
+  const { incrementCart } = useCartStore();
   const [isOpen, setIsOpen] = useState(false);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
 
@@ -86,6 +88,8 @@ export default function ProductDetailClient({
         product_id: product._id,
         quantity: items[0].quantity,
       });
+
+      incrementCart();
 
       const goToCart = confirm(
         '장바구니에 담았습니다.\n장바구니로 이동하시겠습니까?'
