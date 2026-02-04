@@ -35,9 +35,19 @@ export default function WishlistPageClient() {
     try {
       const axios = getAxios();
 
-      const usersResponse = await axios.get('/users/');
-      const users = usersResponse.data.item || [];
+      // products, users, bookmarks 동시 조회
+      const [productsResponse, usersResponse, bookmarksResponse] =
+        await Promise.all([
+          axios.get('/products/'),
+          axios.get('/users/'),
+          axios.get('/bookmarks/product'),
+        ]);
 
+      const products = productsResponse.data.item || [];
+      const users = usersResponse.data.item || [];
+      const bookmarks = bookmarksResponse.data.item || [];
+
+      // seller totalSales 맵 생성
       const salesMap: Record<number, number> = {};
       users.forEach((user: any) => {
         if (user.type === 'seller') {
@@ -48,11 +58,26 @@ export default function WishlistPageClient() {
         }
       });
 
-      console.log('seller totalSales 맵:', salesMap);
       setSellerTotalSales(salesMap);
 
-      const bookmarksResponse = await axios.get('/bookmarks/product');
-      setBookmarks((bookmarksResponse.data.item || []).reverse());
+      // 북마크에 product 정보 병합
+      const bookmarksWithFullInfo = bookmarks
+        .map((bookmark: any) => {
+          const fullProduct = products.find(
+            (p: any) => p._id === bookmark.product._id
+          );
+
+          if (fullProduct) {
+            return {
+              ...bookmark,
+              product: fullProduct, // 전체 product 정보로 교체
+            };
+          }
+          return bookmark;
+        })
+        .reverse();
+
+      setBookmarks(bookmarksWithFullInfo);
     } catch (error) {
       console.error('데이터 조회 실패:', error);
       if ((error as any)?.response?.status === 401) {
@@ -104,8 +129,12 @@ export default function WishlistPageClient() {
                   chefName={bookmark.product.seller?.name || '주부'}
                   tier={getTier(totalSales).label}
                   dishName={bookmark.product.name}
-                  rating={bookmark.product.extra?.rating || 0}
-                  reviewCount={bookmark.product.extra?.replies || 0}
+                  rating={bookmark.product.rating || 0}
+                  reviewCount={
+                    typeof bookmark.product.replies === 'number'
+                      ? bookmark.product.replies
+                      : (bookmark.product.replies?.length ?? 0)
+                  }
                   price={bookmark.product.price}
                   initialWished={true}
                   bookmarkId={bookmark._id}
