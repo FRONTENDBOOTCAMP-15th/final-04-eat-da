@@ -213,6 +213,7 @@ export default async function SellersDetailPage({
               productId={product._id}
               imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
               chefName={`${sellerName}`}
+              tier={sellerTier.label}
               dishName={product.name}
               rating={product.rating ?? 0}
               reviewCount={
