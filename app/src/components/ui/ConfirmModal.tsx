@@ -27,24 +27,32 @@ export default function ConfirmModal({
           {description && <p className="text-display-2">{description}</p>}
         </div>
 
-        <div className={`flex ${onCancel ? "gap-2" : ""}`}>
-          {onCancel && (
+        {onCancel ? (
+          <div className="flex gap-2">
             <button
               type="button"
               onClick={onCancel}
-              className="flex-1 py-3 rounded bg-gray-200 text-gray-800 text-display-2 font-semibold"
+              className="flex-1 py-3 rounded bg-gray-200 text-gray-800 text-display-2 font-semibold hover:opacity-80"
             >
               취소
             </button>
-          )}
+            <button
+              type="button"
+              onClick={onConfirm}
+              className="flex-1 py-3 rounded bg-eatda-orange text-white text-display-2 font-semibold hover:opacity-80"
+            >
+              {confirmText}
+            </button>
+          </div>
+        ) : (
           <button
             type="button"
             onClick={onConfirm}
-            className="flex-1 py-3 rounded bg-eatda-orange text-white text-display-2 font-semibold hover:opacity-80"
+            className="w-full py-3 rounded bg-eatda-orange text-white text-display-2 font-semibold hover:opacity-80"
           >
             {confirmText}
           </button>
-        </div>
+        )}
       </div>
     </div>
   );

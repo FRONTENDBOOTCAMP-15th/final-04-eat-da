@@ -63,6 +63,31 @@ export default function CartPageClient() {
     }
   };
 
+  const handlePurchaseClick = () => {
+    if (cartItems.length === 0) return;
+
+    const pickupPlaces = cartItems.map(
+      (item) => (item.product.extra as any)?.pickupPlace || '서교동 공유주방'
+    );
+
+    const firstPlace = pickupPlaces[0];
+    const differentItems = cartItems.filter(
+      (item, index) => pickupPlaces[index] !== firstPlace
+    );
+
+    if (differentItems.length > 0) {
+      if (differentItems.length === 1) {
+        alert(
+          `'${differentItems[0].product.name}'은(는) 다른 공유주방 상품입니다.\n같은 공유주방에서만 구매 가능합니다.`
+        );
+      } else {
+        alert('같은 공유주방에서만 구매 가능합니다.');
+      }
+      return;
+    }
+
+    router.push('/checkout');
+  };
   if (!loggedInUser && !getTokenPayload()) {
     return null;
   }
@@ -132,7 +157,11 @@ export default function CartPageClient() {
         </div>
 
         {cartItems.length > 0 && (
-          <BottomFixedButton as="link" href="/checkout">
+          <BottomFixedButton
+            as="button"
+            type="button"
+            onClick={handlePurchaseClick}
+          >
             구매하기
           </BottomFixedButton>
         )}

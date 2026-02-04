@@ -9,8 +9,10 @@ import ReviewList from '@/app/src/components/ui/ReviewList';
 import Header from '@/app/src/components/common/Header';
 import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient';
 import { getAxios } from '@/lib/axios';
-import { fetchSellerTier } from '@/lib/tier';
+import { getTier } from '@/lib/tier';
 import { Product, Reply } from '@/app/src/types/product';
+import { getImageUrl } from '@/lib/review';
+import { ProductDetailSkeleton } from './loading';
 
 export default function ProductDetailPage({
   params,
@@ -66,12 +68,10 @@ export default function ProductDetailPage({
       }
 
       if (productData.seller?._id) {
-        // 셀러 이미지 가져오기
-        const sellerImg = await getSellerImage(productData.seller._id);
-        setSellerProfileImage(sellerImg);
-        // 셀러 티어 가져오기
-        const tier = await fetchSellerTier(productData.seller._id);
-        setSellerTier(tier);
+        // 셀러 이미지와 티어 가져오기
+        const sellerInfo = await getSellerInfo(productData.seller._id);
+        setSellerProfileImage(sellerInfo.image);
+        setSellerTier(sellerInfo.tier);
       }
     } catch (error) {
       console.error('상품 조회 실패:', error);
@@ -80,17 +80,35 @@ export default function ProductDetailPage({
     }
   };
 
-  const getSellerImage = async (
+  const getSellerInfo = async (
     sellerId: number
-  ): Promise<string | undefined> => {
+  ): Promise<{
+    image: string | undefined;
+    tier: { level: number; label: string };
+  }> => {
     try {
       const axios = getAxios();
-      const res = await axios.get(`/users/${sellerId}`);
-      const seller = res.data.item;
-      return seller?.extra?.profileImage ?? seller?.image;
+      // /users/ API에서 seller 목록을 가져와서 totalSales 조회 (반찬 목록 페이지와 동일한 방식)
+      const [sellerRes, usersRes] = await Promise.all([
+        axios.get(`/users/${sellerId}`),
+        axios.get('/users/'),
+      ]);
+      const seller = sellerRes.data.item;
+      const users = usersRes.data.item || [];
+      const sellerFromList = users.find(
+        (u: { _id?: number; seller_id?: number; type?: string }) =>
+          (u._id === sellerId || u.seller_id === sellerId) &&
+          u.type === 'seller'
+      );
+      const totalSales = sellerFromList?.totalSales ?? 0;
+
+      return {
+        image: seller?.extra?.profileImage ?? seller?.image,
+        tier: getTier(totalSales),
+      };
     } catch (error) {
-      console.error('판매자 이미지 조회 실패:', error);
-      return undefined;
+      console.error('판매자 정보 조회 실패:', error);
+      return { image: undefined, tier: getTier(0) };
     }
   };
 
@@ -139,19 +157,12 @@ export default function ProductDetailPage({
   };
 
   if (isLoading || !product) {
-    return (
-      <>
-        <Header title=" " showBackButton showSearch showCart />
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-gray-600">로딩 중...</p>
-        </div>
-      </>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   const extra = product.extra ?? {};
   const ingredients: string[] = extra.ingredients ?? [];
-  const serving: string = extra.serving ?? '2인분';
+  const serving: string = `${extra.servings ?? 2}인분`;
   const pickupPlace: string = extra.pickupPlace ?? '서교동 공유주방';
   const stock: number = product.quantity ?? 0;
   const productImages = product.mainImages?.map(
@@ -187,6 +198,7 @@ export default function ProductDetailPage({
         reviewCount={reviewCount}
         profileImage={sellerProfileImage}
         description={sellerDescription}
+        sellerId={product.seller?._id}
       />
 
       <div className="flex flex-col px-5 gap-4">
@@ -232,7 +244,11 @@ export default function ProductDetailPage({
             rating: r.rating,
             createdAt: r.createdAt,
             content: r.content,
-            images: r.extra?.images ?? [],
+            images: (r.extra?.images ?? []).map((img: unknown) =>
+              typeof img === 'string'
+                ? img
+                : getImageUrl((img as { path: string }).path)
+            ),
           }))}
         />
       </div>

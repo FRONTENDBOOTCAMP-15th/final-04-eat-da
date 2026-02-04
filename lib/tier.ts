@@ -24,19 +24,16 @@ export function getTier(totalSales: number): TierInfo {
 
   return {
     level: tier.level,
-    label: `주부 ${tier.level}단`,
+    label: `주부${tier.level}단`,
   };
 }
 
 export async function fetchSellerTier(sellerId: number): Promise<TierInfo> {
   try {
     const axios = getAxios();
-    const response = await axios.get('/users');
+    const response = await axios.get(`/users/${sellerId}`);
     if (response.data.ok) {
-      const seller = response.data.item.find(
-        (u: { _id: number }) => u._id === sellerId
-      );
-      const totalSales = seller?.totalSales ?? 0;
+      const totalSales = response.data.item?.totalSales ?? 0;
       return getTier(totalSales);
     }
     return getTier(0);
@@ -44,4 +41,8 @@ export async function fetchSellerTier(sellerId: number): Promise<TierInfo> {
     console.error('판매자 티어 조회 실패:', error);
     return getTier(0);
   }
+}
+
+export function getTierFromSales(totalSales: number): TierInfo {
+  return getTier(totalSales);
 }
