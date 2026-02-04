@@ -43,10 +43,25 @@ export default function ProductDetailPage({
   const fetchProductData = async (id: string) => {
     try {
       const axios = getAxios();
-      const res = await axios.get(`/products/${id}/`);
-      const productData = res.data.item;
+
+      const [productRes, bookmarksRes] = await Promise.all([
+        axios.get(`/products/${id}/`),
+        axios.get('/bookmarks').catch(() => ({ data: { item: [] } })),
+      ]);
+
+      const productData = productRes.data.item;
+      const bookmarks = Array.isArray(bookmarksRes.data.item)
+        ? bookmarksRes.data.item
+        : [];
+
+      const existingBookmark = bookmarks.find((bookmark: any) => {
+        const targetId =
+          bookmark.product?._id ?? bookmark.target_id ?? bookmark.productId;
+        return targetId === Number(id);
+      });
+
       setProduct(productData);
-      setBookmarkId(productData.myBookmarkId);
+      setBookmarkId(existingBookmark?._id ?? productData.myBookmarkId);
 
       const reviewsData: Reply[] = Array.isArray(productData.replies)
         ? productData.replies
@@ -88,7 +103,6 @@ export default function ProductDetailPage({
   }> => {
     try {
       const axios = getAxios();
-      // /users/ API에서 seller 목록을 가져와서 totalSales 조회 (반찬 목록 페이지와 동일한 방식)
       const [sellerRes, usersRes] = await Promise.all([
         axios.get(`/users/${sellerId}`),
         axios.get('/users/'),
@@ -146,10 +160,27 @@ export default function ProductDetailPage({
         await axios.delete(`/bookmarks/${bookmarkId}`);
         setBookmarkId(undefined);
       } else if (newWishedState) {
-        const response = await axios.post('/bookmarks/product', {
-          product_id: product!._id,
-        });
-        setBookmarkId(response.data.item._id);
+        try {
+          const response = await axios.post('/bookmarks/product', {
+            target_id: product!._id,
+          });
+          setBookmarkId(response.data.item._id);
+        } catch (error: any) {
+          if (error.response?.status === 422) {
+            console.log('이미 북마크되어 있음 - 북마크 목록 재조회');
+            const bookmarksRes = await axios.get('/bookmarks');
+            const bookmarks = bookmarksRes.data.item || [];
+            const existing = bookmarks.find((b: any) => {
+              const targetId = b.product?._id ?? b.target_id ?? b.productId;
+              return targetId === product!._id;
+            });
+            if (existing) {
+              setBookmarkId(existing._id);
+            }
+          } else {
+            throw error;
+          }
+        }
       }
     } catch (error) {
       console.error('북마크 토글 실패:', error);
