@@ -8,7 +8,7 @@ import AddImage from '@/app/src/components/ui/AddImage';
 import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import StarRating from '@/app/src/components/ui/StarItem';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
-import { fetchProduct, createReview, uploadReviewImages, getImageUrl } from '@/lib/review';
+import { fetchOrders, fetchProduct, createReview, uploadReviewImages, getImageUrl } from '@/lib/review';
 
 interface ProductInfo {
   _id: number;
@@ -46,6 +46,7 @@ function ReviewWriteContent() {
   const [images, setImages] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [purchaseDate, setPurchaseDate] = useState('');
 
   // 모달 state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +60,17 @@ function ReviewWriteContent() {
     fetchProduct(productId)
       .then((item) => setProduct(item))
       .catch((err) => console.error('상품 정보 조회 실패:', err));
-  }, [productId]);
+
+    if (orderId) {
+      fetchOrders().then((orders) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const order = orders.find((o: any) => o._id === orderId);
+        if (order?.createdAt) {
+          setPurchaseDate(new Date(order.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, ''));
+        }
+      }).catch(() => {});
+    }
+  }, [productId, orderId]);
 
   const handleImageChange = (newImages: string[], files: File[]) => {
     setImages(newImages);
@@ -159,8 +170,11 @@ function ReviewWriteContent() {
               </h3>
               {sellerName && (
                 <p className="text-paragraph-sm text-eatda-orange">
-                  {sellerName}
+                  {sellerName} 주부
                 </p>
+              )}
+              {purchaseDate && (
+                <p className="text-xs text-gray-500">{purchaseDate} 구매완료</p>
               )}
             </div>
           </div>
@@ -199,12 +213,16 @@ function ReviewWriteContent() {
           </h3>
           <textarea
             value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
+            onChange={(e) => {
+              setReviewText(e.target.value);
+              e.target.style.height = 'auto';
+              e.target.style.height = e.target.scrollHeight + 'px';
+            }}
             placeholder="솔직한 후기를 남겨주세요."
-            className="w-full min-h-[80px] text-paragraph text-gray-800 placeholder:text-gray-500 resize-none focus:outline-none"
+            className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2 resize-none overflow-hidden"
+            rows={1}
           />
         </div>
-        <div className="border-b border-gray-400"></div>
       </form>
 
       {/* 하단 고정 등록 버튼 */}

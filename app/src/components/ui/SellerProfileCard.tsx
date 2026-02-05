@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 interface SellerProfileCardProps {
   name: string;
   tier?: string;
@@ -5,6 +7,7 @@ interface SellerProfileCardProps {
   reviewCount?: number;
   profileImage?: string;
   description?: string;
+  sellerId?: number;
 }
 
 export default function SellerProfileCard({
@@ -14,8 +17,9 @@ export default function SellerProfileCard({
   reviewCount = 0,
   profileImage = '/seller/seller1.png',
   description = '정성스럽게 만든 집밥을 나눕니다.',
+  sellerId,
 }: SellerProfileCardProps) {
-  return (
+  const CardContent = (
     <article className="flex items-start mx-5 gap-2.5 self-stretch rounded-lg border border-gray-300 bg-gray-200 px-2.5 py-5">
       <img
         src={profileImage}
@@ -56,4 +60,10 @@ export default function SellerProfileCard({
       </div>
     </article>
   );
+
+  if (sellerId) {
+    return <Link href={`/sellers/${sellerId}`}>{CardContent}</Link>;
+  }
+
+  return CardContent;
 }

@@ -4,6 +4,8 @@ export interface Product {
   price: number;
   content?: string;
   quantity?: number;
+  buyQuantity?: number;
+  createdAt?: string;
   mainImages?: { path: string; name: string }[];
   seller?: {
     _id?: number;
@@ -18,8 +20,11 @@ export interface Product {
     category?: string[];
     categoryLabel?: string;
     ingredients?: string[];
-    serving?: string;
+    servings?: string;
     pickupPlace?: string;
+    isSubscription?: boolean;
+    frequency?: string;
+    portions?: string;
   };
 }
 

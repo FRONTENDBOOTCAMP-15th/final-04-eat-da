@@ -9,9 +9,10 @@ import ReviewList from '@/app/src/components/ui/ReviewList';
 import Header from '@/app/src/components/common/Header';
 import ProductDetailClient from '@/app/products/[productId]/ProductDetailClient';
 import { getAxios } from '@/lib/axios';
-import { fetchSellerTier } from '@/lib/tier';
+import { getTier } from '@/lib/tier';
 import { Product, Reply } from '@/app/src/types/product';
 import { getImageUrl } from '@/lib/review';
+import { ProductDetailSkeleton } from './loading';
 
 export default function ProductDetailPage({
   params,
@@ -20,9 +21,6 @@ export default function ProductDetailPage({
 }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Reply[]>([]);
-  const [userImageMap, setUserImageMap] = useState<Map<number, string>>(
-    new Map()
-  );
   const [sellerProfileImage, setSellerProfileImage] = useState<
     string | undefined
   >();
@@ -31,6 +29,10 @@ export default function ProductDetailPage({
   >();
   const [bookmarkId, setBookmarkId] = useState<number | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     params.then(({ productId: id }) => {
@@ -42,8 +44,11 @@ export default function ProductDetailPage({
   const fetchProductData = async (id: string) => {
     try {
       const axios = getAxios();
-      const res = await axios.get(`/products/${id}/`);
-      const productData = res.data.item;
+
+      // 1. 상품 정보만 먼저 호출 (bookmarks 호출 제거 - myBookmarkId 사용)
+      const productRes = await axios.get(`/products/${id}/`);
+      const productData = productRes.data.item;
+
       setProduct(productData);
       setBookmarkId(productData.myBookmarkId);
 
@@ -52,28 +57,14 @@ export default function ProductDetailPage({
         : [];
       setReviews(reviewsData);
 
-      // 유저 이미지 가져오기
-      const userIds = Array.from(
-        new Set(
-          reviewsData
-            .map((review) => review.user?._id)
-            .filter((id): id is number => typeof id === 'number')
-        )
-      );
-
-      if (userIds.length > 0) {
-        const imageMap = await getUserImageMap(userIds);
-        setUserImageMap(imageMap);
-      }
-
+      // 2. 셀러 정보 호출 (병렬로 처리)
       if (productData.seller?._id) {
-        // 셀러 이미지 가져오기
-        const sellerImg = await getSellerImage(productData.seller._id);
-        setSellerProfileImage(sellerImg);
-        // 셀러 티어 가져오기
-        const tier = await fetchSellerTier(productData.seller._id);
-        setSellerTier(tier);
+        const sellerInfo = await getSellerInfo(productData.seller._id);
+        setSellerProfileImage(sellerInfo.image);
+        setSellerTier(sellerInfo.tier);
       }
+
+      // 3. 리뷰어 이미지는 reply.user.image를 사용하므로 추가 API 호출 불필요
     } catch (error) {
       console.error('상품 조회 실패:', error);
     } finally {
@@ -81,43 +72,25 @@ export default function ProductDetailPage({
     }
   };
 
-  const getSellerImage = async (
+  const getSellerInfo = async (
     sellerId: number
-  ): Promise<string | undefined> => {
+  ): Promise<{
+    image: string | undefined;
+    tier: { level: number; label: string };
+  }> => {
     try {
       const axios = getAxios();
-      const res = await axios.get(`/users/${sellerId}`);
-      const seller = res.data.item;
-      return seller?.extra?.profileImage ?? seller?.image;
-    } catch (error) {
-      console.error('판매자 이미지 조회 실패:', error);
-      return undefined;
-    }
-  };
+      const sellerRes = await axios.get(`/users/${sellerId}`);
+      const seller = sellerRes.data.item;
+      const totalSales = seller?.totalSales ?? 0;
 
-  const getUserImageMap = async (userIds: number[]) => {
-    try {
-      const axios = getAxios();
-      const responses = await Promise.all(
-        userIds.map((userId) =>
-          axios
-            .get(`/users/${userId}`)
-            .then((res) => ({
-              userId,
-              image: res.data.item?.image as string | undefined,
-            }))
-            .catch(() => ({ userId, image: undefined }))
-        )
-      );
-
-      return new Map(
-        responses
-          .filter((item) => item.image)
-          .map((item) => [item.userId, item.image!])
-      );
+      return {
+        image: seller?.extra?.profileImage ?? seller?.image,
+        tier: getTier(totalSales),
+      };
     } catch (error) {
-      console.error('유저 이미지 조회 실패:', error);
-      return new Map();
+      console.error('판매자 정보 조회 실패:', error);
+      return { image: undefined, tier: getTier(0) };
     }
   };
 
@@ -129,10 +102,27 @@ export default function ProductDetailPage({
         await axios.delete(`/bookmarks/${bookmarkId}`);
         setBookmarkId(undefined);
       } else if (newWishedState) {
-        const response = await axios.post('/bookmarks/product', {
-          product_id: product!._id,
-        });
-        setBookmarkId(response.data.item._id);
+        try {
+          const response = await axios.post('/bookmarks/product', {
+            target_id: product!._id,
+          });
+          setBookmarkId(response.data.item._id);
+        } catch (error: any) {
+          if (error.response?.status === 422) {
+            console.log('이미 북마크되어 있음 - 북마크 목록 재조회');
+            const bookmarksRes = await axios.get('/bookmarks');
+            const bookmarks = bookmarksRes.data.item || [];
+            const existing = bookmarks.find((b: any) => {
+              const targetId = b.product?._id ?? b.target_id ?? b.productId;
+              return targetId === product!._id;
+            });
+            if (existing) {
+              setBookmarkId(existing._id);
+            }
+          } else {
+            throw error;
+          }
+        }
       }
     } catch (error) {
       console.error('북마크 토글 실패:', error);
@@ -140,19 +130,12 @@ export default function ProductDetailPage({
   };
 
   if (isLoading || !product) {
-    return (
-      <>
-        <Header title=" " showBackButton showSearch showCart />
-        <div className="flex items-center justify-center min-h-screen">
-          <p className="text-gray-600">로딩 중...</p>
-        </div>
-      </>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   const extra = product.extra ?? {};
   const ingredients: string[] = extra.ingredients ?? [];
-  const serving: string = extra.serving ?? '2인분';
+  const serving: string = `${extra.servings ?? 2}인분`;
   const pickupPlace: string = extra.pickupPlace ?? '서교동 공유주방';
   const stock: number = product.quantity ?? 0;
   const productImages = product.mainImages?.map(
@@ -188,6 +171,7 @@ export default function ProductDetailPage({
         reviewCount={reviewCount}
         profileImage={sellerProfileImage}
         description={sellerDescription}
+        sellerId={product.seller?._id}
       />
 
       <div className="flex flex-col px-5 gap-4">
@@ -227,14 +211,14 @@ export default function ProductDetailPage({
             id: String(r._id),
             userId: r.user?._id,
             userName: r.user?.name ?? '익명',
-            profileImage:
-              (r.user?._id ? userImageMap.get(r.user._id) : undefined) ??
-              r.user?.image,
+            profileImage: r.user?.image,
             rating: r.rating,
             createdAt: r.createdAt,
             content: r.content,
             images: (r.extra?.images ?? []).map((img: unknown) =>
-              typeof img === 'string' ? img : getImageUrl((img as { path: string }).path)
+              typeof img === 'string'
+                ? img
+                : getImageUrl((img as { path: string }).path)
             ),
           }))}
         />

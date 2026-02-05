@@ -4,8 +4,9 @@ import ProductCard from '@/app/src/components/ui/ProductCard';
 import SellerProfileCard from '@/app/src/components/ui/SellerProfileCard';
 import ReviewList from '@/app/src/components/ui/ReviewList';
 import { getAxios } from '@/lib/axios';
-import { fetchSellerTier } from '@/lib/tier';
+import { getTier } from '@/lib/tier';
 import { Product } from '@/app/src/types';
+import { getImageUrl } from '@/lib/review';
 
 interface Seller {
   _id: number;
@@ -48,13 +49,34 @@ async function getSeller(sellerId: string): Promise<Seller | null> {
   }
 }
 
+interface SellerFromList {
+  _id?: number;
+  seller_id?: number;
+  type?: string;
+  totalSales?: number;
+}
+
+async function getSellers(): Promise<SellerFromList[]> {
+  try {
+    const axios = getAxios();
+    const res = await axios.get('/users/');
+    const items: SellerFromList[] = res.data.item || [];
+    return items.filter((user) => user.type === 'seller');
+  } catch (error) {
+    console.error('판매자 목록 조회 실패:', error);
+    return [];
+  }
+}
+
 async function getSellerProducts(sellerId: string): Promise<Product[]> {
   try {
     const axios = getAxios();
     const res = await axios.get(`/products`, {
       params: { seller_id: sellerId },
     });
-    return res.data.item || [];
+    const products = res.data.item || [];
+    // 구독권 제외
+    return products.filter((p: Product) => !p.extra?.isSubscription);
   } catch (error) {
     console.error('판매자 상품 조회 실패:', error);
     return [];
@@ -125,11 +147,17 @@ export default async function SellersDetailPage({
 }) {
   const { sellerId } = await params;
 
-  const [seller, products, sellerTier] = await Promise.all([
+  const [seller, products, sellers] = await Promise.all([
     getSeller(sellerId),
     getSellerProducts(sellerId),
-    fetchSellerTier(Number(sellerId)),
+    getSellers(),
   ]);
+
+  // /users/ API에서 seller 목록을 가져와서 totalSales 조회
+  const sellerFromList = sellers.find(
+    (u) => u._id === Number(sellerId) || u.seller_id === Number(sellerId)
+  );
+  const sellerTier = getTier(sellerFromList?.totalSales ?? 0);
 
   // 상품 ID 목록으로 리뷰 가져오기
   const productIds = products.map((p) => p._id);
@@ -157,7 +185,8 @@ export default async function SellersDetailPage({
       ? products.reduce((sum, p) => sum + (p.rating ?? 0), 0) / products.length
       : 0;
   const totalReviewCount = products.reduce(
-    (sum, p) => sum + (p.replies?.length ?? 0),
+    (sum, p) =>
+      sum + (Array.isArray(p.replies) ? p.replies.length : (p.replies ?? 0)),
     0
   );
 
@@ -186,9 +215,14 @@ export default async function SellersDetailPage({
               productId={product._id}
               imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
               chefName={`${sellerName}`}
+              tier={sellerTier.label}
               dishName={product.name}
               rating={product.rating ?? 0}
-              reviewCount={product.replies?.length ?? 0}
+              reviewCount={
+                Array.isArray(product.replies)
+                  ? product.replies.length
+                  : (product.replies ?? 0)
+              }
               price={product.price}
               initialWished={Boolean(product.myBookmarkId)}
             />
@@ -203,7 +237,7 @@ export default async function SellersDetailPage({
       {/* 리뷰 리스트 */}
       <div className="gap-0">
         <ReviewList
-          reviews={reviews.map((r) => ({
+          reviews={reviews.map((r: Review) => ({
             id: String(r._id),
             userId: r.user?._id,
             userName: r.user?.name ?? '익명',
@@ -212,14 +246,17 @@ export default async function SellersDetailPage({
               r.user?.image,
             rating: r.rating,
             createdAt: r.createdAt,
-            productName: r.product?.name,
             content: r.content,
-            images: r.extra?.images ?? [],
+            images: (r.extra?.images ?? []).map((img: unknown) =>
+              typeof img === 'string'
+                ? img
+                : getImageUrl((img as { path: string }).path)
+            ),
           }))}
         />
       </div>
 
-      <BottomFixedButton as="link" href={`/mypage/subscription`}>
+      <BottomFixedButton as="link" href={`/sellers/${sellerId}/subscribe`}>
         구독하기
       </BottomFixedButton>
     </div>

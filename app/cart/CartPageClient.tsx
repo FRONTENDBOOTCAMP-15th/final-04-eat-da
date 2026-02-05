@@ -9,9 +9,11 @@ import { useRouter } from 'next/navigation';
 import { getAxios, getTokenPayload } from '@/lib/axios';
 import { CartItemType, CartResponse } from '@/app/src/types';
 import useUserStore from '@/zustand/userStore';
+import useCartStore from '@/zustand/cartStore';
 
 export default function CartPageClient() {
   const router = useRouter();
+  const { setCartCount } = useCartStore();
   const loggedInUser = useUserStore((state) => state.user);
 
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -32,7 +34,9 @@ export default function CartPageClient() {
     try {
       const axios = getAxios();
       const response = await axios.get<CartResponse>('/carts');
-      setCartItems(response.data.item);
+      const items = response.data.item;
+      setCartItems(items);
+      setCartCount(items.length);
     } catch (error) {
       console.error('장바구니 조회 실패:', error);
       if ((error as any)?.response?.status === 401) {
@@ -61,6 +65,11 @@ export default function CartPageClient() {
     } catch (error) {
       console.error('삭제 실패:', error);
     }
+  };
+
+  const handlePurchaseClick = () => {
+    if (cartItems.length === 0) return;
+    router.push('/checkout');
   };
 
   if (!loggedInUser && !getTokenPayload()) {
@@ -132,7 +141,11 @@ export default function CartPageClient() {
         </div>
 
         {cartItems.length > 0 && (
-          <BottomFixedButton as="link" href="/checkout">
+          <BottomFixedButton
+            as="button"
+            type="button"
+            onClick={handlePurchaseClick}
+          >
             구매하기
           </BottomFixedButton>
         )}

@@ -8,6 +8,8 @@ import { getTokenPayload } from '@/lib/axios';
 import { getUser, getCartItems, getBookmarkCount } from '@/lib/mypage';
 import useUserStore from '@/zustand/userStore';
 import { fetchSellerTier } from '@/lib/tier';
+import { getImageUrl } from '@/lib/review';
+import { MyPageSkeleton } from './loading';
 
 type UserInfo = Awaited<ReturnType<typeof getUser>>;
 
@@ -65,11 +67,7 @@ export default function MyPageClient() {
   }
 
   if (loading) {
-    return (
-      <div className="px-5 mt-16 mb-24 flex flex-1 flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
-        <p className="text-gray-600">로딩 중...</p>
-      </div>
-    );
+    return <MyPageSkeleton />;
   }
 
   if (!user) {
@@ -77,6 +75,11 @@ export default function MyPageClient() {
   }
 
   const isSeller = user.type === 'seller';
+  const userImageSrc = typeof user.image === 'string'
+    ? user.image
+    : user.image?.path
+      ? getImageUrl(user.image.path)
+      : '';
 
   return (
     <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
@@ -84,14 +87,14 @@ export default function MyPageClient() {
       <section className="p-5 border border-gray-400 rounded-lg bg-gray-200">
         <div className="flex items-start gap-2.5">
           {/* 프로필 이미지 */}
-          {user.image ? (
+          {userImageSrc ? (
             <Image
-              src={user.image}
+              src={userImageSrc}
               alt="프로필"
               width={60}
               height={60}
               className="w-15 h-15 rounded-full object-cover"
-              unoptimized={user.image.includes('dicebear.com')}
+              unoptimized={userImageSrc.includes('dicebear.com')}
             />
           ) : (
             <div className="w-15 h-15 rounded-full bg-gray-600"></div>
