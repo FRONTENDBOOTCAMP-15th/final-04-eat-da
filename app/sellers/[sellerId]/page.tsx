@@ -256,7 +256,7 @@ export default async function SellersDetailPage({
         />
       </div>
 
-      <BottomFixedButton as="link" href={`/mypage/subscription`}>
+      <BottomFixedButton as="link" href={`/sellers/${sellerId}/subscribe`}>
         구독하기
       </BottomFixedButton>
     </div>
