@@ -34,6 +34,10 @@ export default function ProductDetailPage({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     params.then(({ productId: id }) => {
       fetchProductData(id);
     });
