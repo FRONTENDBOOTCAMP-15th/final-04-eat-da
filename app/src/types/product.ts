@@ -22,6 +22,9 @@ export interface Product {
     ingredients?: string[];
     servings?: string;
     pickupPlace?: string;
+    isSubscription?: boolean;
+    frequency?: string;
+    portions?: string;
   };
 }
 

@@ -2,6 +2,62 @@
 
 import { getAxios } from '@/lib/axios';
 
+// 구독권 3종 데이터
+const subscriptionProducts = [
+  {
+    name: '가볍게 잇는 집밥',
+    price: 15000,
+    quantity: 999,
+    content: '주 2~3회만 집밥을 먹는 분에게 추천! 주 1회 픽업, 픽업당 반찬 3종 제공',
+    extra: {
+      category: ['subscription'],
+      categoryLabel: '구독권',
+      frequency: '주 1회',
+      portions: '픽업당 반찬 3종',
+      isSubscription: true,
+    },
+  },
+  {
+    name: '생활에 자리 잡은 집밥',
+    price: 28000,
+    quantity: 999,
+    content: '평일 저녁을 자주 집에서 먹는 분에게 추천! 주 2회 픽업, 픽업당 반찬 3~4종 제공',
+    extra: {
+      category: ['subscription'],
+      categoryLabel: '구독권',
+      frequency: '주 2회',
+      portions: '픽업당 반찬 3~4종',
+      isSubscription: true,
+    },
+  },
+  {
+    name: '식탁을 맡기는 집밥',
+    price: 39000,
+    quantity: 999,
+    content: '거의 매일 집밥을 먹는 자취생에게 추천! 주 3회 픽업, 픽업당 반찬 4종 제공',
+    extra: {
+      category: ['subscription'],
+      categoryLabel: '구독권',
+      frequency: '주 3회',
+      portions: '픽업당 반찬 4종',
+      isSubscription: true,
+    },
+  },
+];
+
+// 판매자 회원가입 시 구독권 3종 자동 등록
+async function registerSubscriptionProducts(accessToken: string): Promise<void> {
+  const axios = getAxios(accessToken);
+
+  for (const product of subscriptionProducts) {
+    try {
+      await axios.post('/seller/products', product);
+    } catch (error) {
+      console.error('구독권 등록 실패:', error);
+    }
+  }
+}
+
 export interface LoginState {
   ok: 0 | 1;
   message?: string;
@@ -159,6 +215,11 @@ export async function signup(
       const loginData = loginResponse.data;
 
       if (loginData.ok) {
+        // 판매자인 경우 구독권 3종 자동 등록
+        if (type === 'seller') {
+          await registerSubscriptionProducts(loginData.item.token.accessToken);
+        }
+
         return {
           ok: 1,
           message: '회원가입 성공',
