@@ -2,6 +2,7 @@
 
 import { getAxios } from '@/lib/axios';
 import useCartStore from '@/zustand/cartStore';
+import useUserStore from '@/zustand/userStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -34,12 +35,13 @@ export default function Header({
 }: HeaderProps) {
   const router = useRouter();
   const { cartCount, setCartCount } = useCartStore();
+  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
-    if (showCart) {
+    if (showCart && user) {
       fetchCartCount();
     }
-  }, [showCart]);
+  }, [showCart, user]);
 
   const fetchCartCount = async () => {
     try {
