@@ -30,7 +30,11 @@ export default function HomePageClient() {
           axios.get('/users/'),
         ]);
 
-        const allProducts = productsRes.data.item || [];
+        const rawProducts = productsRes.data.item || [];
+        // 구독권 제외
+        const allProducts = rawProducts.filter(
+          (p: Product) => !p.extra?.isSubscription
+        );
         const allUsers = usersRes.data.item || [];
         const sellers = allUsers.filter(
           (user: Seller) => user.type === 'seller'

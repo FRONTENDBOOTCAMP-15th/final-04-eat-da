@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import BanchanCard from '@/app/mypage/banchan/BanchanCard';
-import { BanchanItem } from '@/app/mypage/banchan/BanchanData';
 import { getAxios } from '@/lib/axios';
+import { BanchanItem } from '@/app/src/types';
 
 export default function BanchanManagementClient() {
   const [items, setItems] = useState<BanchanItem[]>([]);

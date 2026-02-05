@@ -1,11 +1,13 @@
 'use client';
 
-import { useActionState, useEffect, useRef, useState } from 'react';
+import { startTransition, useActionState, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { signup, SignupState } from '@/actions/user';
 import useUserStore from '@/zustand/userStore';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
+import AddImage from '@/app/src/components/ui/AddImage';
+import { uploadImages } from '@/lib/banchan';
 
 type ClientErrors = {
   name?: string;
@@ -14,6 +16,7 @@ type ClientErrors = {
   confirmPassword?: string;
   phone?: string;
   address?: string;
+  detailAddress?: string;
   introduction?: string;
 };
 
@@ -27,8 +30,11 @@ export default function SignupForm() {
   const [modalType, setModalType] = useState<'success' | 'error'>('success');
   const [clientErrors, setClientErrors] = useState<ClientErrors>({});
   const [passwordValue, setPasswordValue] = useState('');
+  const [confirmPasswordValue, setConfirmPasswordValue] = useState('');
   const [addressValue, setAddressValue] = useState('');
   const detailAddressRef = useRef<HTMLInputElement>(null);
+  const [profileImageFiles, setProfileImageFiles] = useState<File[]>([]);
+  const [introductionLength, setIntroductionLength] = useState(0);
 
   const openPostcode = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,6 +66,9 @@ export default function SignupForm() {
     }
     if (state?.values?.address) {
       setAddressValue(state.values.address);
+    }
+    if (state?.values?.introduction) {
+      setIntroductionLength(state.values.introduction.length);
     }
   }, [state]);
 
@@ -135,6 +144,9 @@ export default function SignupForm() {
       case 'address':
         if (!value) error = '주소를 입력해주세요.';
         break;
+      case 'detailAddress':
+        if (!value) error = '상세주소를 입력해주세요.';
+        break;
       case 'introduction':
         if (!value) error = '자기소개를 입력해주세요.';
         else if (value.length < 100) error = '100자 이상 작성해주세요.';
@@ -148,10 +160,35 @@ export default function SignupForm() {
     setClientErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
+  const handleProfileImageChange = (_images: string[], files: File[]) => {
+    setProfileImageFiles(files);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
+    if (profileImageFiles.length > 0) {
+      try {
+        const uploaded = await uploadImages(profileImageFiles);
+        if (uploaded.length > 0) {
+          formData.set('profileImage', JSON.stringify(uploaded[0]));
+        }
+      } catch (error) {
+        console.error('프로필 이미지 업로드 실패:', error);
+      }
+    }
+
+    startTransition(() => {
+      formAction(formData);
+    });
+  };
+
   return (
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" strategy="lazyOnload" />
-      <form id="signupForm" action={formAction} noValidate className="flex flex-col gap-5">
+      <form id="signupForm" onSubmit={handleFormSubmit} noValidate className="flex flex-col gap-5">
         {/* 가입유형 */}
         <div>
           <label className="block text-display-3 font-semibold text-gray-800 mb-2">
@@ -236,6 +273,7 @@ export default function SignupForm() {
           <input
             type="password"
             name="password"
+            value={passwordValue}
             placeholder="안전한 비밀번호를 입력하세요"
             onBlur={(e) => handleBlur('password', e.target.value)}
             onChange={(e) => { setPasswordValue(e.target.value); clearError('password'); }}
@@ -257,9 +295,10 @@ export default function SignupForm() {
           <input
             type="password"
             name="confirmPassword"
+            value={confirmPasswordValue}
             placeholder="비밀번호를 한번 더 입력하세요"
             onBlur={(e) => handleBlur('confirmPassword', e.target.value)}
-            onChange={() => clearError('confirmPassword')}
+            onChange={(e) => { setConfirmPasswordValue(e.target.value); clearError('confirmPassword'); }}
             className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2"
           />
           {clientErrors.confirmPassword && (
@@ -315,15 +354,20 @@ export default function SignupForm() {
             type="text"
             name="detailAddress"
             ref={detailAddressRef}
-            defaultValue={state?.values?.address || ''}
+            defaultValue={state?.values?.detailAddress || ''}
             placeholder="상세주소를 입력하세요"
+            onBlur={(e) => handleBlur('detailAddress', e.target.value)}
+            onChange={() => clearError('detailAddress')}
             className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2"
           />
           <input type="hidden" name="address" value={addressValue} />
           {clientErrors.address && (
             <p className="text-eatda-orange text-x-small mt-1">{clientErrors.address}</p>
           )}
-          {!clientErrors.address && state?.ok === 0 && state.errors?.address && (
+          {clientErrors.detailAddress && !clientErrors.address && (
+            <p className="text-eatda-orange text-x-small mt-1">{clientErrors.detailAddress}</p>
+          )}
+          {!clientErrors.address && !clientErrors.detailAddress && state?.ok === 0 && state.errors?.address && (
             <p className="text-eatda-orange text-x-small mt-1">{state.errors.address.msg}</p>
           )}
         </div>
@@ -341,13 +385,16 @@ export default function SignupForm() {
               className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2 resize-none overflow-hidden"
               rows={2}
               onBlur={(e) => handleBlur('introduction', e.target.value)}
-              onChange={() => clearError('introduction')}
+              onChange={(e) => { setIntroductionLength(e.target.value.length); clearError('introduction'); }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
                 target.style.height = 'auto';
                 target.style.height = target.scrollHeight + 'px';
               }}
             />
+            <p className={`text-x-small mt-1 ${introductionLength >= 100 ? 'text-gray-600' : 'text-eatda-orange'}`}>
+              {introductionLength}/100
+            </p>
             {clientErrors.introduction && (
               <p className="text-eatda-orange text-x-small mt-1">{clientErrors.introduction}</p>
             )}
@@ -356,6 +403,18 @@ export default function SignupForm() {
             )}
           </div>
         )}
+
+        {/* 프로필 이미지 등록 */}
+        <div>
+          <label className="block text-display-3 font-semibold text-gray-800 mb-2">
+            프로필 이미지 등록
+          </label>
+          <AddImage
+            onChange={handleProfileImageChange}
+            maxImages={1}
+            showLabel={false}
+          />
+        </div>
       </form>
 
       <ConfirmModal

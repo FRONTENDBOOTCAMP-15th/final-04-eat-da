@@ -9,9 +9,11 @@ import { useRouter } from 'next/navigation';
 import { getAxios, getTokenPayload } from '@/lib/axios';
 import { CartItemType, CartResponse } from '@/app/src/types';
 import useUserStore from '@/zustand/userStore';
+import useCartStore from '@/zustand/cartStore';
 
 export default function CartPageClient() {
   const router = useRouter();
+  const { setCartCount } = useCartStore();
   const loggedInUser = useUserStore((state) => state.user);
 
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
@@ -32,7 +34,9 @@ export default function CartPageClient() {
     try {
       const axios = getAxios();
       const response = await axios.get<CartResponse>('/carts');
-      setCartItems(response.data.item);
+      const items = response.data.item;
+      setCartItems(items);
+      setCartCount(items.length);
     } catch (error) {
       console.error('장바구니 조회 실패:', error);
       if ((error as any)?.response?.status === 401) {
@@ -65,29 +69,9 @@ export default function CartPageClient() {
 
   const handlePurchaseClick = () => {
     if (cartItems.length === 0) return;
-
-    const pickupPlaces = cartItems.map(
-      (item) => (item.product.extra as any)?.pickupPlace || '서교동 공유주방'
-    );
-
-    const firstPlace = pickupPlaces[0];
-    const differentItems = cartItems.filter(
-      (item, index) => pickupPlaces[index] !== firstPlace
-    );
-
-    if (differentItems.length > 0) {
-      if (differentItems.length === 1) {
-        alert(
-          `'${differentItems[0].product.name}'은(는) 다른 공유주방 상품입니다.\n같은 공유주방에서만 구매 가능합니다.`
-        );
-      } else {
-        alert('같은 공유주방에서만 구매 가능합니다.');
-      }
-      return;
-    }
-
     router.push('/checkout');
   };
+
   if (!loggedInUser && !getTokenPayload()) {
     return null;
   }

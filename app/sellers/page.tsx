@@ -25,6 +25,9 @@ interface ProductSummary {
   rating?: number;
   replies?: number;
   mainImages?: Array<{ path?: string; name?: string } | string>;
+  extra?: {
+    isSubscription?: boolean;
+  };
 }
 
 interface DishThumbnail {
@@ -126,8 +129,9 @@ export default async function SellersList() {
   const sellerCards = sellers.map((seller) => {
     const sellerId = seller._id ?? seller.seller_id ?? 0;
     const products = productsBySeller[sellerId] || [];
-    const topDishes = getTopDishes(products);
-    const { rating, reviewCount } = getSellerRating(products);
+    const dishesOnly = products.filter((p) => !p.extra?.isSubscription);
+    const topDishes = getTopDishes(dishesOnly);
+    const { rating, reviewCount } = getSellerRating(dishesOnly);
 
     return {
       sellerId,
@@ -135,12 +139,12 @@ export default async function SellersList() {
       topDishes,
       rating,
       reviewCount,
-      productCount: products.length,
+      productCount: dishesOnly.length,
       tier: getTier(seller.totalSales as number).label,
     };
   });
   const visibleSellerCards = sellerCards.filter(
-    (card) => card.productCount > 0
+    (card) => card.productCount >= 3
   );
 
   return (
