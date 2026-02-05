@@ -7,7 +7,7 @@ import Header from '@/app/src/components/common/Header';
 import StarItem from '@/app/src/components/ui/StarItem';
 import GrayButton from '@/app/src/components/ui/GrayButton';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
-import { fetchOrders, fetchMyReviews, deleteReview, getImageUrl } from '@/lib/review';
+import { fetchOrders, fetchMyReviews, fetchProduct, deleteReview, getImageUrl } from '@/lib/review';
 
 interface OrderProduct {
   _id: number;
@@ -26,6 +26,7 @@ interface Order {
 
 interface ReviewItem {
   _id: number;
+  order_id: number;
   rating: number;
   content: string;
   product: {
@@ -63,13 +64,25 @@ export default function ReviewManagementPage() {
     setLoading(true);
     try {
       const [orders, reviews] = await Promise.all([fetchOrders(), fetchMyReviews()]);
-      const reviewedProductIds = new Set(reviews.map((r: ReviewItem) => r.product._id));
+      // 상품별 리뷰 작성 수 카운트
+      const reviewCountByProduct = new Map<number, number>();
+      reviews.forEach((r: ReviewItem) => {
+        const pid = r.product._id;
+        reviewCountByProduct.set(pid, (reviewCountByProduct.get(pid) || 0) + 1);
+      });
+
       const items: AvailableItem[] = [];
-      for (const order of orders) {
+      // 오래된 주문부터 처리 (이미 리뷰한 건은 앞에서부터 차감)
+      const sortedOrders = [...orders].sort((a: Order, b: Order) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      for (const order of sortedOrders) {
         // 구매완료 상태(OS080)인 주문만
         if (order.state === 'OS080') {
           for (const product of order.products) {
-            if (reviewedProductIds.has(product._id)) continue;
+            const remaining = reviewCountByProduct.get(product._id) || 0;
+            if (remaining > 0) {
+              reviewCountByProduct.set(product._id, remaining - 1);
+              continue;
+            }
             items.push({
               order_id: order._id,
               product_id: product._id,
@@ -85,6 +98,22 @@ export default function ReviewManagementPage() {
           }
         }
       }
+
+      // seller_name이 없는 항목은 상품 정보에서 가져오기
+      const missingIds = [...new Set(items.filter((i) => !i.seller_name).map((i) => i.product_id))];
+      if (missingIds.length > 0) {
+        const productDetails = await Promise.all(missingIds.map((id) => fetchProduct(id).catch(() => null)));
+        const sellerMap = new Map<number, string>();
+        productDetails.forEach((p, idx) => {
+          if (p) sellerMap.set(missingIds[idx], p.seller_name || p.seller?.name || '');
+        });
+        items.forEach((item) => {
+          if (!item.seller_name && sellerMap.has(item.product_id)) {
+            item.seller_name = sellerMap.get(item.product_id) || '';
+          }
+        });
+      }
+
       setAvailableItems(items);
     } catch (error) {
       console.error('주문 내역 조회 실패:', error);
@@ -99,6 +128,23 @@ export default function ReviewManagementPage() {
     setLoading(true);
     try {
       const reviews = await fetchMyReviews();
+
+      // seller_name이 없는 리뷰는 상품 정보에서 가져오기
+      const missingIds = [...new Set(reviews.filter((r: ReviewItem) => !r.product?.seller_name).map((r: ReviewItem) => r.product?._id).filter(Boolean))];
+      if (missingIds.length > 0) {
+        const productDetails = await Promise.all(missingIds.map((id: number) => fetchProduct(id).catch(() => null)));
+        const sellerMap = new Map<number, string>();
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        productDetails.forEach((p: any, idx: number) => {
+          if (p) sellerMap.set(missingIds[idx], p.seller_name || p.seller?.name || '');
+        });
+        reviews.forEach((r: ReviewItem) => {
+          if (!r.product?.seller_name && r.product?._id && sellerMap.has(r.product._id)) {
+            r.product.seller_name = sellerMap.get(r.product._id) || '';
+          }
+        });
+      }
+
       setMyReviews(reviews);
     } catch (error) {
       console.error('리뷰 목록 조회 실패:', error);
@@ -200,7 +246,7 @@ export default function ReviewManagementPage() {
                         {item.product_name}
                       </h3>
                       <p className="text-sm text-eatda-orange">
-                        {item.seller_name}
+                        {item.seller_name} 주부
                       </p>
                       <p className="text-xs text-gray-500">{item.purchase_date} 구매완료</p>
                     </div>
@@ -248,7 +294,7 @@ export default function ReviewManagementPage() {
                       <h3 className="text-base font-semibold text-gray-900">
                         {review.product?.name || '상품명 없음'}
                       </h3>
-                      <p className="text-sm text-eatda-orange">{review.product?.seller_name || ''}</p>
+                      <p className="text-sm text-eatda-orange">{review.product?.seller_name ? `${review.product.seller_name} 주부` : ''}</p>
 
                       {/* 별점 */}
                       <div className="py-1">
