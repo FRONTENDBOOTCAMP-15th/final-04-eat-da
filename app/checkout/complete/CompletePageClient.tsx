@@ -1,50 +1,116 @@
-"use client";
+'use client';
 
-import BottomFixedButton from "@/app/src/components/common/BottomFixedButton";
-import OrderProductItem from "@/app/src/components/ui/OrderProductItem";
-import { getAxios } from "@/lib/axios";
-import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import "dayjs/locale/ko";
-import { OrderData } from "@/app/src/types";
+import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
+import OrderProductItem from '@/app/src/components/ui/OrderProductItem';
+import { getAxios } from '@/lib/axios';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
+import { OrderData } from '@/app/src/types';
 
-dayjs.locale("ko");
+dayjs.locale('ko');
 
 export default function CompletePageClient() {
   const searchParams = useSearchParams();
-  const orderId = searchParams.get("orderId");
+  const router = useRouter();
+  const orderId = searchParams.get('orderId');
+  const impUid = searchParams.get('imp_uid');
+  const merchantUid = searchParams.get('merchant_uid');
+  const impSuccess = searchParams.get('imp_success');
+
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (orderId) {
-      const fetchOrder = async () => {
+    const handlePaymentComplete = async () => {
+      const axios = getAxios();
+
+      // 모바일 결제 리다이렉트 처리
+      if (impUid && merchantUid && impSuccess === 'true' && !orderId) {
         try {
-          const axios = getAxios();
+          // 결제 성공 - 주문 생성
+          // localStorage에서 주문 정보 가져오기
+          const pendingOrderStr = localStorage.getItem('pendingOrder');
+
+          if (!pendingOrderStr) {
+            alert('주문 정보를 찾을 수 없습니다.');
+            router.push('/');
+            return;
+          }
+
+          const pendingOrder = JSON.parse(pendingOrderStr);
+
+          // 서버에 주문 생성
+          const orderData = {
+            ...pendingOrder,
+            extra: {
+              ...pendingOrder.extra,
+              imp_uid: impUid,
+              merchant_uid: merchantUid,
+            },
+          };
+
+          const orderResponse = await axios.post('/orders', orderData);
+
+          // localStorage 정리
+          localStorage.removeItem('pendingOrder');
+
+          if (pendingOrder.isDirect) {
+            localStorage.removeItem('directPurchase');
+          } else {
+            await axios.delete('/carts/cleanup');
+          }
+
+          // orderId로 리다이렉트
+          router.replace(
+            `/checkout/complete?orderId=${orderResponse.data.item._id}`
+          );
+          return;
+        } catch (error) {
+          console.error('주문 생성 실패:', error);
+          alert('주문 생성에 실패했습니다.');
+          router.push('/');
+          return;
+        }
+      }
+
+      // 모바일 결제 실패
+      if (impSuccess === 'false') {
+        alert('결제에 실패했습니다.');
+        router.push('/checkout');
+        return;
+      }
+
+      // orderId로 주문 조회
+      if (orderId) {
+        try {
           const response = await axios.get(`/orders/${orderId}`);
           setOrderData(response.data.item);
         } catch (error) {
-          console.error("주문 조회 실패:", error);
+          console.error('주문 조회 실패:', error);
         } finally {
           setIsLoading(false);
         }
-      };
-      fetchOrder();
-    }
-  }, [orderId]);
+      } else {
+        setIsLoading(false);
+      }
+    };
+
+    handlePaymentComplete();
+  }, [orderId, impUid, merchantUid, impSuccess, router]);
 
   const formatPickupTime = (timeRange: string) => {
     const timeMap: { [key: string]: string } = {
-      "9-12": "9:00 - 12:00",
-      "12-16": "12:00 - 16:00",
-      "16-20": "16:00 - 20:00",
+      '9-12': '9:00 - 12:00',
+      '12-16': '12:00 - 16:00',
+      '16-20': '16:00 - 20:00',
     };
     return timeMap[timeRange] || timeRange;
   };
 
   const formatPickupDate = (dateString: string) => {
-    return dayjs(dateString).format("M월 D일 dddd");
+    return dayjs(dateString).format('M월 D일 dddd');
   };
 
   if (isLoading) {
