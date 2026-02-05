@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { getAxios } from '@/lib/axios';
 import { useEffect, useState } from 'react';
 import { ProductCardProps } from '@/app/src/types';
+import { useRouter } from 'next/navigation';
+import useUserStore from '@/zustand/userStore';
 
 export default function ProductCard({
   productId,
@@ -21,6 +23,8 @@ export default function ProductCard({
   onBookmarkChange,
 }: ProductCardProps) {
   const safeImageSrc = imageSrc || '/food1.png';
+  const router = useRouter();
+  const user = useUserStore((state) => state.user);
   const [currentBookmarkId, setCurrentBookmarkId] = useState(bookmarkId);
   const [isWished, setIsWished] = useState(initialWished);
 
@@ -33,6 +37,22 @@ export default function ProductCard({
   }, [bookmarkId]);
 
   const handleToggleWish = async (isWished: boolean) => {
+    // 로그인 체크 - zustand의 user 상태 확인
+    if (!user || !user.token?.accessToken) {
+      // 로그인하지 않은 경우
+      // 1. 현재 상품 정보를 localStorage에 저장
+      const pendingWishItem = {
+        productId,
+        timestamp: Date.now(),
+      };
+      localStorage.setItem('pendingWishItem', JSON.stringify(pendingWishItem));
+
+      // 2. 로그인 페이지로 리다이렉트
+      router.push('/login?redirect=wishlist');
+      return;
+    }
+
+    // 로그인한 경우 기존 로직 실행
     try {
       const axios = getAxios();
 
@@ -55,6 +75,19 @@ export default function ProductCard({
       }
     } catch (error) {
       console.error('북마크 에러:', error);
+
+      // 401 에러(인증 실패)인 경우 로그인 페이지로
+      if ((error as any)?.response?.status === 401) {
+        const pendingWishItem = {
+          productId,
+          timestamp: Date.now(),
+        };
+        localStorage.setItem(
+          'pendingWishItem',
+          JSON.stringify(pendingWishItem)
+        );
+        router.push('/login?redirect=wishlist');
+      }
     }
   };
 
