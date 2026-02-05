@@ -81,11 +81,18 @@ export default function SubscriptionClient({
 
     if (!selectedPlanId) return;
 
-    // 선택된 플랜의 인덱스 찾기
-    const planIndex = subscriptionPlans.findIndex((p) => p.id === selectedPlanId);
+    // 선택된 플랜 찾기
+    const selectedPlan = subscriptionPlans.find((p) => p.id === selectedPlanId);
 
-    // 해당 인덱스의 실제 구독권 상품 찾기
-    const selectedProduct = subscriptionProducts[planIndex];
+    if (!selectedPlan) {
+      alert('선택된 플랜을 찾을 수 없습니다.');
+      return;
+    }
+
+    // 가격으로 실제 구독권 상품 매칭
+    const selectedProduct = subscriptionProducts.find(
+      (product) => product.price === selectedPlan.price
+    );
 
     if (!selectedProduct) {
       alert('해당 구독권 상품이 없습니다.');
@@ -100,8 +107,8 @@ export default function SubscriptionClient({
     };
     localStorage.setItem('directPurchase', JSON.stringify(directPurchase));
 
-    // 구매 페이지로 이동
-    router.push('/checkout?direct=true');
+    // 구독 전용 구매 페이지로 이동
+    router.push('/checkout/subscribe?direct=true');
   };
 
   return (

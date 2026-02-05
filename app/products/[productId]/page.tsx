@@ -80,9 +80,22 @@ export default function ProductDetailPage({
   }> => {
     try {
       const axios = getAxios();
-      const sellerRes = await axios.get(`/users/${sellerId}`);
+
+      // 개별 판매자 정보와 판매자 목록을 병렬로 호출
+      const [sellerRes, usersRes] = await Promise.all([
+        axios.get(`/users/${sellerId}`),
+        axios.get('/users/'),
+      ]);
+
       const seller = sellerRes.data.item;
-      const totalSales = seller?.totalSales ?? 0;
+      const users = usersRes.data.item || [];
+
+      // 판매자 목록에서 totalSales 찾기
+      const sellerFromList = users.find(
+        (u: { _id?: number; seller_id?: number; totalSales?: number }) =>
+          u._id === sellerId || u.seller_id === sellerId
+      );
+      const totalSales = sellerFromList?.totalSales ?? 0;
 
       return {
         image: seller?.extra?.profileImage ?? seller?.image,
