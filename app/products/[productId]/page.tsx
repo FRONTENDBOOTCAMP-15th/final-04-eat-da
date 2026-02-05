@@ -21,9 +21,6 @@ export default function ProductDetailPage({
 }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Reply[]>([]);
-  const [userImageMap, setUserImageMap] = useState<Map<number, string>>(
-    new Map()
-  );
   const [sellerProfileImage, setSellerProfileImage] = useState<
     string | undefined
   >();
@@ -32,6 +29,10 @@ export default function ProductDetailPage({
   >();
   const [bookmarkId, setBookmarkId] = useState<number | undefined>();
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     params.then(({ productId: id }) => {
@@ -44,50 +45,26 @@ export default function ProductDetailPage({
     try {
       const axios = getAxios();
 
-      const [productRes, bookmarksRes] = await Promise.all([
-        axios.get(`/products/${id}/`),
-        axios.get('/bookmarks').catch(() => ({ data: { item: [] } })),
-      ]);
-
+      // 1. 상품 정보만 먼저 호출 (bookmarks 호출 제거 - myBookmarkId 사용)
+      const productRes = await axios.get(`/products/${id}/`);
       const productData = productRes.data.item;
-      const bookmarks = Array.isArray(bookmarksRes.data.item)
-        ? bookmarksRes.data.item
-        : [];
-
-      const existingBookmark = bookmarks.find((bookmark: any) => {
-        const targetId =
-          bookmark.product?._id ?? bookmark.target_id ?? bookmark.productId;
-        return targetId === Number(id);
-      });
 
       setProduct(productData);
-      setBookmarkId(existingBookmark?._id ?? productData.myBookmarkId);
+      setBookmarkId(productData.myBookmarkId);
 
       const reviewsData: Reply[] = Array.isArray(productData.replies)
         ? productData.replies
         : [];
       setReviews(reviewsData);
 
-      // 유저 이미지 가져오기
-      const userIds = Array.from(
-        new Set(
-          reviewsData
-            .map((review) => review.user?._id)
-            .filter((id): id is number => typeof id === 'number')
-        )
-      );
-
-      if (userIds.length > 0) {
-        const imageMap = await getUserImageMap(userIds);
-        setUserImageMap(imageMap);
-      }
-
+      // 2. 셀러 정보 호출 (병렬로 처리)
       if (productData.seller?._id) {
-        // 셀러 이미지와 티어 가져오기
         const sellerInfo = await getSellerInfo(productData.seller._id);
         setSellerProfileImage(sellerInfo.image);
         setSellerTier(sellerInfo.tier);
       }
+
+      // 3. 리뷰어 이미지는 reply.user.image를 사용하므로 추가 API 호출 불필요
     } catch (error) {
       console.error('상품 조회 실패:', error);
     } finally {
@@ -103,18 +80,9 @@ export default function ProductDetailPage({
   }> => {
     try {
       const axios = getAxios();
-      const [sellerRes, usersRes] = await Promise.all([
-        axios.get(`/users/${sellerId}`),
-        axios.get('/users/'),
-      ]);
+      const sellerRes = await axios.get(`/users/${sellerId}`);
       const seller = sellerRes.data.item;
-      const users = usersRes.data.item || [];
-      const sellerFromList = users.find(
-        (u: { _id?: number; seller_id?: number; type?: string }) =>
-          (u._id === sellerId || u.seller_id === sellerId) &&
-          u.type === 'seller'
-      );
-      const totalSales = sellerFromList?.totalSales ?? 0;
+      const totalSales = seller?.totalSales ?? 0;
 
       return {
         image: seller?.extra?.profileImage ?? seller?.image,
@@ -123,32 +91,6 @@ export default function ProductDetailPage({
     } catch (error) {
       console.error('판매자 정보 조회 실패:', error);
       return { image: undefined, tier: getTier(0) };
-    }
-  };
-
-  const getUserImageMap = async (userIds: number[]) => {
-    try {
-      const axios = getAxios();
-      const responses = await Promise.all(
-        userIds.map((userId) =>
-          axios
-            .get(`/users/${userId}`)
-            .then((res) => ({
-              userId,
-              image: res.data.item?.image as string | undefined,
-            }))
-            .catch(() => ({ userId, image: undefined }))
-        )
-      );
-
-      return new Map(
-        responses
-          .filter((item) => item.image)
-          .map((item) => [item.userId, item.image!])
-      );
-    } catch (error) {
-      console.error('유저 이미지 조회 실패:', error);
-      return new Map();
     }
   };
 
@@ -269,9 +211,7 @@ export default function ProductDetailPage({
             id: String(r._id),
             userId: r.user?._id,
             userName: r.user?.name ?? '익명',
-            profileImage:
-              (r.user?._id ? userImageMap.get(r.user._id) : undefined) ??
-              r.user?.image,
+            profileImage: r.user?.image,
             rating: r.rating,
             createdAt: r.createdAt,
             content: r.content,
