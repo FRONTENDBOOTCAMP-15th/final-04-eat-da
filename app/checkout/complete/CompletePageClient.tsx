@@ -113,6 +113,17 @@ export default function CompletePageClient() {
     return dayjs(dateString).format('M월 D일 dddd');
   };
 
+  const formatPreferredDay = (day: string) => {
+    const dayMap: { [key: string]: string } = {
+      monday: '월요일',
+      tuesday: '화요일',
+      wednesday: '수요일',
+      thursday: '목요일',
+      friday: '금요일',
+    };
+    return `매주 ${dayMap[day] || day}`;
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -184,28 +195,40 @@ export default function CompletePageClient() {
                 />
               </svg>
               <p className="text-paragraph font-semibold">
-                {orderData.products[0]?.extra?.pickupPlace}
+                {(orderData.extra as any)?.isSubscription
+                  ? (orderData.extra as any)?.pickupPlace
+                  : orderData.products[0]?.extra?.pickupPlace}
               </p>
             </div>
           </div>
           <div className="flex justify-between">
             <p className="text-paragraph">픽업 날짜</p>
             <p className="text-paragraph font-semibold">
-              {formatPickupDate(orderData.extra.pickupDate)}
+              {(orderData.extra as any)?.isSubscription
+                ? formatPreferredDay((orderData.extra as any)?.preferredDay)
+                : formatPickupDate(orderData.extra.pickupDate!)}
             </p>
           </div>
           <div className="flex justify-between">
             <p className="text-paragraph">픽업 시간</p>
             <p className="text-paragraph font-semibold">
-              {formatPickupTime(orderData.extra.pickupTime)}
+              {formatPickupTime(
+                (orderData.extra as any)?.isSubscription
+                  ? (orderData.extra as any)?.preferredTime
+                  : orderData.extra.pickupTime!
+              )}
             </p>
           </div>
         </div>
 
         <div className="flex justify-between">
-          <p className="text-paragraph font-semibold">총 결제 금액</p>
+          <p className="text-paragraph font-semibold">
+            {(orderData.extra as any)?.isSubscription ? '주간 결제 금액' : '총 결제 금액'}
+          </p>
           <p className="text-paragraph font-semibold text-eatda-orange">
-            {orderData.cost.total.toLocaleString()}원
+            {(orderData.extra as any)?.isSubscription
+              ? `주당 ${orderData.cost.total.toLocaleString()}원`
+              : `${orderData.cost.total.toLocaleString()}원`}
           </p>
         </div>
       </div>

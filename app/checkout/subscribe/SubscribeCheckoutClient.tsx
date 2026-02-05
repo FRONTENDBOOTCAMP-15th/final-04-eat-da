@@ -4,6 +4,7 @@ import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import Header from '@/app/src/components/common/Header';
 import PurchaseProductItem from '@/app/src/components/ui/PurchaseProductItem';
 import DayDropdown from '@/app/src/components/ui/DayDropdown';
+import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
 import { Product } from '@/app/src/types';
 import { getAxios } from '@/lib/axios';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -25,6 +26,11 @@ export default function SubscribeCheckoutClient() {
   const [directQuantity, setDirectQuantity] = useState(0);
   const [directTotalAmount, setDirectTotalAmount] = useState(0);
   const [pickupPlace, setPickupPlace] = useState('공유주방');
+  const [existingSubscriptionIds, setExistingSubscriptionIds] = useState<
+    number[]
+  >([]);
+  const [existingSellerName, setExistingSellerName] = useState<string>('');
+  const [showReplaceModal, setShowReplaceModal] = useState(false);
 
   const searchParams = useSearchParams();
   const isDirect = searchParams.get('direct') === 'true';
@@ -67,6 +73,26 @@ export default function SubscribeCheckoutClient() {
               setPickupPlace(regularProduct.extra.pickupPlace);
             }
           }
+
+          // 기존 구독 주문 확인
+          const ordersRes = await axios.get('/orders');
+          const orders = ordersRes.data.item || [];
+          const existingSubscriptions = orders.filter(
+            (order: any) =>
+              order.extra?.isSubscription === true && order.state !== 'OS310'
+          );
+
+          if (existingSubscriptions.length > 0) {
+            const existingOrderIds = existingSubscriptions.map(
+              (order: any) => order._id
+            );
+            setExistingSubscriptionIds(existingOrderIds);
+
+            // 기존 구독의 판매자 이름 가져오기
+            const existingSeller =
+              existingSubscriptions[0].products[0]?.seller?.name || '주부';
+            setExistingSellerName(existingSeller);
+          }
         } catch (error) {
           console.error('상품 정보 로드 실패:', error);
           alert('상품 정보를 불러올 수 없습니다.');
@@ -86,7 +112,31 @@ export default function SubscribeCheckoutClient() {
       return;
     }
 
+    // 기존 구독이 있고, 다른 주부의 구독인 경우 확인 모달 표시
+    if (
+      existingSubscriptionIds.length > 0 &&
+      existingSellerName !== directProduct?.seller?.name
+    ) {
+      setShowReplaceModal(true);
+      return;
+    }
+
+    await processSubscription();
+  };
+
+  const processSubscription = async () => {
     try {
+      // 기존 구독 주문들 취소 처리
+      if (existingSubscriptionIds.length > 0) {
+        await Promise.all(
+          existingSubscriptionIds.map((orderId) =>
+            axios.patch(`/orders/${orderId}`, {
+              state: 'OS310', // 주문 취소 상태
+            })
+          )
+        );
+      }
+
       const orderData = {
         products: [
           {
@@ -98,6 +148,7 @@ export default function SubscribeCheckoutClient() {
           isSubscription: true,
           preferredDay: selectedDay,
           preferredTime: selectedTime,
+          pickupPlace: pickupPlace,
         },
       };
 
@@ -110,6 +161,11 @@ export default function SubscribeCheckoutClient() {
       console.error('구독 주문 실패:', error);
       alert('구독 주문에 실패했습니다. 다시 시도해주세요.');
     }
+  };
+
+  const handleReplaceConfirm = async () => {
+    setShowReplaceModal(false);
+    await processSubscription();
   };
 
   return (
@@ -266,6 +322,16 @@ export default function SubscribeCheckoutClient() {
       <BottomFixedButton as="button" type="button" onClick={handlePurchase}>
         구독권 결제하기
       </BottomFixedButton>
+
+      {/* 기존 구독 대체 확인 모달 */}
+      <ConfirmModal
+        isOpen={showReplaceModal}
+        title="이미 구독 중인 플랜이 있습니다"
+        description={`현재 ${existingSellerName} 주부의 구독을 취소하고 새로운 구독으로 변경하시겠습니까?`}
+        confirmText="구독 변경하기"
+        onConfirm={handleReplaceConfirm}
+        onCancel={() => setShowReplaceModal(false)}
+      />
     </>
   );
 }
