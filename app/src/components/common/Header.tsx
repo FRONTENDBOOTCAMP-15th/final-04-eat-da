@@ -102,39 +102,32 @@ export default function Header({
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white px-4 pt-4 pb-3 z-50">
-      <div className="flex items-center justify-between">
-        {/* 왼쪽: 뒤로가기 + 제목 */}
-        <div className="flex items-center gap-3">
-          {showBackButton && (
-            <button
-              onClick={handleBack}
-              className="text-gray-900"
-              aria-label="뒤로가기"
-            >
-              <img src="/back.svg" alt="뒤로가기" width={10} height={18} />
-            </button>
-          )}
-          <h1 className="text-display-6 font-semibold text-gray-900">
-            {title}
-          </h1>
-        </div>
+    <header className="fixed top-0 left-0 right-0 bg-white z-50">
+      <div className="w-full max-w-[744px] min-w-[390px] mx-auto px-4 pt-4 pb-3">
+        <div className="flex items-center justify-between">
+          {/* 왼쪽: 뒤로가기 + 제목 */}
+          <div className="flex items-center gap-3">
+            {showBackButton && (
+              <button
+                onClick={handleBack}
+                className="text-gray-900"
+                aria-label="뒤로가기"
+              >
+                <img src="/back.svg" alt="뒤로가기" width={10} height={18} />
+              </button>
+            )}
+            <h1 className="text-display-6 font-semibold text-gray-900">
+              {title}
+            </h1>
+          </div>
 
-        {/* 오른쪽: X, 검색, 장바구니/홈 */}
-        <div className="flex gap-4 items-center">
-          {showCloseButton && (
-            <button
-              onClick={handleClose}
-              className="text-gray-900"
-              aria-label="닫기"
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
+          {/* 오른쪽: X, 검색, 장바구니/홈 */}
+          <div className="flex gap-4 items-center">
+            {showCloseButton && (
+              <button
+                onClick={handleClose}
+                className="text-gray-900"
+                aria-label="닫기"
               >
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
