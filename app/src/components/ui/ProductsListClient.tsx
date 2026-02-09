@@ -7,7 +7,7 @@ import CategoryTabs, {
 import ProductCard from '@/app/src/components/ui/ProductCard';
 import { Product } from '@/app/src/types';
 import { getTier } from '@/lib/tier';
-import { getAxios } from '@/lib/axios';
+import { getAxios, getAccessToken } from '@/lib/axios';
 
 type SortOption = 'recommend' | 'rating' | 'purchase' | 'latest';
 
@@ -93,6 +93,11 @@ export default function ProductsListClient({
 
   useEffect(() => {
     const fetchBookmarks = async () => {
+      if (!getAccessToken()) {
+        setProducts(initialProducts);
+        return;
+      }
+
       try {
         const axios = getAxios();
         const bookmarksRes = await axios.get('/bookmarks/product');
