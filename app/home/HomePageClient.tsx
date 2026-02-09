@@ -63,7 +63,9 @@ export default function HomePageClient() {
       try {
         const axios = getAxios();
         const [productsRes, usersRes] = await Promise.all([
-          axios.get('/products'),
+          axios.get('/products', {
+            params: { limit: 1000 },
+          }),
           axios.get('/users/'),
         ]);
 
@@ -127,36 +129,69 @@ export default function HomePageClient() {
         }
 
         const storedSeller = localStorage.getItem('dailyRecommendSeller');
+        let foundSeller = false;
 
         if (storedSeller) {
           const { date, sellerId } = JSON.parse(storedSeller);
           if (date === today) {
             const seller = sellers.find((s: Seller) => s._id === sellerId);
             if (seller) {
-              const sellerWithStats = calculateSellerStats(seller, allProducts);
-              setRecommendSeller(sellerWithStats);
-              setIsLoading(false);
-              return;
+              const sellerProductCount = allProducts.filter(
+                (p: Product) => p.seller?._id === seller._id
+              ).length;
+
+              console.log(
+                `저장된 주부 ${seller.name}의 상품 수:`,
+                sellerProductCount
+              );
+
+              if (sellerProductCount >= 3) {
+                const sellerWithStats = calculateSellerStats(
+                  seller,
+                  allProducts
+                );
+                setRecommendSeller(sellerWithStats);
+                foundSeller = true;
+              }
             }
           }
         }
 
-        if (sellers.length > 0) {
-          const randomSeller =
-            sellers[Math.floor(Math.random() * sellers.length)];
-          const sellerWithStats = calculateSellerStats(
-            randomSeller,
-            allProducts
-          );
-          setRecommendSeller(sellerWithStats);
+        if (!foundSeller) {
+          const eligibleSellers = sellers.filter((seller: Seller) => {
+            const productCount = allProducts.filter(
+              (p: Product) => p.seller?._id === seller._id
+            ).length;
+            return productCount >= 3;
+          });
 
-          localStorage.setItem(
-            'dailyRecommendSeller',
-            JSON.stringify({
-              date: today,
-              sellerId: randomSeller._id,
-            })
+          console.log(
+            '3개 이상 상품을 등록한 주부 수:',
+            eligibleSellers.length
           );
+
+          if (eligibleSellers.length > 0) {
+            const randomSeller =
+              eligibleSellers[
+                Math.floor(Math.random() * eligibleSellers.length)
+              ];
+
+            console.log('선정된 주부:', randomSeller.name);
+
+            const sellerWithStats = calculateSellerStats(
+              randomSeller,
+              allProducts
+            );
+            setRecommendSeller(sellerWithStats);
+
+            localStorage.setItem(
+              'dailyRecommendSeller',
+              JSON.stringify({
+                date: today,
+                sellerId: randomSeller._id,
+              })
+            );
+          }
         }
       } catch (error) {
         console.error('데이터 조회 실패:', error);
@@ -173,7 +208,7 @@ export default function HomePageClient() {
     allProducts: Product[]
   ): SellerWithStats => {
     const sellerProducts = allProducts.filter(
-      (p) => (p as any).seller_id === seller._id
+      (p: Product) => p.seller?._id === seller._id
     );
 
     const rating =
@@ -194,7 +229,7 @@ export default function HomePageClient() {
 
     const topDishes = sellerProducts
       .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
-      .slice(0, 4)
+      .slice(0, 6)
       .map((p) => ({
         imageSrc: p.mainImages?.[0]?.path ?? '/food1.png',
         name: p.name,
@@ -268,7 +303,7 @@ export default function HomePageClient() {
                   </div>
                 ))}
                 {[
-                  ...Array(Math.max(0, 4 - recommendSeller.topDishes.length)),
+                  ...Array(Math.max(0, 6 - recommendSeller.topDishes.length)),
                 ].map((_, i) => (
                   <div
                     key={`placeholder-${i}`}
@@ -317,7 +352,7 @@ export default function HomePageClient() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 -mx-5 md:grid-cols-4 sm:grid-cols-3 sm:gap-2 md:gap-1">
+          <div className="grid grid-cols-2 -mx-5">
             {products.map((product) => {
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length
