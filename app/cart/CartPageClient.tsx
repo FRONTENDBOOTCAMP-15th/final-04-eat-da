@@ -11,6 +11,33 @@ import { CartItemType, CartResponse } from '@/app/src/types';
 import useUserStore from '@/zustand/userStore';
 import useCartStore from '@/zustand/cartStore';
 
+// 스켈레톤 컴포넌트
+const CartItemSkeleton = () => (
+  <div className="flex gap-3 p-3 bg-gray-50 rounded-lg animate-pulse">
+    {/* 이미지 */}
+    <div className="w-24 h-24 bg-gray-200 rounded-lg flex-shrink-0" />
+
+    {/* 상품 정보 */}
+    <div className="flex-1 flex flex-col justify-between">
+      <div>
+        <div className="h-3 bg-gray-200 rounded w-1/3 mb-2" />
+        <div className="h-4 bg-gray-200 rounded w-2/3 mb-2" />
+        <div className="h-4 bg-gray-200 rounded w-1/2" />
+      </div>
+
+      {/* 수량 및 삭제 버튼 */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 bg-gray-200 rounded" />
+          <div className="w-8 h-6 bg-gray-200 rounded" />
+          <div className="w-8 h-8 bg-gray-200 rounded" />
+        </div>
+        <div className="w-12 h-8 bg-gray-200 rounded" />
+      </div>
+    </div>
+  </div>
+);
+
 export default function CartPageClient() {
   const router = useRouter();
   const { setCartCount } = useCartStore();
@@ -76,33 +103,27 @@ export default function CartPageClient() {
     return null;
   }
 
-  if (isLoading) {
-    return (
-      <>
-        <Header
-          title="장바구니"
-          showBackButton={true}
-          showSearch={true}
-          showCart={true}
-        />
-        <div className="min-h-screen flex items-center justify-center">
-          <p className="text-gray-600">로딩 중...</p>
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <Header
         title="장바구니"
         showBackButton={true}
         showSearch={true}
-        showHome={true}
+        showHome={!isLoading && cartItems.length > 0}
+        showCart={isLoading || cartItems.length === 0}
       />
       <div className="min-h-screen flex flex-col">
         <div className="mt-6 mb-12 p-5 flex-1 flex flex-col">
-          {cartItems.length > 0 ? (
+          {isLoading ? (
+            <>
+              <div className="h-6 bg-gray-200 rounded w-24 mt-5 mb-3 animate-pulse" />
+              <div className="space-y-3">
+                {[...Array(3)].map((_, i) => (
+                  <CartItemSkeleton key={i} />
+                ))}
+              </div>
+            </>
+          ) : cartItems.length > 0 ? (
             <>
               <p className="text-paragraph-md mt-5 mb-3">
                 {cartItems.length}개 상품
@@ -140,7 +161,7 @@ export default function CartPageClient() {
           )}
         </div>
 
-        {cartItems.length > 0 && (
+        {cartItems.length > 0 && !isLoading && (
           <BottomFixedButton
             as="button"
             type="button"

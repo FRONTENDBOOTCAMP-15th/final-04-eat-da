@@ -11,8 +11,45 @@ import { getAxios } from '@/lib/axios';
 import { Product, Seller, SellerWithStats } from '@/app/src/types';
 
 import * as ChannelService from '@channel.io/channel-web-sdk-loader';
+import { getTier } from '@/lib/tier';
 
 ChannelService.loadScript();
+
+const RecommendProductSkeleton = () => (
+  <div className="shrink-0 w-28 animate-pulse">
+    <div className="w-28 h-28 bg-gray-200 rounded-lg mb-2" />
+    <div className="h-3 bg-gray-200 rounded w-3/4 mb-1" />
+    <div className="h-3 bg-gray-200 rounded w-1/2" />
+  </div>
+);
+
+const RecommendSellerSkeleton = () => (
+  <div className="animate-pulse">
+    <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
+      {[...Array(4)].map((_, i) => (
+        <div key={i} className="shrink-0 w-28 h-28 bg-gray-200 rounded-lg" />
+      ))}
+    </div>
+    <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
+      <div className="w-16 h-16 bg-gray-200 rounded-full" />
+      <div className="flex-1">
+        <div className="h-4 bg-gray-200 rounded w-1/3 mb-2" />
+        <div className="h-3 bg-gray-200 rounded w-1/2 mb-2" />
+        <div className="h-3 bg-gray-200 rounded w-2/3" />
+      </div>
+    </div>
+  </div>
+);
+
+const ProductCardSkeleton = () => (
+  <div className="p-2 animate-pulse">
+    <div className="w-full aspect-square bg-gray-200 rounded-lg mb-2" />
+    <div className="h-3 bg-gray-200 rounded w-1/2 mb-2" />
+    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+    <div className="h-3 bg-gray-200 rounded w-1/3 mb-2" />
+    <div className="h-4 bg-gray-200 rounded w-1/2" />
+  </div>
+);
 
 export default function HomePageClient() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,18 +63,34 @@ export default function HomePageClient() {
       try {
         const axios = getAxios();
         const [productsRes, usersRes] = await Promise.all([
-          axios.get('/products'),
+          axios.get('/products', {
+            params: { limit: 1000 },
+          }),
           axios.get('/users/'),
         ]);
 
         const rawProducts = productsRes.data.item || [];
-        // 구독권 제외
-        const allProducts = rawProducts.filter(
-          (p: Product) => !p.extra?.isSubscription
-        );
         const allUsers = usersRes.data.item || [];
         const sellers = allUsers.filter(
           (user: Seller) => user.type === 'seller'
+        );
+
+        const productsWithSellerStats = rawProducts.map((product: Product) => {
+          const seller = allUsers.find(
+            (u: any) => u._id === product.seller?._id
+          );
+          return {
+            ...product,
+            seller: {
+              ...product.seller,
+              name: seller?.name ?? product.seller?.name,
+              totalSales: seller?.totalSales ?? 0,
+            },
+          };
+        });
+
+        const allProducts = productsWithSellerStats.filter(
+          (p: Product) => !p.extra?.isSubscription
         );
 
         setProducts(allProducts);
@@ -76,36 +129,69 @@ export default function HomePageClient() {
         }
 
         const storedSeller = localStorage.getItem('dailyRecommendSeller');
+        let foundSeller = false;
 
         if (storedSeller) {
           const { date, sellerId } = JSON.parse(storedSeller);
           if (date === today) {
             const seller = sellers.find((s: Seller) => s._id === sellerId);
             if (seller) {
-              const sellerWithStats = calculateSellerStats(seller, allProducts);
-              setRecommendSeller(sellerWithStats);
-              setIsLoading(false);
-              return;
+              const sellerProductCount = allProducts.filter(
+                (p: Product) => p.seller?._id === seller._id
+              ).length;
+
+              console.log(
+                `저장된 주부 ${seller.name}의 상품 수:`,
+                sellerProductCount
+              );
+
+              if (sellerProductCount >= 3) {
+                const sellerWithStats = calculateSellerStats(
+                  seller,
+                  allProducts
+                );
+                setRecommendSeller(sellerWithStats);
+                foundSeller = true;
+              }
             }
           }
         }
 
-        if (sellers.length > 0) {
-          const randomSeller =
-            sellers[Math.floor(Math.random() * sellers.length)];
-          const sellerWithStats = calculateSellerStats(
-            randomSeller,
-            allProducts
-          );
-          setRecommendSeller(sellerWithStats);
+        if (!foundSeller) {
+          const eligibleSellers = sellers.filter((seller: Seller) => {
+            const productCount = allProducts.filter(
+              (p: Product) => p.seller?._id === seller._id
+            ).length;
+            return productCount >= 3;
+          });
 
-          localStorage.setItem(
-            'dailyRecommendSeller',
-            JSON.stringify({
-              date: today,
-              sellerId: randomSeller._id,
-            })
+          console.log(
+            '3개 이상 상품을 등록한 주부 수:',
+            eligibleSellers.length
           );
+
+          if (eligibleSellers.length > 0) {
+            const randomSeller =
+              eligibleSellers[
+                Math.floor(Math.random() * eligibleSellers.length)
+              ];
+
+            console.log('선정된 주부:', randomSeller.name);
+
+            const sellerWithStats = calculateSellerStats(
+              randomSeller,
+              allProducts
+            );
+            setRecommendSeller(sellerWithStats);
+
+            localStorage.setItem(
+              'dailyRecommendSeller',
+              JSON.stringify({
+                date: today,
+                sellerId: randomSeller._id,
+              })
+            );
+          }
         }
       } catch (error) {
         console.error('데이터 조회 실패:', error);
@@ -122,7 +208,7 @@ export default function HomePageClient() {
     allProducts: Product[]
   ): SellerWithStats => {
     const sellerProducts = allProducts.filter(
-      (p) => (p as any).seller_id === seller._id
+      (p: Product) => p.seller?._id === seller._id
     );
 
     const rating =
@@ -143,7 +229,7 @@ export default function HomePageClient() {
 
     const topDishes = sellerProducts
       .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))
-      .slice(0, 4)
+      .slice(0, 6)
       .map((p) => ({
         imageSrc: p.mainImages?.[0]?.path ?? '/food1.png',
         name: p.name,
@@ -156,6 +242,7 @@ export default function HomePageClient() {
       topDishes,
     };
   };
+
   useEffect(() => {
     ChannelService.boot({
       pluginKey: '67502dfa-39a4-4d1e-8332-59d195da33a7',
@@ -179,10 +266,7 @@ export default function HomePageClient() {
             {isLoading ? (
               <>
                 {[...Array(6)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="shrink-0 w-28 h-40 bg-gray-200 animate-pulse rounded-lg"
-                  />
+                  <RecommendProductSkeleton key={i} />
                 ))}
               </>
             ) : (
@@ -199,9 +283,7 @@ export default function HomePageClient() {
           </p>
 
           {isLoading ? (
-            <div className="animate-pulse">
-              <div className="h-20 bg-gray-200 rounded-lg mb-4" />
-            </div>
+            <RecommendSellerSkeleton />
           ) : recommendSeller ? (
             <>
               <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
@@ -221,7 +303,7 @@ export default function HomePageClient() {
                   </div>
                 ))}
                 {[
-                  ...Array(Math.max(0, 4 - recommendSeller.topDishes.length)),
+                  ...Array(Math.max(0, 6 - recommendSeller.topDishes.length)),
                 ].map((_, i) => (
                   <div
                     key={`placeholder-${i}`}
@@ -264,8 +346,10 @@ export default function HomePageClient() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-10">
-            <p className="text-gray-600">로딩 중...</p>
+          <div className="grid grid-cols-2 -mx-5">
+            {[...Array(6)].map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-2 -mx-5">
@@ -282,6 +366,7 @@ export default function HomePageClient() {
                   productId={product._id}
                   imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
                   chefName={`${product.seller?.name ?? '주부'}`}
+                  tier={getTier(product.seller?.totalSales ?? 0).label}
                   dishName={product.name}
                   rating={product.rating ?? 0}
                   reviewCount={reviewCount}
