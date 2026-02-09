@@ -17,6 +17,7 @@ import type {
   BanchanFormData,
   EditBanchanClientProps,
 } from '@/app/src/types/banchan';
+import { EditBanchanSkeleton } from '@/app/mypage/banchan/[id]/edit/loading';
 
 export default function EditBanchanClient({ id }: EditBanchanClientProps) {
   const router = useRouter();
@@ -211,11 +212,7 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
   };
 
   if (loading) {
-    return (
-      <div className="flex mt-16 items-center justify-center min-h-[calc(100vh-4rem)]">
-        <p className="text-gray-500">반찬 정보를 불러오는 중...</p>
-      </div>
-    );
+    return <EditBanchanSkeleton />;
   }
 
   return (

@@ -8,6 +8,7 @@ import GrayButton from '@/app/src/components/ui/GrayButton';
 import SubscriptionCard from '@/app/mypage/subscription/SubscriptionCard';
 import DayDropdown from '@/app/src/components/ui/DayDropdown';
 import { getAxios } from '@/lib/axios';
+import { SubscriptionSkeleton } from '@/app/mypage/subscription/loading';
 import { getTier } from '@/lib/tier';
 import { Product } from '@/app/src/types';
 
@@ -338,11 +339,7 @@ export default function SubscriptionClient() {
   };
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-600">로딩 중...</p>
-      </div>
-    );
+    return <SubscriptionSkeleton />;
   }
 
   if (!hasSubscription) {

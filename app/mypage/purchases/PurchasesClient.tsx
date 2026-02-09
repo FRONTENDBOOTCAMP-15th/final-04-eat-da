@@ -6,6 +6,7 @@ import type { PurchaseData } from '@/app/src/types';
 import PurchaseCard from '@/app/mypage/purchases/PurchaseCard';
 import Link from 'next/link';
 import Image from 'next/image';
+import { PurchasesSkeleton } from '@/app/mypage/purchases/loading';
 
 export default function PurchasesClient() {
   const [purchases, setPurchases] = useState<PurchaseData[]>([]);
@@ -19,11 +20,7 @@ export default function PurchasesClient() {
   }, []);
 
   if (loading) {
-    return (
-      <section className="px-5 mt-15 mb-24 flex flex-1 flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
-        <p className="text-gray-600">불러오는 중...</p>
-      </section>
-    );
+    return <PurchasesSkeleton />;
   }
 
   return (
