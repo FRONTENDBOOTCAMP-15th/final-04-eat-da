@@ -11,6 +11,7 @@ import { getAxios } from '@/lib/axios';
 import { Product, Seller, SellerWithStats } from '@/app/src/types';
 
 import * as ChannelService from '@channel.io/channel-web-sdk-loader';
+import { getTier } from '@/lib/tier';
 
 ChannelService.loadScript();
 
@@ -31,13 +32,27 @@ export default function HomePageClient() {
         ]);
 
         const rawProducts = productsRes.data.item || [];
-        // 구독권 제외
-        const allProducts = rawProducts.filter(
-          (p: Product) => !p.extra?.isSubscription
-        );
         const allUsers = usersRes.data.item || [];
         const sellers = allUsers.filter(
           (user: Seller) => user.type === 'seller'
+        );
+
+        const productsWithSellerStats = rawProducts.map((product: Product) => {
+          const seller = allUsers.find(
+            (u: any) => u._id === product.seller?._id
+          );
+          return {
+            ...product,
+            seller: {
+              ...product.seller,
+              name: seller?.name ?? product.seller?.name,
+              totalSales: seller?.totalSales ?? 0,
+            },
+          };
+        });
+
+        const allProducts = productsWithSellerStats.filter(
+          (p: Product) => !p.extra?.isSubscription
         );
 
         setProducts(allProducts);
@@ -156,6 +171,7 @@ export default function HomePageClient() {
       topDishes,
     };
   };
+
   useEffect(() => {
     ChannelService.boot({
       pluginKey: '67502dfa-39a4-4d1e-8332-59d195da33a7',
@@ -282,6 +298,7 @@ export default function HomePageClient() {
                   productId={product._id}
                   imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
                   chefName={`${product.seller?.name ?? '주부'}`}
+                  tier={getTier(product.seller?.totalSales ?? 0).label}
                   dishName={product.name}
                   rating={product.rating ?? 0}
                   reviewCount={reviewCount}
