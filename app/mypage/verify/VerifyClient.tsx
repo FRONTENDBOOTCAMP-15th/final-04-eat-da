@@ -73,11 +73,9 @@ export default function VerifyClient() {
       </section>
 
       {/* 하단 고정 버튼 */}
-      <div onClick={handleCheck}>
-        <BottomFixedButton as="link" href="#">
-          {loading ? "확인 중..." : "확인"}
-        </BottomFixedButton>
-      </div>
+      <BottomFixedButton as="button" type="button" onClick={handleCheck}>
+        {loading ? "확인 중..." : "확인"}
+      </BottomFixedButton>
 
       <ConfirmModal
         isOpen={showModal}
