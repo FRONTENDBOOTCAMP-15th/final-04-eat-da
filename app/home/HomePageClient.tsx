@@ -145,7 +145,7 @@ export default function HomePageClient() {
                 sellerProductCount
               );
 
-              if (sellerProductCount >= 3) {
+              if (sellerProductCount >= 6) {
                 const sellerWithStats = calculateSellerStats(
                   seller,
                   allProducts
@@ -162,7 +162,7 @@ export default function HomePageClient() {
             const productCount = allProducts.filter(
               (p: Product) => p.seller?._id === seller._id
             ).length;
-            return productCount >= 3;
+            return productCount >= 6;
           });
 
           console.log(
@@ -293,15 +293,15 @@ export default function HomePageClient() {
                 {recommendSeller.topDishes.map((dish, index) => (
                   <div
                     key={index}
-                    className="shrink-0 w-28 h-28 overflow-hidden"
+                    className="relative shrink-0 w-28 h-28 overflow-hidden"
                   >
                     <Image
                       src={dish.imageSrc}
                       alt={dish.name}
-                      width={120}
-                      height={120}
-                      sizes="50vw"
-                      className="object-cover rounded-lg w-full h-full"
+                      fill
+                      sizes="112px"
+                      unoptimized
+                      className="object-cover rounded-lg"
                     />
                   </div>
                 ))}
@@ -310,15 +310,15 @@ export default function HomePageClient() {
                 ].map((_, i) => (
                   <div
                     key={`placeholder-${i}`}
-                    className="shrink-0 overflow-hidden w-28 h-28"
+                    className="relative shrink-0 overflow-hidden w-28 h-28"
                   >
                     <Image
                       src="/food2.png"
                       alt="음식"
-                      width={120}
-                      height={120}
-                      sizes="50vw"
-                      className="object-cover rounded-lg w-full h-full"
+                      fill
+                      sizes="112px"
+                      unoptimized
+                      className="object-cover rounded-lg"
                     />
                   </div>
                 ))}
