@@ -16,6 +16,13 @@ interface DirectPurchaseData {
   totalAmount: number;
 }
 
+// 아임포트 타입 정의
+declare global {
+  interface Window {
+    IMP: any;
+  }
+}
+
 export default function SubscribeCheckoutClient() {
   const axios = getAxios();
   const router = useRouter();
@@ -31,9 +38,24 @@ export default function SubscribeCheckoutClient() {
   >([]);
   const [existingSellerName, setExistingSellerName] = useState<string>('');
   const [showReplaceModal, setShowReplaceModal] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const searchParams = useSearchParams();
   const isDirect = searchParams.get('direct') === 'true';
+
+  useEffect(() => {
+    const jquery = document.createElement('script');
+    jquery.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
+    const iamport = document.createElement('script');
+    iamport.src = 'https://cdn.iamport.kr/js/iamport.payment-1.2.0.js';
+    document.head.appendChild(jquery);
+    document.head.appendChild(iamport);
+
+    return () => {
+      document.head.removeChild(jquery);
+      document.head.removeChild(iamport);
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -125,17 +147,21 @@ export default function SubscribeCheckoutClient() {
   };
 
   const processSubscription = async () => {
+    if (isProcessing) {
+      return;
+    }
+
+    if (!window.IMP) {
+      alert('결제 모듈 로딩 중입니다. 잠시 후 다시 시도해주세요.');
+      return;
+    }
+
+    setIsProcessing(true);
+
     try {
-      // 기존 구독 주문들 취소 처리
-      if (existingSubscriptionIds.length > 0) {
-        await Promise.all(
-          existingSubscriptionIds.map((orderId) =>
-            axios.patch(`/orders/${orderId}`, {
-              state: 'OS310', // 주문 취소 상태
-            })
-          )
-        );
-      }
+      const merchantUid = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const productName = `${directProduct!.name} (구독)`;
+      const IMP_CODE = process.env.NEXT_PUBLIC_IMP_CODE || 'imp10391932';
 
       const orderData = {
         products: [
@@ -150,16 +176,75 @@ export default function SubscribeCheckoutClient() {
           preferredTime: selectedTime,
           pickupPlace: pickupPlace,
         },
+        isDirect: true,
+        existingSubscriptionIds: existingSubscriptionIds,
       };
 
-      const response = await axios.post('/orders', orderData);
+      localStorage.setItem('pendingOrder', JSON.stringify(orderData));
+      window.IMP.init(IMP_CODE);
+      window.IMP.request_pay(
+        {
+          pg: 'html5_inicis.INIpayTest',
+          pay_method: 'card',
+          merchant_uid: merchantUid,
+          name: productName,
+          amount: directTotalAmount,
+          buyer_name: '구매자',
+          buyer_tel: '010-0000-0000',
+          buyer_email: 'buyer@example.com',
+          m_redirect_url: `${window.location.origin}/checkout/complete`,
+          custom_data: {
+            isSubscription: 'true',
+            preferredDay: selectedDay,
+            preferredTime: selectedTime,
+            isDirect: 'true',
+          },
+        },
+        async (rsp: any) => {
+          if (rsp.success) {
+            try {
+              if (existingSubscriptionIds.length > 0) {
+                await Promise.all(
+                  existingSubscriptionIds.map((orderId) =>
+                    axios.patch(`/orders/${orderId}`, {
+                      state: 'OS310', // 주문 취소 상태
+                    })
+                  )
+                );
+              }
 
-      localStorage.removeItem('directPurchase');
+              const finalOrderData = {
+                ...orderData,
+                extra: {
+                  ...orderData.extra,
+                  imp_uid: rsp.imp_uid,
+                  merchant_uid: rsp.merchant_uid,
+                },
+              };
 
-      router.push(`/checkout/complete?orderId=${response.data.item._id}`);
+              const orderResponse = await axios.post('/orders', finalOrderData);
+              localStorage.removeItem('pendingOrder');
+              localStorage.removeItem('directPurchase');
+
+              router.push(
+                `/checkout/complete?orderId=${orderResponse.data.item._id}`
+              );
+            } catch (error) {
+              console.error('구독 주문 생성 실패:', error);
+              alert('구독 주문 생성에 실패했습니다. 고객센터로 문의해주세요.');
+              setIsProcessing(false);
+            }
+          } else {
+            localStorage.removeItem('pendingOrder');
+            alert(`결제에 실패했습니다: ${rsp.error_msg}`);
+            setIsProcessing(false);
+          }
+        }
+      );
     } catch (error) {
-      console.error('구독 주문 실패:', error);
-      alert('구독 주문에 실패했습니다. 다시 시도해주세요.');
+      console.error('구독 결제 처리 실패:', error);
+      alert('구독 결제 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
+      setIsProcessing(false);
     }
   };
 
@@ -320,7 +405,7 @@ export default function SubscribeCheckoutClient() {
       </div>
 
       <BottomFixedButton as="button" type="button" onClick={handlePurchase}>
-        구독권 결제하기
+        {isProcessing ? '결제 처리중...' : '구독권 결제하기'}
       </BottomFixedButton>
 
       {/* 기존 구독 대체 확인 모달 */}
