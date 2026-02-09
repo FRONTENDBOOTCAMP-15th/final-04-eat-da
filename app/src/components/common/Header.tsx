@@ -2,6 +2,7 @@
 
 import { getAxios } from '@/lib/axios';
 import useCartStore from '@/zustand/cartStore';
+import useNotificationStore from '@/zustand/notificationStore';
 import useUserStore from '@/zustand/userStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -13,6 +14,7 @@ interface HeaderProps {
   showSearch?: boolean;
   showCart?: boolean;
   showHome?: boolean;
+  showNotification?: boolean;
   onBack?: () => void;
   onClose?: () => void;
   onSearch?: () => void;
@@ -27,6 +29,7 @@ export default function Header({
   showSearch = false,
   showCart = false,
   showHome = false,
+  showNotification = false,
   onBack,
   onClose,
   onSearch,
@@ -36,12 +39,9 @@ export default function Header({
   const router = useRouter();
   const { cartCount, setCartCount } = useCartStore();
   const user = useUserStore((state) => state.user);
-
-  useEffect(() => {
-    if (showCart && user) {
-      fetchCartCount();
-    }
-  }, [showCart, user]);
+  const unreadCount = useNotificationStore((state) =>
+    showNotification && user ? state.unreadCountForSeller(user._id) : 0
+  );
 
   const fetchCartCount = async () => {
     try {
@@ -54,6 +54,12 @@ export default function Header({
       setCartCount(0);
     }
   };
+
+  useEffect(() => {
+    if (showCart && user) {
+      fetchCartCount();
+    }
+  }, [showCart, user]);
 
   const handleBack = () => {
     if (onBack) {
@@ -123,43 +129,48 @@ export default function Header({
                 className="text-gray-900"
                 aria-label="닫기"
               >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M18 6L6 18M6 6l12 12" />
-                </svg>
-              </button>
-            )}
-            {showSearch && (
-              <button onClick={handleSearch} className="text-gray-900">
-                <img src="/search.svg" alt="검색" width={21} height={21} />
-              </button>
-            )}
-            {showHome ? (
-              <button onClick={handleHome} className="text-gray-900">
-                <img src="/Home.svg" alt="홈" width={21} height={21} />
-              </button>
-            ) : showCart ? (
-              <button onClick={handleCart} className="text-gray-900 relative">
-                <img
-                  src="/shopping cart.svg"
-                  alt="장바구니"
-                  width={22}
-                  height={22}
-                />
-                {cartCount > 0 && (
-                  <span className="absolute -top-2 -right-2 bg-eatda-orange text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
-                    {cartCount > 99 ? '99+' : cartCount}
-                  </span>
-                )}
-              </button>
-            ) : null}
-          </div>
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          )}
+          {showSearch && (
+            <button onClick={handleSearch} className="text-gray-900">
+              <img src="/search.svg" alt="검색" width={21} height={21} />
+            </button>
+          )}
+          {showNotification && (
+            <button
+              onClick={() => router.push('/mypage/notifications')}
+              className="text-gray-900 relative"
+              aria-label="알림"
+            >
+              <img src="/Notification.svg" alt="알림" width={21} height={21} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-eatda-orange text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </button>
+          )}
+          {showHome ? (
+            <button onClick={handleHome} className="text-gray-900">
+              <img src="/Home.svg" alt="홈" width={21} height={21} />
+            </button>
+          ) : showCart ? (
+            <button onClick={handleCart} className="text-gray-900 relative">
+              <img
+                src="/shopping cart.svg"
+                alt="장바구니"
+                width={22}
+                height={22}
+              />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-eatda-orange text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
+            </button>
+          ) : null}
         </div>
       </div>
     </header>

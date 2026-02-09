@@ -7,6 +7,7 @@ import { CartItemType, CartResponse, Product } from '@/app/src/types';
 import { getAxios } from '@/lib/axios';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { sendOrder } from '@/lib/socket/sendOrder';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 
@@ -225,6 +226,31 @@ export default function CheckoutPageClient() {
                 localStorage.removeItem('directPurchase');
               } else {
                 await axios.delete('/carts/cleanup');
+              }
+
+              // 판매자에게 주문 알림 전송
+              try {
+                if (isDirect && directProduct?.seller?._id) {
+                  await sendOrder(directProduct.seller._id, [
+                    { name: directProduct.name, quantity: directQuantity },
+                  ]);
+                } else {
+                  // 판매자별로 제품 그룹화
+                  const sellerProducts = new Map<number, { name: string; quantity: number }[]>();
+                  for (const item of cartItems) {
+                    const sellerId = item.product.seller._id;
+                    if (!sellerId) continue;
+                    const products = sellerProducts.get(sellerId) || [];
+                    products.push({ name: item.product.name, quantity: item.quantity });
+                    sellerProducts.set(sellerId, products);
+                  }
+                  // 판매자별로 순차 전송
+                  for (const [sellerId, products] of sellerProducts) {
+                    await sendOrder(sellerId, products);
+                  }
+                }
+              } catch (e) {
+                console.error('주문 알림 전송 실패:', e);
               }
 
               // 완료 페이지로 이동
