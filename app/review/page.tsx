@@ -8,6 +8,7 @@ import StarItem from '@/app/src/components/ui/StarItem';
 import GrayButton from '@/app/src/components/ui/GrayButton';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
 import { fetchOrders, fetchMyReviews, fetchProduct, deleteReview, getImageUrl } from '@/lib/review';
+import { ReviewCardListSkeleton } from './loading';
 
 interface OrderProduct {
   _id: number;
@@ -216,9 +217,7 @@ export default function ReviewManagementPage() {
       {/* 컨텐츠 */}
       <div>
         {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <p className="text-gray-500 text-sm">로딩 중...</p>
-          </div>
+          <ReviewCardListSkeleton />
         ) : activeTab === 'available' ? (
           // 작성 가능한 리뷰 탭
           <div>
