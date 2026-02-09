@@ -293,13 +293,15 @@ export default function HomePageClient() {
           </div>
         )}
       </div>
-      <button
-        type="button"
-        onClick={() => ChannelService.showMessenger()}
-        className="fixed bg-white bottom-20 right-2 z-50 w-12 h-12 rounded-2xl shadow flex items-center justify-center"
-      >
-        <Image src="/Message.svg" alt="채널톡 문의" width={28} height={28} />
-      </button>
+      <div className="fixed bottom-20 z-50 w-full max-w-186 left-1/2 -translate-x-1/2 pointer-events-none">
+        <button
+          type="button"
+          onClick={() => ChannelService.showMessenger()}
+          className="absolute right-2 min-[744px]:right-3 bottom-0 pointer-events-auto bg-white w-12 h-12 rounded-2xl shadow flex items-center justify-center"
+        >
+          <Image src="/Message.svg" alt="채널톡 문의" width={28} height={28} />
+        </button>
+      </div>
       <BottomNavigation />
     </>
   );
