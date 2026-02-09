@@ -7,12 +7,14 @@ import SellerProfileClear from '@/app/src/components/ui/SellerProfileClear';
 import ProductCard from '@/app/src/components/ui/ProductCard';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getAxios } from '@/lib/axios';
 import { Product, Seller, SellerWithStats } from '@/app/src/types';
 
 import * as ChannelService from '@channel.io/channel-web-sdk-loader';
 import { getTier } from '@/lib/tier';
+import useNearestKitchen from '@/hooks/useNearestKitchen';
+import Script from 'next/script';
 
 
 const RecommendProductSkeleton = () => (
@@ -52,11 +54,17 @@ const ProductCardSkeleton = () => (
 );
 
 export default function HomePageClient() {
+  const { nearestKitchen, onKakaoLoad } = useNearestKitchen();
   const [products, setProducts] = useState<Product[]>([]);
   const [recommendProducts, setRecommendProducts] = useState<Product[]>([]);
   const [recommendSeller, setRecommendSeller] =
     useState<SellerWithStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const filteredProducts = useMemo(
+    () => products.filter((p) => p.extra?.pickupPlace === nearestKitchen),
+    [products, nearestKitchen]
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -356,7 +364,7 @@ export default function HomePageClient() {
           </div>
         ) : (
           <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 md:grid-cols-4 sm:gap-2.5 md:gap-1">
-            {products.map((product) => {
+            {filteredProducts.map((product) => {
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length
                 : typeof product.replies === 'number'

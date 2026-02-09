@@ -8,6 +8,7 @@ import ProductCard from '@/app/src/components/ui/ProductCard';
 import { Product } from '@/app/src/types';
 import { getTier } from '@/lib/tier';
 import { getAxios, getAccessToken } from '@/lib/axios';
+import useKitchenStore from '@/zustand/kitchenStore';
 
 type SortOption = 'recommend' | 'rating' | 'purchase' | 'latest';
 
@@ -86,6 +87,7 @@ function sortProducts(products: Product[], sortBy: SortOption): Product[] {
 export default function ProductsListClient({
   products: initialProducts,
 }: ProductsListClientProps) {
+  const nearestKitchen = useKitchenStore((state) => state.nearestKitchen);
   const [selected, setSelected] = useState<CategoryLabel>('전체');
   const [sortBy, setSortBy] = useState<SortOption>('recommend');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -152,11 +154,14 @@ export default function ProductsListClient({
   const lastScrollY = useRef(0);
 
   const filtered = useMemo(() => {
-    const categoryFiltered = products.filter((p) =>
+    const kitchenFiltered = products.filter(
+      (p) => p.extra?.pickupPlace === nearestKitchen
+    );
+    const categoryFiltered = kitchenFiltered.filter((p) =>
       matchesCategory(p, selected)
     );
     return sortProducts(categoryFiltered, sortBy);
-  }, [products, selected, sortBy]);
+  }, [products, selected, sortBy, nearestKitchen]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
