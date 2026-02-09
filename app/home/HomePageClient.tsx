@@ -317,7 +317,7 @@ export default function HomePageClient() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 -mx-5">
+          <div className="grid grid-cols-2 -mx-5 md:grid-cols-4 sm:grid-cols-3 sm:gap-2 md:gap-1">
             {products.map((product) => {
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length
