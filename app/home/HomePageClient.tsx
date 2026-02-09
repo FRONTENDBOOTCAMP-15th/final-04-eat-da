@@ -6,6 +6,7 @@ import BottomNavigation from '@/app/src/components/common/BottomNavigation';
 import SellerProfileClear from '@/app/src/components/ui/SellerProfileClear';
 import ProductCard from '@/app/src/components/ui/ProductCard';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getAxios } from '@/lib/axios';
 import { Product, Seller, SellerWithStats } from '@/app/src/types';
@@ -171,7 +172,9 @@ export default function HomePageClient() {
     <>
       <HomeHeader />
       <div className="p-5 flex flex-col gap-6 mt-12 mb-10">
-        <Image src="/Hero.png" alt="banner" height={460} width={350}></Image>
+        <Link href="/about">
+          <Image src="/Hero.png" alt="banner" height={460} width={350} />
+        </Link>
 
         <div>
           <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
