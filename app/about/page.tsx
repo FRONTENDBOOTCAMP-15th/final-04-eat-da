@@ -135,7 +135,7 @@ const STEPS = [
   {
     num: '01',
     title: '앱에서 선택',
-    desc: '동네 주부님들이 만든 다양한 반찬 메뉴 중 원하는 반찬을 골라요',
+    desc: '동네 주부님들이 만든 다양한 반찬 중 원하는 반찬을 골라요',
     img: 'https://res.cloudinary.com/ddedslqvv/image/upload/v1770621235/febc15-final04-ecad/jspcQ1Hmu.jpg',
   },
   {
