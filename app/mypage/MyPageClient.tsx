@@ -75,16 +75,17 @@ export default function MyPageClient() {
   }
 
   const isSeller = user.type === 'seller';
-  const userImageSrc = typeof user.image === 'string'
-    ? user.image
-    : user.image?.path
-      ? getImageUrl(user.image.path)
-      : '';
+  const userImageSrc =
+    typeof user.image === 'string'
+      ? user.image
+      : user.image?.path
+        ? getImageUrl(user.image.path)
+        : '';
 
   return (
     <div className="px-5 mt-15 mb-24 flex flex-1 flex-col gap-5 min-h-[calc(100vh-10rem)]">
       {/* 프로필 섹션 */}
-      <section className="p-5 border border-gray-400 rounded-lg bg-gray-200">
+      <section className="p-5 border border-gray-300 rounded-lg bg-gray-200">
         <div className="flex items-start gap-2.5">
           {/* 프로필 이미지 */}
           {userImageSrc ? (
