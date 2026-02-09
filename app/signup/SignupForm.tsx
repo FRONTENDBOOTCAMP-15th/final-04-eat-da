@@ -35,6 +35,7 @@ export default function SignupForm() {
   const detailAddressRef = useRef<HTMLInputElement>(null);
   const [profileImageFiles, setProfileImageFiles] = useState<File[]>([]);
   const [introductionLength, setIntroductionLength] = useState(0);
+  const [introductionRows, setIntroductionRows] = useState(2);
 
   const openPostcode = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -382,9 +383,13 @@ export default function SignupForm() {
               name="introduction"
               defaultValue={state?.values?.introduction || ''}
               placeholder="요리를 시작하게 된 계기나 자신 있는 반찬 이야기를 적어주시면 좋아요. (100자 이상)"
-              className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 text-gray-800 text-display-2 placeholder:text-display-2 resize-none overflow-hidden"
-              rows={2}
-              onBlur={(e) => handleBlur('introduction', e.target.value)}
+              className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 focus:placeholder:text-transparent text-gray-800 text-display-2 placeholder:text-display-2 resize-none overflow-hidden"
+              rows={introductionRows}
+              onFocus={() => setIntroductionRows(1)}
+              onBlur={(e) => {
+                handleBlur('introduction', e.target.value);
+                if (!e.target.value) setIntroductionRows(2);
+              }}
               onChange={(e) => { setIntroductionLength(e.target.value.length); clearError('introduction'); }}
               onInput={(e) => {
                 const target = e.target as HTMLTextAreaElement;
