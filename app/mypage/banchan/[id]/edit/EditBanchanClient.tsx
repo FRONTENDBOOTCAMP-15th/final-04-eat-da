@@ -54,11 +54,15 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
 
     if (savedFormState) {
       hasRestoredRef.current = true;
-      const saved = JSON.parse(savedFormState);
-      setFormData(saved.formData);
-      setPickupAddress(saved.pickupAddress);
-      setIsOnSale(saved.isOnSale);
-      setExistingImages(saved.existingImages);
+      try {
+        const saved = JSON.parse(savedFormState);
+        setFormData(saved.formData);
+        setPickupAddress(saved.pickupAddress);
+        setIsOnSale(saved.isOnSale);
+        setExistingImages(saved.existingImages);
+      } catch {
+        // white screen 방지용 trycatch
+      }
       sessionStorage.removeItem('editBanchanFormState');
     }
 
@@ -96,9 +100,17 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
   useEffect(() => {
     const selectedKitchen = sessionStorage.getItem('selectedKitchen');
     if (selectedKitchen) {
-      const kitchen = JSON.parse(selectedKitchen);
-      setFormData((prev) => ({ ...prev, pickupPlace: kitchen.name, pickupAddress: kitchen.address }));
-      setPickupAddress(kitchen.address);
+      try {
+        const kitchen = JSON.parse(selectedKitchen);
+        setFormData((prev) => ({
+          ...prev,
+          pickupPlace: kitchen.name,
+          pickupAddress: kitchen.address,
+        }));
+        setPickupAddress(kitchen.address);
+      } catch {
+        // white screen 방지용 trycatch
+      }
       sessionStorage.removeItem('selectedKitchen');
     }
   }, []);
