@@ -113,7 +113,7 @@ export default function WishlistPageClient() {
       />
       <div className="mt-15 mb-16">
         {isLoading ? (
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 sm:gap-2">
             {[...Array(6)].map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
@@ -123,7 +123,7 @@ export default function WishlistPageClient() {
             <p className="text-gray-600">찜한 상품이 없습니다.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 sm:gap-2">
             {bookmarks.map((bookmark) => {
               const sellerId = (bookmark.product.seller as any)?._id;
               const totalSales = sellerTotalSales[sellerId] ?? 0;
