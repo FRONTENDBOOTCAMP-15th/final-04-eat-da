@@ -26,6 +26,7 @@ const nextStatusTextMap: Record<OrderStatus, string> = {
   승인됨: '조리 완료',
   조리완료: '픽업 완료',
   픽업완료: '',
+  취소됨: '',
 };
 
 const pickupTimeMap: Record<string, string> = {
