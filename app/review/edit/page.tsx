@@ -9,6 +9,7 @@ import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import StarRating from '@/app/src/components/ui/StarItem';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
 import { fetchMyReviews, fetchProduct, updateReview, uploadReviewImages, getImageUrl } from '@/lib/review';
+import { ReviewEditSkeleton } from './loading';
 
 export default function ReviewEditPage() {
   return (
@@ -16,9 +17,7 @@ export default function ReviewEditPage() {
       <div className="min-h-screen bg-white flex flex-col">
         <Header title="리뷰수정" showCloseButton />
         <div className="h-[60px]"></div>
-        <div className="flex-1 flex justify-center items-center">
-          <p className="text-gray-500 text-sm">로딩 중...</p>
-        </div>
+        <ReviewEditSkeleton />
       </div>
     }>
       <ReviewEditContent />
@@ -160,9 +159,7 @@ function ReviewEditContent() {
       <div className="min-h-screen bg-white flex flex-col">
         <Header title="리뷰수정" showCloseButton />
         <div className="h-[60px]"></div>
-        <div className="flex-1 flex justify-center items-center">
-          <p className="text-gray-500 text-sm">로딩 중...</p>
-        </div>
+        <ReviewEditSkeleton />
       </div>
     );
   }

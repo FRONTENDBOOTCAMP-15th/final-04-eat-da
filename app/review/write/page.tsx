@@ -9,6 +9,7 @@ import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import StarRating from '@/app/src/components/ui/StarItem';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
 import { fetchOrders, fetchProduct, createReview, uploadReviewImages, getImageUrl } from '@/lib/review';
+import { ReviewWriteSkeleton } from './loading';
 
 interface ProductInfo {
   _id: number;
@@ -24,9 +25,7 @@ export default function ReviewWritePage() {
       <div className="min-h-screen bg-white flex flex-col">
         <Header title="리뷰작성" showCloseButton />
         <div className="h-[60px]"></div>
-        <div className="flex-1 flex justify-center items-center">
-          <p className="text-gray-500 text-sm">로딩 중...</p>
-        </div>
+        <ReviewWriteSkeleton />
       </div>
     }>
       <ReviewWriteContent />
