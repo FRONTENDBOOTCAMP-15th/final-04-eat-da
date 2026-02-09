@@ -6,6 +6,7 @@ import { fetchPurchaseDetail } from '@/lib/purchase';
 import type { PurchaseData } from '@/app/src/types';
 import PurchasesDetailCard from '@/app/mypage/purchases/[id]/PurchasesDetailCard';
 import GrayButton from '@/app/src/components/ui/GrayButton';
+import { PurchaseDetailSkeleton } from '@/app/mypage/purchases/[id]/loading';
 
 interface PurchaseDetailClientProps {
   orderId: string;
@@ -26,11 +27,7 @@ export default function PurchaseDetailClient({
   }, [orderId]);
 
   if (loading) {
-    return (
-      <section className="flex-1 flex flex-col items-center justify-center">
-        <p className="text-gray-600">불러오는 중...</p>
-      </section>
-    );
+    return <PurchaseDetailSkeleton />;
   }
 
   if (!order) {

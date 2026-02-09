@@ -11,10 +11,8 @@ export default function AccountPage() {
     <div className="min-h-screen bg-white flex flex-col">
       <Header title="개인 정보 설정" showBackButton />
       <div className="h-[60px]"></div>
-      <div className="flex-1 px-5 py-8 overflow-y-auto pb-32">
-        <div className="max-w-md mx-auto">
-          <AccountClient />
-        </div>
+      <div className="flex-1 px-5 py-8 overflow-y-auto pb-32 w-full max-w-[744px] min-w-[390px] mx-auto">
+        <AccountClient />
       </div>
       <BottomFixedButton as="button" formId="account-form">
         변경 완료

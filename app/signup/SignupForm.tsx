@@ -33,9 +33,42 @@ export default function SignupForm() {
   const [confirmPasswordValue, setConfirmPasswordValue] = useState('');
   const [addressValue, setAddressValue] = useState('');
   const detailAddressRef = useRef<HTMLInputElement>(null);
+  const introductionRef = useRef<HTMLTextAreaElement>(null);
   const [profileImageFiles, setProfileImageFiles] = useState<File[]>([]);
   const [introductionLength, setIntroductionLength] = useState(0);
   const [introductionRows, setIntroductionRows] = useState(2);
+
+  // 화면 너비에 따라 placeholder 줄 수 계산
+  const calculatePlaceholderRows = () => {
+    const textarea = introductionRef.current;
+    if (!textarea || textarea.value) return;
+
+    const placeholder = "요리를 시작하게 된 계기나 자신 있는 반찬 이야기를 적어주시면 좋아요. (100자 이상)";
+    const style = getComputedStyle(textarea);
+    const font = `${style.fontSize} ${style.fontFamily}`;
+
+    // canvas로 텍스트 너비 측정
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.font = font;
+    const textWidth = ctx.measureText(placeholder).width;
+    const textareaWidth = textarea.clientWidth - parseInt(style.paddingLeft) - parseInt(style.paddingRight);
+
+    const rows = textWidth > textareaWidth ? 2 : 1;
+    setIntroductionRows(rows);
+  };
+
+  useEffect(() => {
+    // 약간의 지연을 주어 DOM이 완전히 렌더링된 후 계산
+    const timer = setTimeout(calculatePlaceholderRows, 100);
+    window.addEventListener('resize', calculatePlaceholderRows);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', calculatePlaceholderRows);
+    };
+  }, [selectedType]);
 
   const openPostcode = () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -380,6 +413,7 @@ export default function SignupForm() {
               자기소개 <span className="text-eatda-orange">*</span>
             </label>
             <textarea
+              ref={introductionRef}
               name="introduction"
               defaultValue={state?.values?.introduction || ''}
               placeholder="요리를 시작하게 된 계기나 자신 있는 반찬 이야기를 적어주시면 좋아요. (100자 이상)"
@@ -388,7 +422,7 @@ export default function SignupForm() {
               onFocus={() => setIntroductionRows(1)}
               onBlur={(e) => {
                 handleBlur('introduction', e.target.value);
-                if (!e.target.value) setIntroductionRows(2);
+                if (!e.target.value) calculatePlaceholderRows();
               }}
               onChange={(e) => { setIntroductionLength(e.target.value.length); clearError('introduction'); }}
               onInput={(e) => {
