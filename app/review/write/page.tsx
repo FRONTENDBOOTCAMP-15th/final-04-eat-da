@@ -8,7 +8,8 @@ import AddImage from '@/app/src/components/ui/AddImage';
 import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import StarRating from '@/app/src/components/ui/StarItem';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
-import { fetchProduct, createReview, uploadReviewImages, getImageUrl } from '@/lib/review';
+import { fetchOrders, fetchProduct, createReview, uploadReviewImages, getImageUrl } from '@/lib/review';
+import { ReviewWriteSkeleton } from './loading';
 
 interface ProductInfo {
   _id: number;
@@ -24,9 +25,7 @@ export default function ReviewWritePage() {
       <div className="min-h-screen bg-white flex flex-col">
         <Header title="리뷰작성" showCloseButton />
         <div className="h-[60px]"></div>
-        <div className="flex-1 flex justify-center items-center">
-          <p className="text-gray-500 text-sm">로딩 중...</p>
-        </div>
+        <ReviewWriteSkeleton />
       </div>
     }>
       <ReviewWriteContent />
@@ -46,6 +45,7 @@ function ReviewWriteContent() {
   const [images, setImages] = useState<string[]>([]);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [purchaseDate, setPurchaseDate] = useState('');
 
   // 모달 state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,7 +59,17 @@ function ReviewWriteContent() {
     fetchProduct(productId)
       .then((item) => setProduct(item))
       .catch((err) => console.error('상품 정보 조회 실패:', err));
-  }, [productId]);
+
+    if (orderId) {
+      fetchOrders().then((orders) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const order = orders.find((o: any) => o._id === orderId);
+        if (order?.createdAt) {
+          setPurchaseDate(new Date(order.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, ''));
+        }
+      }).catch(() => {});
+    }
+  }, [productId, orderId]);
 
   const handleImageChange = (newImages: string[], files: File[]) => {
     setImages(newImages);
@@ -159,8 +169,11 @@ function ReviewWriteContent() {
               </h3>
               {sellerName && (
                 <p className="text-paragraph-sm text-eatda-orange">
-                  {sellerName}
+                  {sellerName} 주부
                 </p>
+              )}
+              {purchaseDate && (
+                <p className="text-xs text-gray-500">{purchaseDate} 구매완료</p>
               )}
             </div>
           </div>

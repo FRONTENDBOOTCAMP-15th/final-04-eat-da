@@ -7,6 +7,7 @@ import type { PurchaseData, OrderStateCode } from '@/app/src/types';
 import PurchasesDetailCard from '@/app/mypage/purchases/[id]/PurchasesDetailCard';
 import GrayButton from '@/app/src/components/ui/GrayButton';
 import Header from '@/app/src/components/common/Header';
+import { PickupCompleteSkeleton } from '@/app/mypage/purchases/[id]/complete/loading';
 
 const stateInfo: Record<OrderStateCode, { title: string; messages: string[] }> =
   {
@@ -31,6 +32,10 @@ const stateInfo: Record<OrderStateCode, { title: string; messages: string[] }> =
     OS080: {
       title: '픽업 완료!',
       messages: ['오늘의 집밥을 잘 전달했어요.', '맛있게 드세요!'],
+    },
+    OS310: {
+      title: '취소됨',
+      messages: ['주문이 취소되었습니다.'],
     },
   };
 
@@ -60,9 +65,7 @@ export default function PickupCompleteClient({
     return (
       <>
         <Header title="" />
-        <section className="px-5 mt-15 mb-24 flex flex-1 flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
-          <p className="text-gray-600">불러오는 중...</p>
-        </section>
+        <PickupCompleteSkeleton />
       </>
     );
   }

@@ -17,6 +17,7 @@ import type {
   BanchanFormData,
   EditBanchanClientProps,
 } from '@/app/src/types/banchan';
+import { EditBanchanSkeleton } from '@/app/mypage/banchan/[id]/edit/loading';
 
 export default function EditBanchanClient({ id }: EditBanchanClientProps) {
   const router = useRouter();
@@ -53,11 +54,15 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
 
     if (savedFormState) {
       hasRestoredRef.current = true;
-      const saved = JSON.parse(savedFormState);
-      setFormData(saved.formData);
-      setPickupAddress(saved.pickupAddress);
-      setIsOnSale(saved.isOnSale);
-      setExistingImages(saved.existingImages);
+      try {
+        const saved = JSON.parse(savedFormState);
+        setFormData(saved.formData);
+        setPickupAddress(saved.pickupAddress);
+        setIsOnSale(saved.isOnSale);
+        setExistingImages(saved.existingImages);
+      } catch {
+        // white screen 방지용 trycatch
+      }
       sessionStorage.removeItem('editBanchanFormState');
     }
 
@@ -95,9 +100,17 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
   useEffect(() => {
     const selectedKitchen = sessionStorage.getItem('selectedKitchen');
     if (selectedKitchen) {
-      const kitchen = JSON.parse(selectedKitchen);
-      setFormData((prev) => ({ ...prev, pickupPlace: kitchen.name, pickupAddress: kitchen.address }));
-      setPickupAddress(kitchen.address);
+      try {
+        const kitchen = JSON.parse(selectedKitchen);
+        setFormData((prev) => ({
+          ...prev,
+          pickupPlace: kitchen.name,
+          pickupAddress: kitchen.address,
+        }));
+        setPickupAddress(kitchen.address);
+      } catch {
+        // white screen 방지용 trycatch
+      }
       sessionStorage.removeItem('selectedKitchen');
     }
   }, []);
@@ -211,11 +224,7 @@ export default function EditBanchanClient({ id }: EditBanchanClientProps) {
   };
 
   if (loading) {
-    return (
-      <div className="flex mt-16 items-center justify-center min-h-[calc(100vh-4rem)]">
-        <p className="text-gray-500">반찬 정보를 불러오는 중...</p>
-      </div>
-    );
+    return <EditBanchanSkeleton />;
   }
 
   return (

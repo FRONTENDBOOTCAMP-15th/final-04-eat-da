@@ -8,7 +8,8 @@ import AddImage from '@/app/src/components/ui/AddImage';
 import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import StarRating from '@/app/src/components/ui/StarItem';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
-import { fetchMyReviews, updateReview, uploadReviewImages, getImageUrl } from '@/lib/review';
+import { fetchMyReviews, fetchProduct, updateReview, uploadReviewImages, getImageUrl } from '@/lib/review';
+import { ReviewEditSkeleton } from './loading';
 
 export default function ReviewEditPage() {
   return (
@@ -16,9 +17,7 @@ export default function ReviewEditPage() {
       <div className="min-h-screen bg-white flex flex-col">
         <Header title="리뷰수정" showCloseButton />
         <div className="h-[60px]"></div>
-        <div className="flex-1 flex justify-center items-center">
-          <p className="text-gray-500 text-sm">로딩 중...</p>
-        </div>
+        <ReviewEditSkeleton />
       </div>
     }>
       <ReviewEditContent />
@@ -43,6 +42,7 @@ function ReviewEditContent() {
   const [productName, setProductName] = useState('');
   const [sellerName, setSellerName] = useState('');
   const [productImage, setProductImage] = useState('');
+  const [purchaseDate, setPurchaseDate] = useState('');
 
   // 모달 state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,6 +69,18 @@ function ReviewEditContent() {
         setProductName(item.product?.name || '');
         setSellerName(item.product?.seller_name || '');
         setProductImage(item.product?.image?.path || '');
+        if (item.createdAt) {
+          setPurchaseDate(new Date(item.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\. /g, '.').replace(/\.$/, ''));
+        }
+
+        // seller_name이 없으면 상품 정보에서 가져오기
+        const pid = item.product?._id || item.product_id;
+        if (!item.product?.seller_name && pid) {
+          fetchProduct(pid).then((p) => {
+            if (p?.seller_name) setSellerName(p.seller_name);
+            else if (p?.seller?.name) setSellerName(p.seller.name);
+          }).catch(() => {});
+        }
       })
       .catch((err) => {
         console.error('리뷰 조회 실패:', err);
@@ -147,9 +159,7 @@ function ReviewEditContent() {
       <div className="min-h-screen bg-white flex flex-col">
         <Header title="리뷰수정" showCloseButton />
         <div className="h-[60px]"></div>
-        <div className="flex-1 flex justify-center items-center">
-          <p className="text-gray-500 text-sm">로딩 중...</p>
-        </div>
+        <ReviewEditSkeleton />
       </div>
     );
   }
@@ -187,8 +197,11 @@ function ReviewEditContent() {
               </h3>
               {sellerName && (
                 <p className="text-paragraph-sm text-eatda-orange">
-                  {sellerName}
+                  {sellerName} 주부
                 </p>
+              )}
+              {purchaseDate && (
+                <p className="text-xs text-gray-500">{purchaseDate} 구매완료</p>
               )}
             </div>
           </div>

@@ -15,7 +15,7 @@ interface Seller {
 async function getProducts(): Promise<Product[]> {
   try {
     const axios = getAxios();
-    const res = await axios.get('/products/');
+    const res = await axios.get('/products/', { params: { limit: 200 } });
     const products = res.data.item || [];
     // 구독권 제외
     return products.filter((p: Product) => !p.extra?.isSubscription);

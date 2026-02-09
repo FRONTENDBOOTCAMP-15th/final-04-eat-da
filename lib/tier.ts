@@ -31,10 +31,13 @@ export function getTier(totalSales: number): TierInfo {
 export async function fetchSellerTier(sellerId: number): Promise<TierInfo> {
   try {
     const axios = getAxios();
-    const response = await axios.get(`/users/${sellerId}`);
+    // 개별 유저 API(/users/:id)는 totalSales를 반환하지 않으므로 리스트 API 사용
+    const response = await axios.get('/users?type=seller');
     if (response.data.ok) {
-      const totalSales = response.data.item?.totalSales ?? 0;
-      return getTier(totalSales);
+      const seller = response.data.item?.find(
+        (u: { _id: number }) => u._id === sellerId
+      );
+      return getTier(seller?.totalSales ?? 0);
     }
     return getTier(0);
   } catch (error) {

@@ -96,6 +96,7 @@ export interface SignupState {
     email: string;
     phone: string;
     address: string;
+    detailAddress: string;
     introduction: string;
   };
   item?: {
@@ -126,6 +127,7 @@ export async function signup(
   const detailAddress = formData.get('detailAddress') as string;
   const address = detailAddress ? `${addressBase} ${detailAddress}` : addressBase;
   const introduction = formData.get('introduction') as string;
+  const profileImageStr = formData.get('profileImage') as string;
 
   // 유효성 검사
   const errors: SignupState['errors'] = {};
@@ -156,21 +158,34 @@ export async function signup(
     errors.phone = { msg: '전화번호를 입력해주세요.' };
   }
 
-  if (!address) {
+  if (!addressBase) {
     errors.address = { msg: '주소를 입력해주세요.' };
+  } else if (!detailAddress) {
+    errors.address = { msg: '상세주소를 입력해주세요.' };
   }
 
   if (type === 'seller' && (!introduction || introduction.length < 100)) {
     errors.extra = { msg: '자기소개를 100자 이상 입력해주세요.' };
   }
 
-  const values = { type, name, email, phone, address, introduction: introduction || '' };
+  const values = { type, name, email, phone, address: addressBase, detailAddress, introduction: introduction || '' };
 
   if (Object.keys(errors).length > 0) {
     return { ok: 0, message: '입력값을 확인해주세요.', errors, values };
   }
 
   try {
+    let image: string | { path: string; name: string };
+    if (profileImageStr) {
+      try {
+        image = JSON.parse(profileImageStr);
+      } catch {
+        image = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(email)}&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+      }
+    } else {
+      image = `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(email)}&backgroundColor=65c9ff,b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf`;
+    }
+
     const userData = {
       type,
       name,
@@ -178,6 +193,7 @@ export async function signup(
       password,
       phone,
       address,
+      image,
       ...(type === 'seller' && { extra: { introduction } }),
     };
 

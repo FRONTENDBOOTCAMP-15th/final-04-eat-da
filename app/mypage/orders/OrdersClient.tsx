@@ -12,6 +12,7 @@ import { fetchSellerOrders, updateOrderState } from '@/lib/orders';
 import { getUser } from '@/lib/mypage';
 import { getTokenPayload } from '@/lib/axios';
 import ConfirmModal from '@/app/src/components/ui/ConfirmModal';
+import { OrdersSkeleton } from '@/app/mypage/orders/loading';
 
 const statusList: OrderStatus[] = ['대기중', '승인됨', '조리완료', '픽업완료'];
 
@@ -26,6 +27,7 @@ const nextStatusTextMap: Record<OrderStatus, string> = {
   승인됨: '조리 완료',
   조리완료: '픽업 완료',
   픽업완료: '',
+  취소됨: '',
 };
 
 const pickupTimeMap: Record<string, string> = {
@@ -123,11 +125,7 @@ export default function OrdersClient() {
   };
 
   if (loading) {
-    return (
-      <div className="flex mt-16 items-center justify-center min-h-[calc(100vh-4rem)]">
-        <p className="text-gray-500">주문 목록을 불러오는 중...</p>
-      </div>
-    );
+    return <OrdersSkeleton />;
   }
 
   return (

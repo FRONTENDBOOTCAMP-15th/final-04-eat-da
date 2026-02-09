@@ -52,9 +52,13 @@ export default function NewBanchanClient() {
     const savedFormState = sessionStorage.getItem('newBanchanFormState');
     if (savedFormState) {
       hasRestoredRef.current = true;
-      const saved = JSON.parse(savedFormState);
-      setFormData(saved.formData);
-      setPickupAddress(saved.pickupAddress);
+      try {
+        const saved = JSON.parse(savedFormState);
+        setFormData(saved.formData);
+        setPickupAddress(saved.pickupAddress);
+      } catch {
+        // white screen 방지용 trycatch
+      }
       sessionStorage.removeItem('newBanchanFormState');
     }
   }, []);
@@ -63,13 +67,17 @@ export default function NewBanchanClient() {
   useEffect(() => {
     const stored = sessionStorage.getItem('selectedKitchen');
     if (stored) {
-      const kitchen = JSON.parse(stored);
-      setFormData((prev) => ({
-        ...prev,
-        pickupPlace: kitchen.name,
-        pickupAddress: kitchen.address,
-      }));
-      setPickupAddress(kitchen.address);
+      try {
+        const kitchen = JSON.parse(stored);
+        setFormData((prev) => ({
+          ...prev,
+          pickupPlace: kitchen.name,
+          pickupAddress: kitchen.address,
+        }));
+        setPickupAddress(kitchen.address);
+      } catch {
+        // white screen 방지용 trycatch
+      }
       sessionStorage.removeItem('selectedKitchen');
     }
   }, []);

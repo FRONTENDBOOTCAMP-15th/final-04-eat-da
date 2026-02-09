@@ -10,6 +10,16 @@ import { BookmarkProduct } from '@/app/src/types';
 import useUserStore from '@/zustand/userStore';
 import { getTier } from '@/lib/tier';
 
+const ProductCardSkeleton = () => (
+  <div className="p-2 animate-pulse">
+    <div className="w-full aspect-square bg-gray-200 rounded-lg mb-2" />
+    <div className="h-3 bg-gray-200 rounded w-1/2 mb-2" />
+    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
+    <div className="h-3 bg-gray-200 rounded w-1/3 mb-2" />
+    <div className="h-4 bg-gray-200 rounded w-1/2" />
+  </div>
+);
+
 export default function WishlistPageClient() {
   const router = useRouter();
   const loggedInUser = useUserStore((state) => state.user);
@@ -35,7 +45,6 @@ export default function WishlistPageClient() {
     try {
       const axios = getAxios();
 
-      // products, users, bookmarks 동시 조회
       const [productsResponse, usersResponse, bookmarksResponse] =
         await Promise.all([
           axios.get('/products/'),
@@ -47,7 +56,6 @@ export default function WishlistPageClient() {
       const users = usersResponse.data.item || [];
       const bookmarks = bookmarksResponse.data.item || [];
 
-      // seller totalSales 맵 생성
       const salesMap: Record<number, number> = {};
       users.forEach((user: any) => {
         if (user.type === 'seller') {
@@ -60,7 +68,6 @@ export default function WishlistPageClient() {
 
       setSellerTotalSales(salesMap);
 
-      // 북마크에 product 정보 병합
       const bookmarksWithFullInfo = bookmarks
         .map((bookmark: any) => {
           const fullProduct = products.find(
@@ -70,7 +77,7 @@ export default function WishlistPageClient() {
           if (fullProduct) {
             return {
               ...bookmark,
-              product: fullProduct, // 전체 product 정보로 교체
+              product: fullProduct,
             };
           }
           return bookmark;
@@ -106,15 +113,17 @@ export default function WishlistPageClient() {
       />
       <div className="mt-15 mb-16">
         {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <p className="text-gray-600">로딩 중...</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 sm:gap-2">
+            {[...Array(6)].map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
           </div>
         ) : bookmarks.length === 0 ? (
           <div className="flex items-center justify-center py-20">
             <p className="text-gray-600">찜한 상품이 없습니다.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 sm:gap-2">
             {bookmarks.map((bookmark) => {
               const sellerId = (bookmark.product.seller as any)?._id;
               const totalSales = sellerTotalSales[sellerId] ?? 0;

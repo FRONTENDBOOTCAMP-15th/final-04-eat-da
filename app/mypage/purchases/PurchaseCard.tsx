@@ -13,14 +13,8 @@ export default function PurchaseCard({ product, quantity }: PurchaseCardProps) {
   return (
     <div className="flex border-b-[0.5px] border-gray-400 pb-4 gap-5">
       {/* 이미지 영역 */}
-      <div className="flex items-start rounded-lg">
-        <Image
-          src={imgSrc}
-          alt={product.name}
-          width={50}
-          height={50}
-          className="object-cover rounded-lg"
-        />
+      <div className="relative h-12.5 w-12.5 overflow-hidden items-start rounded-lg">
+        <Image src={imgSrc} alt={product.name} fill className="object-cover" />
       </div>
 
       {/* 정보 영역 */}
