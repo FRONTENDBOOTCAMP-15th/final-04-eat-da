@@ -2,6 +2,7 @@
 
 import { getAxios } from '@/lib/axios';
 import useCartStore from '@/zustand/cartStore';
+import useNotificationStore from '@/zustand/notificationStore';
 import useUserStore from '@/zustand/userStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -13,6 +14,7 @@ interface HeaderProps {
   showSearch?: boolean;
   showCart?: boolean;
   showHome?: boolean;
+  showNotification?: boolean;
   onBack?: () => void;
   onClose?: () => void;
   onSearch?: () => void;
@@ -27,6 +29,7 @@ export default function Header({
   showSearch = false,
   showCart = false,
   showHome = false,
+  showNotification = false,
   onBack,
   onClose,
   onSearch,
@@ -36,12 +39,9 @@ export default function Header({
   const router = useRouter();
   const { cartCount, setCartCount } = useCartStore();
   const user = useUserStore((state) => state.user);
-
-  useEffect(() => {
-    if (showCart && user) {
-      fetchCartCount();
-    }
-  }, [showCart, user]);
+  const unreadCount = useNotificationStore((state) =>
+    showNotification && user ? state.unreadCountForSeller(user._id) : 0
+  );
 
   const fetchCartCount = async () => {
     try {
@@ -54,6 +54,12 @@ export default function Header({
       setCartCount(0);
     }
   };
+
+  useEffect(() => {
+    if (showCart && user) {
+      fetchCartCount();
+    }
+  }, [showCart, user]);
 
   const handleBack = () => {
     if (onBack) {
@@ -137,6 +143,20 @@ export default function Header({
           {showSearch && (
             <button onClick={handleSearch} className="text-gray-900">
               <img src="/search.svg" alt="검색" width={21} height={21} />
+            </button>
+          )}
+          {showNotification && (
+            <button
+              onClick={() => router.push('/mypage/notifications')}
+              className="text-gray-900 relative"
+              aria-label="알림"
+            >
+              <img src="/Notification.svg" alt="알림" width={21} height={21} />
+              {unreadCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-eatda-orange text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
             </button>
           )}
           {showHome ? (
