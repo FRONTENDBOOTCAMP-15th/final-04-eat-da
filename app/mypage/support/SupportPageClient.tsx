@@ -1,12 +1,10 @@
 'use client';
 
 import BottomNavigation from '@/app/src/components/common/BottomNavigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as ChannelService from '@channel.io/channel-web-sdk-loader';
-import { useEffect } from 'react';
 import Image from 'next/image';
 
-ChannelService.loadScript();
 
 interface FAQ {
   question: string;
@@ -68,6 +66,7 @@ export default function SupportPageClient() {
     setOpenIndex(openIndex === index ? null : index);
   };
   useEffect(() => {
+    ChannelService.loadScript();
     ChannelService.boot({
       pluginKey: '67502dfa-39a4-4d1e-8332-59d195da33a7',
       hideChannelButtonOnBoot: true,

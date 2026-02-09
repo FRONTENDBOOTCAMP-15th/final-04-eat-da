@@ -17,7 +17,6 @@ export default function BanchanCard({ item }: BanchanCardProps) {
   const status = getBanchanStatus(item);
   const price = item.price.toLocaleString();
   const imagePath = item.mainImages?.[0]?.path;
-  const imgSrc = imagePath || null;
 
   return (
     <Link
@@ -26,9 +25,9 @@ export default function BanchanCard({ item }: BanchanCardProps) {
     >
       {/* 이미지 영역 */}
       <div className="w-17.5 h-17.5 shrink-0 rounded-lg bg-gray-200 border-[0.5px] border-gray-300 overflow-hidden">
-        {imgSrc && (
+        {imagePath && (
           <Image
-            src={imgSrc}
+            src={imagePath}
             alt={item.name}
             width={70}
             height={70}

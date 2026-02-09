@@ -13,7 +13,6 @@ import { Product, Seller, SellerWithStats } from '@/app/src/types';
 import * as ChannelService from '@channel.io/channel-web-sdk-loader';
 import { getTier } from '@/lib/tier';
 
-ChannelService.loadScript();
 
 const RecommendProductSkeleton = () => (
   <div className="shrink-0 w-28 animate-pulse">
@@ -244,6 +243,7 @@ export default function HomePageClient() {
   };
 
   useEffect(() => {
+    ChannelService.loadScript();
     ChannelService.boot({
       pluginKey: '67502dfa-39a4-4d1e-8332-59d195da33a7',
       hideChannelButtonOnBoot: true,
