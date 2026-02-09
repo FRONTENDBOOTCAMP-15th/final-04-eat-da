@@ -1,6 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { getAxios } from '@/lib/axios';
+import useCartStore from '@/zustand/cartStore';
+import useUserStore from '@/zustand/userStore';
 
 interface HomeHeaderProps {
   onSearch?: () => void;
@@ -9,6 +13,26 @@ interface HomeHeaderProps {
 
 export default function HomeHeader({ onSearch, onCart }: HomeHeaderProps) {
   const router = useRouter();
+  const { cartCount, setCartCount } = useCartStore();
+  const user = useUserStore((state) => state.user);
+
+  useEffect(() => {
+    if (user) {
+      fetchCartCount();
+    }
+  }, [user]);
+
+  const fetchCartCount = async () => {
+    try {
+      const axios = getAxios();
+      const response = await axios.get('/carts');
+      const items = response.data.item || [];
+      setCartCount(items.length);
+    } catch (error) {
+      console.error('장바구니 개수 조회 실패:', error);
+      setCartCount(0);
+    }
+  };
 
   const handleLogoClick = () => {
     router.push('/home');
@@ -60,6 +84,11 @@ export default function HomeHeader({ onSearch, onCart }: HomeHeaderProps) {
                 width={22}
                 height={22}
               />
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-eatda-orange text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
             </button>
           </div>
         </div>
