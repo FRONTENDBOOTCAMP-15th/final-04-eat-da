@@ -346,13 +346,13 @@ export default function HomePageClient() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 -mx-5">
+          <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 md:grid-cols-4 sm:gap-2.5 md:gap-1">
             {[...Array(6)].map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 -mx-5">
+          <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 md:grid-cols-4 sm:gap-2.5 md:gap-1">
             {products.map((product) => {
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length
