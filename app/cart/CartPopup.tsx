@@ -96,7 +96,7 @@ export default function CartPopup({
       <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
 
       <div
-        className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[70vh] overflow-y-auto"
+        className="fixed max-w-[744px] min-w-[390px] w-full left-1/2 -translate-x-1/2 bottom-0 left-0 right-0 bg-white rounded-t-2xl z-50 max-h-[70vh] overflow-y-auto"
         style={{
           transform: `translateY(${translateY}px)`,
           transition: isDragging ? 'none' : 'transform 0.3s ease-out',
