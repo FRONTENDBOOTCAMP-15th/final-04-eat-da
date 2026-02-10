@@ -1,8 +1,22 @@
-import ProductDetailCilent from '@/app/products/[productId]/ProductDetailCilent';
-import { Metadata } from 'next';
-import { getAxios } from '@/lib/axios';
+'use client';
 
-type Props = {
+import { useEffect, useState } from 'react';
+import IngredientList from '@/app/products/[productId]/components/IngredientList';
+import ProductImageSlider from '@/app/products/[productId]/components/ProductImageSlider';
+import HeartItem from '@/app/src/components/ui/HeartItem';
+import SellerProfileCard from '@/app/src/components/ui/SellerProfileCard';
+import ReviewList from '@/app/src/components/ui/ReviewList';
+import Header from '@/app/src/components/common/Header';
+import ProductDetailClient from '@/app/products/[productId]/ProductBottomSheet';
+import { getAxios } from '@/lib/axios';
+import { getTier } from '@/lib/tier';
+import { Product, Reply } from '@/app/src/types/product';
+import { getImageUrl } from '@/lib/review';
+import { ProductDetailSkeleton } from './loading';
+
+export default function ProductDetailCilent({
+  params,
+}: {
   params: Promise<{ productId: string }>;
 }) {
   const [product, setProduct] = useState<Product | null>(null);
@@ -83,16 +97,8 @@ type Props = {
       );
       const totalSales = sellerFromList?.totalSales ?? 0;
 
-      const sellerImage =
-        seller?.extra?.profileImage ??
-        (typeof seller?.image === 'string'
-          ? seller.image
-          : seller?.image?.path
-            ? getImageUrl(seller.image.path)
-            : undefined);
-
       return {
-        image: sellerImage,
+        image: seller?.extra?.profileImage ?? seller?.image,
         tier: getTier(totalSales),
       };
     } catch (error) {
@@ -139,13 +145,12 @@ type Props = {
   if (isLoading || !product) {
     return <ProductDetailSkeleton />;
   }
-}
 
   const extra = product.extra ?? {};
   const ingredients: string[] = extra.ingredients ?? [];
   const serving: string = `${extra.servings ?? 2}인분`;
-  const pickupPlace: string = extra.pickupPlace ?? ' ';
-  const stock: number = (product.quantity ?? 0) - (product.buyQuantity ?? 0);
+  const pickupPlace: string = extra.pickupPlace ?? '서교동 공유주방';
+  const stock: number = product.quantity ?? 0;
   const productImages = product.mainImages?.map(
     (img: { path: string }) => img.path
   ) ?? ['/food/food_01.png'];

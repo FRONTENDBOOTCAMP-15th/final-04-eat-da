@@ -3,6 +3,16 @@ import ProductsPageHeader from '@/app/src/components/ui/ProductsPageHeader';
 import ProductsListClient from '@/app/src/components/ui/ProductsListClient';
 import { Product } from '@/app/src/types';
 import { getAxios } from '@/lib/axios';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '잇다 반찬 목록',
+  openGraph: {
+    title: '잇다 반찬 목록',
+    description: '반찬 목록 페이지',
+    url: '/products',
+  },
+};
 
 interface Seller {
   _id?: number;
