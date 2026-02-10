@@ -77,7 +77,13 @@ export default function HomePageClient() {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
     };
-  }, []);
+  }, [showSplash]);
+
+  const handleLogoClick = () => {
+    setSplashVisible(false);
+    setSplashFading(false);
+    setShowSplash(true);
+  };
 
   const filteredProducts = useMemo(
     () => products.filter((p) => p.extra?.pickupPlace === nearestKitchen),
@@ -311,7 +317,7 @@ export default function HomePageClient() {
         </div>
       )}
 
-      <HomeHeader />
+      <HomeHeader onLogoClick={handleLogoClick} />
       <div className="p-5 flex flex-col gap-6 min-[744px]:gap-10 mt-12 mb-10">
         <Link
           href="/about"
