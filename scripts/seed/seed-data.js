@@ -404,7 +404,11 @@ const categories = [
   },
 ];
 
-const defaultPickupPlace = '서교동 공유주방';
+// 더미데이터 등록 대상 공유주방 2곳
+const seedKitchens = [
+  { name: '서교동 공유주방', address: '서울특별시 마포구 동교로15길' },
+  { name: '건대입구역 공유주방', address: '서울 광진구 아차산로 243' },
+];
 const defaultServing = '2인분';
 
 // 요리명 → 재료 매핑
@@ -884,40 +888,44 @@ function createProducts({ startId = 1 } = {}) {
     fry: [5000, 11000],
   };
 
-  categories.forEach((cat) => {
-    const [min, max] = priceRangeByCategory[cat.key] ?? [4500, 16000];
+  // 모든 대표 공유주방에 동일한 반찬 세트를 등록
+  seedKitchens.forEach((kitchen) => {
+    categories.forEach((cat) => {
+      const [min, max] = priceRangeByCategory[cat.key] ?? [4500, 16000];
 
-    cat.items.forEach((name, idx) => {
-      const sellerId = pickSellerIdByIndex(id);
+      cat.items.forEach((name, idx) => {
+        const sellerId = pickSellerIdByIndex(id);
 
-      products.push({
-        _id: id,
-        createdAt: now,
-        updatedAt: now,
-        seller_id: sellerId,
-        price: randomPrice(min, max),
-        show: true,
-        active: true,
-        name,
-        quantity: randomBetween(30, 300),
-        buyQuantity: randomBetween(0, 30),
-        mainImages: [getImage(name, cat.key, idx + 1)],
-        content: getContent(name, cat.key),
-        extra: {
-          isNew: idx < 3,
-          isBest: idx % 4 === 0,
-          category: [cat.key],
-          categoryLabel: cat.label,
+        products.push({
+          _id: id,
+          createdAt: now,
+          updatedAt: now,
+          seller_id: sellerId,
+          price: randomPrice(min, max),
+          show: true,
+          active: true,
+          name,
+          quantity: randomBetween(30, 300),
+          buyQuantity: randomBetween(0, 30),
+          mainImages: [getImage(name, cat.key, idx + 1)],
+          content: getContent(name, cat.key),
+          extra: {
+            isNew: idx < 3,
+            isBest: idx % 4 === 0,
+            category: [cat.key],
+            categoryLabel: cat.label,
 
-          // ✅ 상세용 확장 데이터
-          ingredients: getIngredients(name, cat.key),
-          description: getContent(name, cat.key),
-          serving: defaultServing,
-          pickupPlace: defaultPickupPlace,
-        },
+            // ✅ 상세용 확장 데이터
+            ingredients: getIngredients(name, cat.key),
+            description: getContent(name, cat.key),
+            serving: defaultServing,
+            pickupPlace: kitchen.name,
+            pickupAddress: kitchen.address,
+          },
+        });
+
+        id += 1;
       });
-
-      id += 1;
     });
   });
 
