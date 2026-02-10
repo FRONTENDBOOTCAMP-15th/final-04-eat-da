@@ -41,10 +41,7 @@ export default function Header({
   const user = useUserStore((state) => state.user);
   const unreadCount = useNotificationStore((state) => {
     if (!showNotification || !user) return 0;
-    return (
-      state.unreadCountForSeller(user._id) +
-      state.unreadCountForUser(user._id)
-    );
+    return state.unreadCountForSeller(user._id);
   });
 
   const fetchCartCount = async () => {

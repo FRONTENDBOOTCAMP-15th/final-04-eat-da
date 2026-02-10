@@ -1,6 +1,6 @@
-import ProductDetailCilent from '@/app/products/[productId]/ProductDetailCilent';
 import { Metadata } from 'next';
 import { getAxios } from '@/lib/axios';
+import ProductDetailClient from '@/app/products/[productId]/ProductDetailCilent';
 
 type Props = {
   params: Promise<{ productId: string }>;
@@ -83,9 +83,8 @@ type Props = {
       );
       const totalSales = sellerFromList?.totalSales ?? 0;
 
-      const sellerImage =
-        seller?.extra?.profileImage ??
-        (typeof seller?.image === 'string'
+      const sellerImage = seller?.extra?.profileImage
+        ?? (typeof seller?.image === 'string'
           ? seller.image
           : seller?.image?.path
             ? getImageUrl(seller.image.path)
@@ -144,7 +143,7 @@ type Props = {
   const extra = product.extra ?? {};
   const ingredients: string[] = extra.ingredients ?? [];
   const serving: string = `${extra.servings ?? 2}인분`;
-  const pickupPlace: string = extra.pickupPlace ?? ' ';
+  const pickupPlace: string = extra.pickupPlace ?? '서교동 공유주방';
   const stock: number = (product.quantity ?? 0) - (product.buyQuantity ?? 0);
   const productImages = product.mainImages?.map(
     (img: { path: string }) => img.path
