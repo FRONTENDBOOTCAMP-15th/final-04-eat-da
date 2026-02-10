@@ -29,7 +29,7 @@ export default function Header({
   showSearch = false,
   showCart = false,
   showHome = false,
-  showNotification = false,
+  showNotification = showCart,
   onBack,
   onClose,
   onSearch,

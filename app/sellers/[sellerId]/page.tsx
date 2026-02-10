@@ -1,5 +1,6 @@
 import BottomFixedButton from '@/app/src/components/common/BottomFixedButton';
 import Header from '@/app/src/components/common/Header';
+import ScrollToTop from '@/app/src/components/common/ScrollToTop';
 import ProductCard from '@/app/src/components/ui/ProductCard';
 import SellerProfileCard from '@/app/src/components/ui/SellerProfileCard';
 import ReviewList from '@/app/src/components/ui/ReviewList';
@@ -192,6 +193,7 @@ export default async function SellersDetailPage({
 
   return (
     <div className="flex flex-col gap-7.5 mt-15 pt-7.5 pb-23">
+      <ScrollToTop />
       <Header
         title={`${sellerName} ${sellerTier.label}`}
         showBackButton
