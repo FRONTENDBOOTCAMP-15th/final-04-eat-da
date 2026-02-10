@@ -16,7 +16,6 @@ import { getTier } from '@/lib/tier';
 import useNearestKitchen from '@/hooks/useNearestKitchen';
 import Script from 'next/script';
 
-
 const RecommendProductSkeleton = () => (
   <div className="shrink-0 w-28 animate-pulse">
     <div className="w-28 h-28 bg-gray-200 rounded-lg mb-2" />
@@ -266,9 +265,30 @@ export default function HomePageClient() {
   return (
     <>
       <HomeHeader />
-      <div className="p-5 flex flex-col gap-6 mt-12 mb-10">
-        <Link href="/about">
-          <Image src="/Hero.png" alt="banner" height={460} width={350} />
+      <div className="p-5 flex flex-col gap-6 min-[744px]:gap-10 mt-12 mb-10">
+        <Link
+          href="/about"
+          className="block relative -mx-5 w-[calc(100%+2.5rem)] aspect-350/200 overflow-hidden"
+        >
+          <Image
+            src="https://res.cloudinary.com/ddedslqvv/image/upload/v1770690901/febc15-final04-ecad/E6MEBL6ui.jpg"
+            alt="잇다 소개 배너"
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent" />
+          <div className="absolute bottom-5 left-5 text-white">
+            <p className="text-display-6 font-semibold leading-tight">
+              우리 동네 주부님의
+              <br />
+              정성 가득 집밥 한 끼
+            </p>
+            <p className="text-paragraph mt-1 text-white/80">
+              잇-다 이야기 보러가기
+            </p>
+          </div>
         </Link>
 
         <div>
@@ -288,7 +308,7 @@ export default function HomePageClient() {
           </div>
         </div>
 
-        <div className="border-b-[0.5px] border-gray-400 pb-4">
+        <div className="mb-1">
           <p className="text-display-5 font-semibold pb-4">
             오늘의 추천 주부님
           </p>
@@ -297,7 +317,10 @@ export default function HomePageClient() {
             <RecommendSellerSkeleton />
           ) : recommendSeller ? (
             <>
-              <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
+              <Link
+                href={`/sellers/${recommendSeller._id}`}
+                className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide"
+              >
                 {recommendSeller.topDishes.map((dish, index) => (
                   <div
                     key={index}
@@ -330,7 +353,7 @@ export default function HomePageClient() {
                     />
                   </div>
                 ))}
-              </div>
+              </Link>
 
               <SellerProfileClear
                 sellerId={recommendSeller._id}
@@ -364,26 +387,33 @@ export default function HomePageClient() {
           </div>
         ) : (
           <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 md:grid-cols-4 sm:gap-2.5 md:gap-1">
-            {filteredProducts.map((product) => {
+            {filteredProducts.map((product, index) => {
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length
                 : typeof product.replies === 'number'
                   ? product.replies
                   : 0;
 
+              const colCount = 2;
+              const rowIndex = Math.floor(index / colCount);
+
               return (
-                <ProductCard
+                <div
                   key={product._id}
-                  productId={product._id}
-                  imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
-                  chefName={`${product.seller?.name ?? '주부'}`}
-                  tier={getTier(product.seller?.totalSales ?? 0).label}
-                  dishName={product.name}
-                  rating={product.rating ?? 0}
-                  reviewCount={reviewCount}
-                  price={product.price}
-                  initialWished={Boolean(product.myBookmarkId)}
-                />
+                  className={`${rowIndex > 0 ? 'border-t border-gray-200' : ''} ${index % colCount !== 0 ? 'border-l border-gray-200' : ''}`}
+                >
+                  <ProductCard
+                    productId={product._id}
+                    imageSrc={product.mainImages?.[0]?.path ?? '/food1.png'}
+                    chefName={`${product.seller?.name ?? '주부'}`}
+                    tier={getTier(product.seller?.totalSales ?? 0).label}
+                    dishName={product.name}
+                    rating={product.rating ?? 0}
+                    reviewCount={reviewCount}
+                    price={product.price}
+                    initialWished={Boolean(product.myBookmarkId)}
+                  />
+                </div>
               );
             })}
           </div>
