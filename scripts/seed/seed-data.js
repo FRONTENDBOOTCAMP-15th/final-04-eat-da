@@ -583,7 +583,7 @@ const imagesByName = {
   // 볶음 (stir)
   // =========================
   소시지야채볶음:
-    'https://zipbanchan.godohosting.com//800X800px/7_fry/2361_ZIP_P_6233_T_2.jpg',
+    'https://zipbanchan.godohosting.com/800X800px/7_fry/2361_ZIP_P_6233_T_2.jpg',
   새우볶음:
     'https://zipbanchan.godohosting.com/800X800px/7_fry/160_ZIP_P_6030_T_re.jpg',
   오징어볶음:
@@ -593,7 +593,7 @@ const imagesByName = {
   버섯볶음:
     'https://zipbanchan.godohosting.com/800X800px/5_kid/1731_ZIP_P_6292_T.jpg',
   어묵볶음:
-    'https://zipbanchan.godohosting.com//800X800px/7_fry/2359_ZIP_P_6431_T_2.png',
+    'https://zipbanchan.godohosting.com/800X800px/7_fry/2359_ZIP_P_6431_T_2.png',
   두부김치: '/food/TofuKimchi.jpg',
   가지볶음:
     'https://zipbanchan.godohosting.com/800X800px/7_fry/1692_ZIP_P_6291_T.jpg',
