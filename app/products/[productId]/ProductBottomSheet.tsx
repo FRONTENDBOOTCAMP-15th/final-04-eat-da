@@ -62,8 +62,7 @@ export default function ProductBottomSheet({
       const axios = getAxios();
 
       // 현재 상품의 픽업 장소
-      const currentPickupPlace =
-        product.extra?.pickupPlace || '서교동 공유주방';
+      const currentPickupPlace = product.extra?.pickupPlace || ' ';
 
       // 장바구니 조회
       const cartResponse = await axios.get('/carts');
@@ -72,8 +71,7 @@ export default function ProductBottomSheet({
       // 장바구니에 상품이 있으면 픽업 장소 확인
       if (cartItems.length > 0) {
         const firstItem = cartItems[0];
-        const cartPickupPlace =
-          firstItem.product.extra?.pickupPlace || '서교동 공유주방';
+        const cartPickupPlace = firstItem.product.extra?.pickupPlace || ' ';
 
         if (currentPickupPlace !== cartPickupPlace) {
           alert(
