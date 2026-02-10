@@ -4,6 +4,16 @@ import Header from '@/app/src/components/common/Header';
 import ScrollToTop from '@/app/src/components/common/ScrollToTop';
 import { getAxios } from '@/lib/axios';
 import { getTier } from '@/lib/tier';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '잇다 주부 목록',
+  openGraph: {
+    title: '잇다 주부 목록',
+    description: '주부 목록 페이지',
+    url: '/sellers',
+  },
+};
 
 interface Seller {
   _id?: number;

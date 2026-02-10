@@ -16,7 +16,6 @@ import { getTier } from '@/lib/tier';
 import useNearestKitchen from '@/hooks/useNearestKitchen';
 import Script from 'next/script';
 
-
 const RecommendProductSkeleton = () => (
   <div className="shrink-0 w-28 animate-pulse">
     <div className="w-28 h-28 bg-gray-200 rounded-lg mb-2" />
@@ -357,13 +356,13 @@ export default function HomePageClient() {
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 md:grid-cols-4 sm:gap-2.5 md:gap-1">
+          <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 sm:gap-2.5">
             {[...Array(6)].map((_, i) => (
               <ProductCardSkeleton key={i} />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 md:grid-cols-4 sm:gap-2.5 md:gap-1">
+          <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 sm:gap-2.5 ">
             {filteredProducts.map((product) => {
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length

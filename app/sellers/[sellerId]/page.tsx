@@ -8,7 +8,46 @@ import { getAxios } from '@/lib/axios';
 import { getTier } from '@/lib/tier';
 import { Product } from '@/app/src/types';
 import { getImageUrl } from '@/lib/review';
+import { Metadata } from 'next';
+type Props = {
+  params: Promise<{ sellerId: string }>;
+};
 
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  try {
+    const { sellerId } = await params;
+    const axios = getAxios();
+    const sellerRes = await axios.get(`/users/${sellerId}`);
+    const seller = sellerRes.data.item;
+
+    const sellerName = seller?.name ?? '판매자';
+    const sellerDescription =
+      seller?.extra?.description ??
+      seller?.extra?.intro ??
+      '정성스럽게 만든 집밥을 나눕니다.';
+    const sellerProfileImage = seller?.extra?.profileImage ?? seller?.image;
+
+    return {
+      title: `${sellerName} 주부 - 잇다`,
+      openGraph: {
+        title: `${sellerName}`,
+        description: sellerDescription,
+        url: `/sellers/${sellerId}`,
+        images: sellerProfileImage ? [{ url: sellerProfileImage }] : [],
+      },
+    };
+  } catch (error) {
+    console.error('메타데이터 생성 실패:', error);
+    return {
+      title: '판매자 상세 - 잇다',
+      openGraph: {
+        title: '판매자 상세',
+        description: '판매자 페이지',
+        url: '/sellers',
+      },
+    };
+  }
+}
 interface Seller {
   _id: number;
   name: string;
