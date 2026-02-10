@@ -13,7 +13,7 @@ interface Seller {
   _id: number;
   name: string;
   email: string;
-  image?: string;
+  image?: string | { path: string };
   extra?: {
     description?: string;
     intro?: string;
@@ -178,7 +178,12 @@ export default async function SellersDetailPage({
     seller?.extra?.intro ??
     '정성스럽게 만든 집밥을 나눕니다.';
   const sellerProfileImage =
-    seller?.extra?.profileImage ?? seller?.image ?? '/seller/seller1.png';
+    seller?.extra?.profileImage
+    ?? (typeof seller?.image === 'string'
+      ? seller.image
+      : seller?.image?.path
+        ? getImageUrl(seller.image.path)
+        : '/seller/seller1.png');
 
   // 판매자의 총 평점과 리뷰 수 계산
   const totalRating =
