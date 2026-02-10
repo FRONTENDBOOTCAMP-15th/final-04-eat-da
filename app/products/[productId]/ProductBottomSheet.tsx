@@ -8,7 +8,7 @@ import { getAxios } from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 import useCartStore from '@/zustand/cartStore';
 
-interface ProductDetailClientProps {
+interface ProductBottomSheetProps {
   product: {
     _id: number;
     name: string;
@@ -20,9 +20,9 @@ interface ProductDetailClientProps {
   };
 }
 
-export default function ProductDetailClient({
+export default function ProductBottomSheet({
   product,
-}: ProductDetailClientProps) {
+}: ProductBottomSheetProps) {
   const router = useRouter();
   const { incrementCart } = useCartStore();
   const [isOpen, setIsOpen] = useState(false);
