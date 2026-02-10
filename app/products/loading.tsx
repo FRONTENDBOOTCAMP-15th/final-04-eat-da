@@ -34,7 +34,7 @@ function ProductCardSkeleton() {
 export default function Loading() {
   return (
     <>
-      <Header title="서교동 공유주방" showBackButton showSearch showCart />
+      <Header title=" " showBackButton showSearch showCart />
 
       <CategoryTabsSkeleton />
 
