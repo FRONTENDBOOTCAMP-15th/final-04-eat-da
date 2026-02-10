@@ -59,6 +59,25 @@ export default function HomePageClient() {
   const [recommendSeller, setRecommendSeller] =
     useState<SellerWithStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('splashShown'));
+  const [splashVisible, setSplashVisible] = useState(false);
+  const [splashFading, setSplashFading] = useState(false);
+
+  // 스플래시 애니메이션
+  useEffect(() => {
+    if (!showSplash) return;
+
+    sessionStorage.setItem('splashShown', 'true');
+    const showTimer = setTimeout(() => setSplashVisible(true), 100);
+    const fadeTimer = setTimeout(() => setSplashFading(true), 3000);
+    const hideTimer = setTimeout(() => setShowSplash(false), 3500);
+
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(fadeTimer);
+      clearTimeout(hideTimer);
+    };
+  }, []);
 
   const filteredProducts = useMemo(
     () => products.filter((p) => p.extra?.pickupPlace === nearestKitchen),
@@ -264,6 +283,34 @@ export default function HomePageClient() {
 
   return (
     <>
+      {/* 스플래시 오버레이 */}
+      {showSplash && (
+        <div
+          className={`fixed inset-0 z-[100] bg-[#ff6155] min-[390px]:bg-[#ffffff] flex items-center justify-center transition-opacity duration-500 ${
+            splashFading ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
+            <div
+              className={`w-full max-w-[744px] px-5 transition-all duration-1000 ${
+                splashVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+            >
+              <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[390px]:text-[#ff6155] leading-tight">
+                <span className="shrink-0">잇</span>
+                <span
+                  className="flex-1 h-1 bg-[#ffffff] min-[390px]:bg-[#ff6155] mx-3 overflow-hidden"
+                  style={
+                    splashVisible
+                      ? { animation: 'line-expand 0.8s ease-in 1.1s both' }
+                      : undefined
+                  }
+                />
+                <span className="shrink-0">다</span>
+              </h1>
+            </div>
+        </div>
+      )}
+
       <HomeHeader />
       <div className="p-5 flex flex-col gap-6 min-[744px]:gap-10 mt-12 mb-10">
         <Link
