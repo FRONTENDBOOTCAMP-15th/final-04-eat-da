@@ -7,14 +7,14 @@ import HeartItem from '@/app/src/components/ui/HeartItem';
 import SellerProfileCard from '@/app/src/components/ui/SellerProfileCard';
 import ReviewList from '@/app/src/components/ui/ReviewList';
 import Header from '@/app/src/components/common/Header';
-import ProductDetailClient from '@/app/products/[productId]/ProductBottomSheet';
+import ProductDetailBottomSheet from '@/app/products/[productId]/ProductBottomSheet';
 import { getAxios } from '@/lib/axios';
 import { getTier } from '@/lib/tier';
 import { Product, Reply } from '@/app/src/types/product';
 import { getImageUrl } from '@/lib/review';
 import { ProductDetailSkeleton } from './loading';
 
-export default function ProductDetailCilent({
+export default function ProductDetailClient({
   params,
 }: {
   params: Promise<{ productId: string }>;
@@ -45,7 +45,6 @@ export default function ProductDetailCilent({
     try {
       const axios = getAxios();
 
-      // 1. 상품 정보만 먼저 호출 (bookmarks 호출 제거 - myBookmarkId 사용)
       const productRes = await axios.get(`/products/${id}/`);
       const productData = productRes.data.item;
 
@@ -57,14 +56,11 @@ export default function ProductDetailCilent({
         : [];
       setReviews(reviewsData);
 
-      // 2. 셀러 정보 호출 (병렬로 처리)
       if (productData.seller?._id) {
         const sellerInfo = await getSellerInfo(productData.seller._id);
         setSellerProfileImage(sellerInfo.image);
         setSellerTier(sellerInfo.tier);
       }
-
-      // 3. 리뷰어 이미지는 reply.user.image를 사용하므로 추가 API 호출 불필요
     } catch (error) {
       console.error('상품 조회 실패:', error);
     } finally {
@@ -81,7 +77,6 @@ export default function ProductDetailCilent({
     try {
       const axios = getAxios();
 
-      // 개별 판매자 정보와 판매자 목록을 병렬로 호출
       const [sellerRes, usersRes] = await Promise.all([
         axios.get(`/users/${sellerId}`),
         axios.get('/users/'),
@@ -90,7 +85,6 @@ export default function ProductDetailCilent({
       const seller = sellerRes.data.item;
       const users = usersRes.data.item || [];
 
-      // 판매자 목록에서 totalSales 찾기
       const sellerFromList = users.find(
         (u: { _id?: number; seller_id?: number; totalSales?: number }) =>
           u._id === sellerId || u.seller_id === sellerId
@@ -167,7 +161,6 @@ export default function ProductDetailCilent({
       <Header title=" " showBackButton showSearch showCart />
       <ProductImageSlider images={productImages} />
 
-      {/* 반찬이름 */}
       <div className="flex mx-5 items-center">
         <h1 className="w-full text-display-7 font-semibold">{product.name}</h1>
         <HeartItem
@@ -237,7 +230,7 @@ export default function ProductDetailCilent({
         />
       </div>
 
-      <ProductDetailClient product={product} />
+      <ProductDetailBottomSheet product={product} />
     </main>
   );
 }
