@@ -162,13 +162,18 @@ export default function ProductDetailClient({
       <ProductImageSlider images={productImages} />
 
       <div className="flex mx-5 items-center">
-        <h1 className="w-full text-display-7 font-semibold">{product.name}</h1>
+        <div className="w-full">
+          <h1 className="text-display-7 font-semibold">{product.name}</h1>
+        </div>
         <HeartItem
           size={24}
           initialWished={Boolean(bookmarkId)}
           onToggle={handleWishToggle}
         />
       </div>
+      <p className="mx-5 -mt-3 text-display-4 font-semibold">
+        {product.price.toLocaleString()}원
+      </p>
 
       <SellerProfileCard
         name={sellerName}
