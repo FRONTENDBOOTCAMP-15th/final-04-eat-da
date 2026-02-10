@@ -21,6 +21,7 @@ interface UserInfo {
   image: string | { path: string; name: string };
   extra?: {
     detailAddress?: string;
+    introduction?: string;
     profileImage?: { path: string; name: string };
   };
   bookmark: {
