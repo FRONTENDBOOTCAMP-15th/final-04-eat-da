@@ -10,9 +10,10 @@ import useUserStore from '@/zustand/userStore';
 interface HomeHeaderProps {
   onSearch?: () => void;
   onCart?: () => void;
+  onLogoClick?: () => void;
 }
 
-export default function HomeHeader({ onSearch, onCart }: HomeHeaderProps) {
+export default function HomeHeader({ onSearch, onCart, onLogoClick }: HomeHeaderProps) {
   const router = useRouter();
   const { cartCount, setCartCount } = useCartStore();
   const user = useUserStore((state) => state.user);
@@ -39,7 +40,11 @@ export default function HomeHeader({ onSearch, onCart }: HomeHeaderProps) {
   };
 
   const handleLogoClick = () => {
-    router.push('/home');
+    if (onLogoClick) {
+      onLogoClick();
+    } else {
+      router.push('/home');
+    }
   };
 
   const handleSearch = () => {
