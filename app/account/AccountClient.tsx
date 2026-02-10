@@ -65,17 +65,20 @@ export default function AccountClient() {
       setEmail(userInfo.email);
       setPhone(userInfo.phone || '');
       setAddressValue(userInfo.address || '');
+      setDetailAddress(userInfo.extra?.detailAddress || '');
 
-      // 이미지 처리
+      // 이미지 처리 (직접 업로드한 이미지만 표시, 기본 아바타 URL은 제외)
       if (userInfo.image) {
-        if (typeof userInfo.image === 'string') {
+        const imagePath = typeof userInfo.image === 'string' ? userInfo.image : userInfo.image.path;
+        if (!imagePath.startsWith('http')) {
           const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/market', '') || '';
-          setInitialImages([`${apiUrl}${userInfo.image}`]);
-          setExistingImage({ path: userInfo.image, name: '' });
-        } else {
-          const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace('/market', '') || '';
-          setInitialImages([`${apiUrl}${userInfo.image.path}`]);
-          setExistingImage(userInfo.image);
+          if (typeof userInfo.image === 'string') {
+            setInitialImages([`${apiUrl}${userInfo.image}`]);
+            setExistingImage({ path: userInfo.image, name: '' });
+          } else {
+            setInitialImages([`${apiUrl}${userInfo.image.path}`]);
+            setExistingImage(userInfo.image);
+          }
         }
       }
 
@@ -286,6 +289,7 @@ export default function AccountClient() {
           </label>
           <input
             type="email"
+            autoComplete="off"
             value={email}
             placeholder="example@youremail.com"
             onBlur={(e) => handleBlur('email', e.target.value)}
@@ -304,6 +308,7 @@ export default function AccountClient() {
           </label>
           <input
             type="password"
+            autoComplete="off"
             value={passwordValue}
             placeholder="변경할 비밀번호를 입력하세요"
             onBlur={(e) => handleBlur('password', e.target.value)}
@@ -323,6 +328,7 @@ export default function AccountClient() {
             </label>
             <input
               type="password"
+              autoComplete="off"
               value={confirmPasswordValue}
               placeholder="비밀번호를 한번 더 입력하세요"
               onBlur={(e) => handleBlur('confirmPassword', e.target.value)}
@@ -342,6 +348,7 @@ export default function AccountClient() {
           </label>
           <input
             type="tel"
+            autoComplete="off"
             value={phone}
             placeholder="010-0000-0000"
             onBlur={(e) => handleBlur('phone', e.target.value)}
@@ -387,6 +394,7 @@ export default function AccountClient() {
           </label>
           <input
             type="text"
+            autoComplete="off"
             ref={detailAddressRef}
             value={detailAddress}
             placeholder="상세주소를 입력하세요"
