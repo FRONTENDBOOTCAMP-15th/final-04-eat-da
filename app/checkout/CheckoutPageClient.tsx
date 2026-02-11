@@ -343,20 +343,6 @@ export default function CheckoutPageClient() {
             픽업할 날짜를 선택해주세요
           </p>
           <div className="flex gap-2.5 w-full">
-            {/* TODO: 테스트용 - 나중에 제거 */}
-            <button
-              onClick={() => setSelectedDate('today')}
-              className={`flex-1 py-4 px-5 border border-dashed border-red-400 rounded-lg transition-shadow bg-red-50 ${
-                selectedDate === 'today'
-                  ? 'shadow-[inset_0_0_0_2px_#FF6155]'
-                  : ''
-              }`}
-            >
-              <p className="text-paragraph font-semibold text-red-500">오늘</p>
-              <p className="text-paragraph-sm text-red-400">
-                {dayjs().format('M월 D일 dddd')}
-              </p>
-            </button>
             <button
               onClick={() => setSelectedDate('tomorrow')}
               className={`flex-1 py-4 px-5 border border-gray-300 rounded-lg transition-shadow ${
@@ -422,26 +408,6 @@ export default function CheckoutPageClient() {
             >
               16:00 - 20:00
             </button>
-            {/* TODO: 테스트용 - 나중에 제거 */}
-            <div className="flex items-center gap-2 mt-2 p-3 border border-dashed border-red-400 rounded-lg bg-red-50">
-              <label className="text-sm text-red-500 whitespace-nowrap">
-                테스트:
-              </label>
-              <input
-                type="time"
-                className="border border-gray-300 rounded px-2 py-1 text-sm"
-                onChange={(e) => {
-                  if (e.target.value) {
-                    const [h, m] = e.target.value.split(':');
-                    const endHour = parseInt(h) + 1;
-                    setSelectedTime(`${h}:${m}-${endHour}`);
-                  }
-                }}
-              />
-              {selectedTime?.includes(':') && (
-                <span className="text-sm text-red-500">→ {selectedTime}</span>
-              )}
-            </div>
           </div>
         </div>
 
