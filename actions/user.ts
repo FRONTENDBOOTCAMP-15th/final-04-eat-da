@@ -164,8 +164,8 @@ export async function signup(
     errors.address = { msg: '상세주소를 입력해주세요.' };
   }
 
-  if (type === 'seller' && (!introduction || introduction.length < 100)) {
-    errors.extra = { msg: '자기소개를 100자 이상 입력해주세요.' };
+  if (type === 'seller' && (!introduction || introduction.length < 40)) {
+    errors.extra = { msg: '자기소개를 40자 이상 입력해주세요.' };
   }
 
   const values = { type, name, email, phone, address: addressBase, detailAddress, introduction: introduction || '' };

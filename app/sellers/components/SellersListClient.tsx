@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import SellerCard from '@/app/sellers/components/SellerCard';
+import useKitchenStore from '@/zustand/kitchenStore';
 
 type SortOption = 'recommend' | 'rating' | 'review' | 'product';
 
@@ -28,6 +29,7 @@ interface SellerCardData {
   reviewCount: number;
   productCount: number;
   tier: string;
+  kitchens: string[];
 }
 
 interface SellersListClientProps {
@@ -69,14 +71,18 @@ function sortSellers(
 export default function SellersListClient({
   sellerCards,
 }: SellersListClientProps) {
+  const nearestKitchen = useKitchenStore((state) => state.nearestKitchen);
   const [sortBy, setSortBy] = useState<SortOption>('recommend');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
 
   const sortedSellers = useMemo(() => {
-    return sortSellers(sellerCards, sortBy);
-  }, [sellerCards, sortBy]);
+    const kitchenFiltered = sellerCards.filter((card) =>
+      card.kitchens.includes(nearestKitchen)
+    );
+    return sortSellers(kitchenFiltered, sortBy);
+  }, [sellerCards, sortBy, nearestKitchen]);
 
   useEffect(() => {
     const handleClickOutside = () => setIsDropdownOpen(false);

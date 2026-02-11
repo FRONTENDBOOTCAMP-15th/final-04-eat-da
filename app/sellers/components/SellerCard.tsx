@@ -88,7 +88,7 @@ export default function SellerCard({
           </div>
         </article>
         {showDivider && (
-          <div className="mx-5 border-b-[0.5px] border-gray-400" />
+          <div className="mx-5 border-b-[0.5px] border-gray-300" />
         )}
       </div>
     </Link>
