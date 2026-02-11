@@ -115,11 +115,11 @@ export default function SellersListClient({
   return (
     <>
       <div
-        className={`fixed top-22 z-10 flex place-self-end mr-3 transition-transform duration-300 ${
+        className={`fixed top-22 z-10 left-0 right-0 max-w-186 mx-auto flex justify-end pr-3 pointer-events-none transition-transform duration-300 ${
           isVisible ? 'translate-y-0' : '-translate-y-20'
         }`}
       >
-        <div className="relative">
+        <div className="relative pointer-events-auto">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -168,7 +168,7 @@ export default function SellersListClient({
         </div>
       </div>
 
-      <div>
+      <div className="max-w-186 mx-auto">
         {sortedSellers.map((card, index) => {
           const isLast = index === sortedSellers.length - 1;
           const sellerName = card.seller.name ?? '주부';

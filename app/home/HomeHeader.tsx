@@ -82,7 +82,7 @@ export default function HomeHeader({ onSearch, onCart, onLogoClick }: HomeHeader
             </svg>
           </button>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-[clamp(1rem,calc(0.725rem+1.13vw),1.25rem)] items-center">
             <button onClick={handleSearch} className="text-gray-900">
               <img src="/search.svg" alt="검색" width={21} height={21} />
             </button>
