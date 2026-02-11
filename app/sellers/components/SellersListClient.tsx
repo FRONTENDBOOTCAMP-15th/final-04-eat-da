@@ -20,7 +20,7 @@ interface SellerCardData {
     name?: string;
     image?: string | { path?: string };
     extra?: {
-      description?: string;
+      introduction?: string;
       intro?: string;
       profileImage?: string;
     };
@@ -115,7 +115,7 @@ export default function SellersListClient({
   return (
     <>
       <div
-        className={`fixed top-22 z-10 left-0 right-0 max-w-186 mx-auto flex justify-end pr-3 pointer-events-none transition-transform duration-300 ${
+        className={`fixed top-20 z-10 left-0 right-0 max-w-186 mx-auto flex justify-end pr-3 pointer-events-none transition-transform duration-300 ${
           isVisible ? 'translate-y-0' : '-translate-y-20'
         }`}
       >
@@ -168,12 +168,12 @@ export default function SellersListClient({
         </div>
       </div>
 
-      <div className="max-w-186 mx-auto">
+      <div className="mt-14 mb-16 max-w-186 mx-auto">
         {sortedSellers.map((card, index) => {
           const isLast = index === sortedSellers.length - 1;
           const sellerName = card.seller.name ?? '주부';
           const sellerDescription =
-            card.seller.extra?.description ??
+            card.seller.extra?.introduction ??
             card.seller.extra?.intro ??
             '정성스럽게 만든 집밥을 나눕니다.';
           const sellerProfileImage =

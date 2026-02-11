@@ -439,7 +439,7 @@ export default function HomePageClient() {
                   '/seller/seller1.png'
                 }
                 description={
-                  recommendSeller.extra?.description ??
+                  recommendSeller.extra?.introduction ??
                   recommendSeller.extra?.intro ??
                   '정성스럽게 만든 집밥을 나눕니다.'
                 }

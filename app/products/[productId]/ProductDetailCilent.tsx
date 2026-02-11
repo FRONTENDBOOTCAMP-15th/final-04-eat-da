@@ -149,7 +149,7 @@ export default function ProductDetailClient({
   const ingredients: string[] = extra.ingredients ?? [];
   const serving: string = `${extra.servings ?? 2}인분`;
   const pickupPlace: string = extra.pickupPlace ?? '서교동 공유주방';
-  const stock: number = product.quantity ?? 0;
+  const stock: number = (product.quantity ?? 0) - (product.buyQuantity ?? 0);
   const productImages = product.mainImages?.map(
     (img: { path: string }) => img.path
   ) ?? ['/food/food_01.png'];
@@ -157,7 +157,7 @@ export default function ProductDetailClient({
   const seller = product.seller ?? {};
   const sellerName: string = seller.name ?? '주부';
   const sellerDescription: string =
-    seller.extra?.description ?? seller.extra?.intro ?? '';
+    seller.extra?.introduction ?? seller.extra?.intro ?? '';
   const rating: number = product.rating ?? 0;
   const reviewCount: number = reviews.length;
 
@@ -240,7 +240,7 @@ export default function ProductDetailClient({
         />
       </div>
 
-      <ProductDetailBottomSheet product={product} />
+      <ProductDetailBottomSheet product={product} availableStock={stock} />
     </main>
   );
 }

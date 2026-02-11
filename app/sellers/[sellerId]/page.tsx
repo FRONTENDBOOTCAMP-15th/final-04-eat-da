@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     const sellerName = seller?.name ?? '판매자';
     const sellerDescription =
-      seller?.extra?.description ??
+      seller?.extra?.introduction ??
       seller?.extra?.intro ??
       '정성스럽게 만든 집밥을 나눕니다.';
     const sellerProfileImage = seller?.extra?.profileImage
@@ -55,7 +55,7 @@ interface Seller {
   email: string;
   image?: string | { path: string };
   extra?: {
-    description?: string;
+    introduction?: string;
     intro?: string;
     profileImage?: string;
   };
@@ -214,7 +214,7 @@ export default async function SellersDetailPage({
 
   const sellerName = seller?.name ?? '주부';
   const sellerDescription =
-    seller?.extra?.description ??
+    seller?.extra?.introduction ??
     seller?.extra?.intro ??
     '정성스럽게 만든 집밥을 나눕니다.';
   const sellerProfileImage =
