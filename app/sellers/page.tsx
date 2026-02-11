@@ -7,12 +7,8 @@ import { getTier } from '@/lib/tier';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '잇다 주부 목록',
-  openGraph: {
-    title: '잇다 주부 목록',
-    description: '주부 목록 페이지',
-    url: '/sellers',
-  },
+  title: '주부님 둘러보기 - 잇다',
+  description: '우리 동네에서 정성껏 집밥을 만드시는 주부님들을 만나보세요.',
 };
 
 interface Seller {
