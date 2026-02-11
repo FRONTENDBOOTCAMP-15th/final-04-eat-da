@@ -123,7 +123,7 @@ export default function Header({
           </div>
 
           {/* 오른쪽: X, 검색, 장바구니/홈 */}
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-[clamp(1rem,calc(0.725rem+1.13vw),1.25rem)] items-center">
             {showCloseButton && (
               <button
                 onClick={handleClose}
