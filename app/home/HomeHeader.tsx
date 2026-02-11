@@ -18,7 +18,7 @@ export default function HomeHeader({ onSearch, onCart, onLogoClick }: HomeHeader
   const { cartCount, setCartCount } = useCartStore();
   const user = useUserStore((state) => state.user);
   const unreadCount = useNotificationStore((state) =>
-    user ? state.unreadCountForSeller(user._id) : 0
+    user ? state.unreadCountForSeller(user._id) + state.unreadCountForUser(user._id) : 0
   );
 
   useEffect(() => {

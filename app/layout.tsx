@@ -2,6 +2,9 @@ import './globals.css';
 import './src/styles/tailwind.css';
 import { Inter } from 'next/font/google';
 import { Metadata, Viewport } from 'next';
+import PickupAlarmProvider from '@/app/src/components/common/PickupAlarmProvider';
+import GlobalToastProvider from '@/app/src/components/common/GlobalToastProvider';
+
 
 const inter = Inter({
   subsets: ['latin'],
@@ -41,6 +44,8 @@ export default function RootLayout({
   return (
     <html lang="ko" className={inter.variable}>
       <body suppressHydrationWarning>
+        <PickupAlarmProvider />
+        <GlobalToastProvider />
         <div className="w-full max-w-[744px] min-w-[390px] mx-auto">
           {children}
         </div>
