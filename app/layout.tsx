@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description: '정성 가득 집밥 한 끼',
     images: [
       {
-        url: 'https://res.cloudinary.com/ddedslqvv/image/upload/v1770784591/febc15-final04-ecad/RJy6JDRqV.jpg',
+        url: 'https://res.cloudinary.com/ddedslqvv/image/upload/v1770784776/febc15-final04-ecad/oEd-zW4BO.jpg',
         width: 1200,
         height: 630,
         alt: '잇다 대표 이미지',
