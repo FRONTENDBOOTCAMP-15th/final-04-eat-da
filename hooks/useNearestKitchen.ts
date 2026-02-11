@@ -1,15 +1,12 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import {
-  sharedKitchen,
-  SharedKitchen,
-} from '@/app/mypage/map/sharedKitchens';
+import { sharedKitchen, SharedKitchen } from '@/app/mypage/map/sharedKitchens';
 import { getUserAddress, geocodeAddress } from '@/lib/map';
 import useKitchenStore from '@/zustand/kitchenStore';
 import useUserStore from '@/zustand/userStore';
 
-const DEFAULT_KITCHEN_NAME = '서교동 공유주방';
+const DEFAULT_KITCHEN_NAME = ' ';
 const KITCHEN_COORDS_CACHE_KEY = 'kitchen-coords-cache';
 
 interface KitchenWithCoords {

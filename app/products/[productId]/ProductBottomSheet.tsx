@@ -18,10 +18,12 @@ interface ProductBottomSheetProps {
       pickupPlace?: string;
     };
   };
+  availableStock: number;
 }
 
 export default function ProductBottomSheet({
   product,
+  availableStock,
 }: ProductBottomSheetProps) {
   const router = useRouter();
   const { incrementCart } = useCartStore();
@@ -42,6 +44,10 @@ export default function ProductBottomSheet({
   const handleClose = () => setIsOpen(false);
 
   const handleQuantityChange = (id: string, newQuantity: number) => {
+    if (newQuantity > availableStock) {
+      alert(`남은 수량이 ${availableStock}개입니다.`);
+      return;
+    }
     setItems((prev) =>
       prev.map((it) => (it.id === id ? { ...it, quantity: newQuantity } : it))
     );
@@ -60,20 +66,13 @@ export default function ProductBottomSheet({
     setIsAddingToCart(true);
     try {
       const axios = getAxios();
-
-      // 현재 상품의 픽업 장소
-      const currentPickupPlace =
-        product.extra?.pickupPlace || '서교동 공유주방';
-
-      // 장바구니 조회
+      const currentPickupPlace = product.extra?.pickupPlace || ' ';
       const cartResponse = await axios.get('/carts');
       const cartItems = cartResponse.data.item || [];
 
-      // 장바구니에 상품이 있으면 픽업 장소 확인
       if (cartItems.length > 0) {
         const firstItem = cartItems[0];
-        const cartPickupPlace =
-          firstItem.product.extra?.pickupPlace || '서교동 공유주방';
+        const cartPickupPlace = firstItem.product.extra?.pickupPlace || ' ';
 
         if (currentPickupPlace !== cartPickupPlace) {
           alert(
@@ -91,17 +90,9 @@ export default function ProductBottomSheet({
 
       incrementCart();
 
-      const goToCart = confirm(
-        '장바구니에 담았습니다.\n장바구니로 이동하시겠습니까?'
-      );
-
-      if (goToCart) {
-        router.push('/cart');
-      } else {
-        handleClose();
-      }
+      handleClose();
     } catch (error: any) {
-      console.error('장바구니 추가 실패:', error);
+      // console.error('장바구니 추가 실패:', error);
 
       if (error.response?.status === 409) {
         alert('이미 장바구니에 담긴 상품입니다.');
@@ -132,10 +123,17 @@ export default function ProductBottomSheet({
     router.push('/checkout?direct=true');
   };
 
+  const isSoldOut = availableStock <= 0;
+
   return (
     <>
-      <BottomFixedButton as="button" type="button" onClick={handleOpen}>
-        구매하기
+      <BottomFixedButton
+        as="button"
+        type="button"
+        onClick={handleOpen}
+        disabled={isSoldOut}
+      >
+        {isSoldOut ? '품절' : '구매하기'}
       </BottomFixedButton>
 
       <CartPopup

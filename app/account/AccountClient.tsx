@@ -33,6 +33,8 @@ export default function AccountClient() {
   const [phone, setPhone] = useState('');
   const [addressValue, setAddressValue] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [introductionLength, setIntroductionLength] = useState(0);
   const [profileImageFiles, setProfileImageFiles] = useState<File[]>([]);
   const [initialImages, setInitialImages] = useState<string[]>([]);
   const [existingImage, setExistingImage] = useState<{ path: string; name: string } | null>(null);
@@ -44,6 +46,7 @@ export default function AccountClient() {
   const [submitting, setSubmitting] = useState(false);
 
   const detailAddressRef = useRef<HTMLInputElement>(null);
+  const introductionRef = useRef<HTMLTextAreaElement>(null);
 
   // 유저 정보 로드
   useEffect(() => {
@@ -66,6 +69,18 @@ export default function AccountClient() {
       setPhone(userInfo.phone || '');
       setAddressValue(userInfo.address || '');
       setDetailAddress(userInfo.extra?.detailAddress || '');
+      if (userInfo.extra?.introduction) {
+        const trimmed = userInfo.extra.introduction.slice(0, 100);
+        setIntroduction(trimmed);
+        setIntroductionLength(trimmed.length);
+        setTimeout(() => {
+          const el = introductionRef.current;
+          if (el) {
+            el.style.height = 'auto';
+            el.style.height = el.scrollHeight + 'px';
+          }
+        }, 0);
+      }
 
       // 이미지 처리 (직접 업로드한 이미지만 표시, 기본 아바타 URL은 제외)
       if (userInfo.image) {
@@ -182,6 +197,7 @@ export default function AccountClient() {
         address: addressValue,
         extra: {
           detailAddress,
+          ...(userType === 'seller' ? { introduction } : {}),
         },
       };
 
@@ -406,6 +422,35 @@ export default function AccountClient() {
             <p className="text-eatda-orange text-x-small mt-1">{clientErrors.detailAddress}</p>
           )}
         </div>
+
+        {/* 자기소개 - 주부일 때만 표시 */}
+        {userType === 'seller' && (
+          <div>
+            <label className="block text-display-3 font-semibold text-gray-800 mb-2">
+              자기소개
+            </label>
+            <textarea
+              ref={introductionRef}
+              value={introduction}
+              placeholder="요리를 시작하게 된 계기나 자신 있는 반찬 이야기를 적어주시면 좋아요. (40자 이상)"
+              maxLength={100}
+              className="w-full py-3 border-0 border-b border-gray-400 focus:outline-none focus:border-gray-600 placeholder:text-gray-500 focus:placeholder:text-transparent text-gray-800 text-display-2 placeholder:text-display-2 resize-none overflow-hidden"
+              rows={1}
+              onChange={(e) => {
+                setIntroduction(e.target.value);
+                setIntroductionLength(e.target.value.length);
+              }}
+              onInput={(e) => {
+                const target = e.target as HTMLTextAreaElement;
+                target.style.height = 'auto';
+                target.style.height = target.scrollHeight + 'px';
+              }}
+            />
+            <p className={`text-x-small mt-1 ${introductionLength >= 40 ? 'text-gray-600' : 'text-eatda-orange'}`}>
+              {introductionLength}/100
+            </p>
+          </div>
+        )}
 
         {/* 프로필 이미지 */}
         <div>

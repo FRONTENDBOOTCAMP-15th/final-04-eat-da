@@ -18,37 +18,46 @@ import Script from 'next/script';
 
 const RecommendProductSkeleton = () => (
   <div className="shrink-0 w-28 animate-pulse">
-    <div className="w-28 h-28 bg-gray-200 rounded-lg mb-2" />
-    <div className="h-3 bg-gray-200 rounded w-3/4 mb-1" />
-    <div className="h-3 bg-gray-200 rounded w-1/2" />
+    <div className="w-28 aspect-square bg-gray-200 rounded-lg" />
+    <div className="pt-2 px-1">
+      <div className="h-3 bg-gray-200 rounded w-3/4 mb-1" />
+      <div className="h-3 bg-gray-200 rounded w-1/2 mb-1" />
+      <div className="h-4 bg-gray-200 rounded w-2/3" />
+    </div>
   </div>
 );
 
 const RecommendSellerSkeleton = () => (
   <div className="animate-pulse">
     <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
-      {[...Array(4)].map((_, i) => (
+      {[...Array(6)].map((_, i) => (
         <div key={i} className="shrink-0 w-28 h-28 bg-gray-200 rounded-lg" />
       ))}
     </div>
-    <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-      <div className="w-16 h-16 bg-gray-200 rounded-full" />
-      <div className="flex-1">
-        <div className="h-4 bg-gray-200 rounded w-1/3 mb-2" />
-        <div className="h-3 bg-gray-200 rounded w-1/2 mb-2" />
-        <div className="h-3 bg-gray-200 rounded w-2/3" />
+    <div className="flex items-start gap-2.5 rounded-lg px-2.5">
+      <div className="h-15 w-15 bg-gray-200 rounded-full shrink-0" />
+      <div className="flex-1 flex flex-col gap-1">
+        <div className="h-4 bg-gray-200 rounded w-1/4 mb-0.5" />
+        <div className="h-3 bg-gray-200 rounded w-1/3" />
+        <div className="h-3 bg-gray-200 rounded w-2/3 mt-1" />
       </div>
     </div>
   </div>
 );
 
 const ProductCardSkeleton = () => (
-  <div className="p-2 animate-pulse">
-    <div className="w-full aspect-square bg-gray-200 rounded-lg mb-2" />
-    <div className="h-3 bg-gray-200 rounded w-1/2 mb-2" />
-    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-    <div className="h-3 bg-gray-200 rounded w-1/3 mb-2" />
-    <div className="h-4 bg-gray-200 rounded w-1/2" />
+  <div className="flex flex-col animate-pulse">
+    <div className="w-full aspect-square bg-gray-200" />
+    <div className="pt-4 pb-5 px-2.5 space-y-1">
+      <div className="flex gap-2 items-center">
+        <div className="h-3 bg-gray-200 rounded w-1/3" />
+      </div>
+      <div className="flex items-center gap-1">
+        <div className="h-4 bg-gray-200 rounded w-2/5" />
+        <div className="h-3 bg-gray-200 rounded w-1/5" />
+      </div>
+      <div className="h-4 bg-gray-200 rounded w-1/4" />
+    </div>
   </div>
 );
 
@@ -58,8 +67,12 @@ export default function HomePageClient() {
   const [recommendProducts, setRecommendProducts] = useState<Product[]>([]);
   const [recommendSeller, setRecommendSeller] =
     useState<SellerWithStats | null>(null);
+  const [allSellers, setAllSellers] = useState<Seller[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('splashShown'));
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return !sessionStorage.getItem('splashShown');
+  });
   const [splashVisible, setSplashVisible] = useState(false);
   const [splashFading, setSplashFading] = useState(false);
 
@@ -77,11 +90,23 @@ export default function HomePageClient() {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
     };
-  }, []);
+  }, [showSplash]);
+
+  const handleLogoClick = () => {
+    setSplashVisible(false);
+    setSplashFading(false);
+    setShowSplash(true);
+  };
 
   const filteredProducts = useMemo(
     () => products.filter((p) => p.extra?.pickupPlace === nearestKitchen),
     [products, nearestKitchen]
+  );
+
+  const filteredRecommendProducts = useMemo(
+    () =>
+      recommendProducts.filter((p) => p.extra?.pickupPlace === nearestKitchen),
+    [recommendProducts, nearestKitchen]
   );
 
   useEffect(() => {
@@ -120,6 +145,7 @@ export default function HomePageClient() {
         );
 
         setProducts(allProducts);
+        setAllSellers(sellers);
 
         const today = new Date().toDateString();
         const stored = localStorage.getItem('dailyRecommend');
@@ -153,72 +179,6 @@ export default function HomePageClient() {
             })
           );
         }
-
-        const storedSeller = localStorage.getItem('dailyRecommendSeller');
-        let foundSeller = false;
-
-        if (storedSeller) {
-          const { date, sellerId } = JSON.parse(storedSeller);
-          if (date === today) {
-            const seller = sellers.find((s: Seller) => s._id === sellerId);
-            if (seller) {
-              const sellerProductCount = allProducts.filter(
-                (p: Product) => p.seller?._id === seller._id
-              ).length;
-
-              console.log(
-                `저장된 주부 ${seller.name}의 상품 수:`,
-                sellerProductCount
-              );
-
-              if (sellerProductCount >= 6) {
-                const sellerWithStats = calculateSellerStats(
-                  seller,
-                  allProducts
-                );
-                setRecommendSeller(sellerWithStats);
-                foundSeller = true;
-              }
-            }
-          }
-        }
-
-        if (!foundSeller) {
-          const eligibleSellers = sellers.filter((seller: Seller) => {
-            const productCount = allProducts.filter(
-              (p: Product) => p.seller?._id === seller._id
-            ).length;
-            return productCount >= 6;
-          });
-
-          console.log(
-            '3개 이상 상품을 등록한 주부 수:',
-            eligibleSellers.length
-          );
-
-          if (eligibleSellers.length > 0) {
-            const randomSeller =
-              eligibleSellers[
-                Math.floor(Math.random() * eligibleSellers.length)
-              ];
-
-            console.log('선정된 주부:', randomSeller.name);
-
-            const sellerWithStats = calculateSellerStats(
-              randomSeller,
-              allProducts
-            );
-            setRecommendSeller(sellerWithStats);
-
-            localStorage.setItem(
-              'dailyRecommendSeller',
-              JSON.stringify({
-                date: today,
-                sellerId: randomSeller._id,
-              })
-            );
-          }
-        }
       } catch (error) {
         console.error('데이터 조회 실패:', error);
       } finally {
@@ -228,6 +188,70 @@ export default function HomePageClient() {
 
     fetchData();
   }, []);
+
+  // 가장 가까운 주방에 반찬이 있는 주부만 추천
+  useEffect(() => {
+    if (products.length === 0 || allSellers.length === 0) return;
+
+    const kitchenProducts = products.filter(
+      (p) => p.extra?.pickupPlace === nearestKitchen
+    );
+
+    const today = new Date().toDateString();
+    const storedSeller = localStorage.getItem('dailyRecommendSeller');
+    let foundSeller = false;
+
+    if (storedSeller) {
+      try {
+        const { date, sellerId } = JSON.parse(storedSeller);
+        if (date === today) {
+          const seller = allSellers.find((s) => s._id === sellerId);
+          if (seller) {
+            const hasKitchenProducts = kitchenProducts.some(
+              (p) => p.seller?._id === seller._id
+            );
+            if (hasKitchenProducts) {
+              const sellerWithStats = calculateSellerStats(seller, products);
+              setRecommendSeller(sellerWithStats);
+              foundSeller = true;
+            }
+          }
+        }
+      } catch {
+        // 캐시 파싱 실패 시 무시
+      }
+    }
+
+    if (!foundSeller) {
+      const eligibleSellers = allSellers.filter((seller) => {
+        const hasKitchenProducts = kitchenProducts.some(
+          (p) => p.seller?._id === seller._id
+        );
+        const totalProductCount = products.filter(
+          (p) => p.seller?._id === seller._id
+        ).length;
+        return hasKitchenProducts && totalProductCount >= 6;
+      });
+
+      if (eligibleSellers.length > 0) {
+        const randomSeller =
+          eligibleSellers[Math.floor(Math.random() * eligibleSellers.length)];
+
+        const sellerWithStats = calculateSellerStats(randomSeller, products);
+        setRecommendSeller(sellerWithStats);
+
+        localStorage.setItem(
+          'dailyRecommendSeller',
+          JSON.stringify({
+            date: today,
+            sellerId: randomSeller._id,
+          })
+        );
+      } else {
+        setRecommendSeller(null);
+      }
+    }
+  }, [products, allSellers, nearestKitchen]);
 
   const calculateSellerStats = (
     seller: Seller,
@@ -286,33 +310,35 @@ export default function HomePageClient() {
       {/* 스플래시 오버레이 */}
       {showSplash && (
         <div
-          className={`fixed inset-0 z-[100] bg-[#ff6155] min-[390px]:bg-[#ffffff] flex items-center justify-center transition-opacity duration-500 ${
+          className={`fixed inset-0 z-[100] bg-[#ff6155] min-[391px]:bg-[#ffffff] flex items-center justify-center transition-opacity duration-500 ${
             splashFading ? 'opacity-0' : 'opacity-100'
           }`}
         >
-            <div
-              className={`w-full max-w-[744px] px-5 transition-all duration-1000 ${
-                splashVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-            >
-              <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[390px]:text-[#ff6155] leading-tight">
-                <span className="shrink-0">잇</span>
-                <span
-                  className="flex-1 h-1 bg-[#ffffff] min-[390px]:bg-[#ff6155] mx-3 overflow-hidden"
-                  style={
-                    splashVisible
-                      ? { animation: 'line-expand 0.8s ease-in 1.1s both' }
-                      : undefined
-                  }
-                />
-                <span className="shrink-0">다</span>
-              </h1>
-            </div>
+          <div
+            className={`w-full max-w-[744px] px-5 transition-all duration-1000 ${
+              splashVisible
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[391px]:text-[#ff6155] leading-tight">
+              <span className="shrink-0">잇</span>
+              <span
+                className="flex-1 h-1 bg-[#ffffff] min-[391px]:bg-[#ff6155] mx-3 overflow-hidden"
+                style={
+                  splashVisible
+                    ? { animation: 'line-expand 0.8s ease-in 1.1s both' }
+                    : undefined
+                }
+              />
+              <span className="shrink-0">다</span>
+            </h1>
+          </div>
         </div>
       )}
 
-      <HomeHeader />
-      <div className="p-5 flex flex-col gap-6 min-[744px]:gap-10 mt-12 mb-10">
+      <HomeHeader onLogoClick={handleLogoClick} />
+      <div className="p-5 flex flex-col gap-6 min-[744px]:gap-10 mt-11 mb-10">
         <Link
           href="/about"
           className="block relative -mx-5 w-[calc(100%+2.5rem)] aspect-350/200 overflow-hidden"
@@ -338,7 +364,7 @@ export default function HomePageClient() {
           </div>
         </Link>
 
-        <div>
+        <div className="min-[744px]:max-w min-[744px]:mx-auto">
           <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
           <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
             {isLoading ? (
@@ -348,14 +374,14 @@ export default function HomePageClient() {
                 ))}
               </>
             ) : (
-              recommendProducts.map((product) => (
+              filteredRecommendProducts.map((product) => (
                 <RecommendProduct key={product._id} product={product} />
               ))
             )}
           </div>
         </div>
 
-        <div className="mb-1">
+        <div className="mb-1 min-[744px]:max-w min-[744px]:mx-auto">
           <p className="text-display-5 font-semibold pb-4">
             오늘의 추천 주부님
           </p>
@@ -413,7 +439,7 @@ export default function HomePageClient() {
                   '/seller/seller1.png'
                 }
                 description={
-                  recommendSeller.extra?.description ??
+                  recommendSeller.extra?.introduction ??
                   recommendSeller.extra?.intro ??
                   '정성스럽게 만든 집밥을 나눕니다.'
                 }
@@ -429,14 +455,17 @@ export default function HomePageClient() {
         {isLoading ? (
           <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 sm:gap-2.5">
             {[...Array(6)].map((_, i) => (
-              <ProductCardSkeleton key={i} />
+              <div
+                key={i}
+                className={`${Math.floor(i / 2) > 0 ? 'border-t border-gray-200' : ''}`}
+              >
+                <ProductCardSkeleton />
+              </div>
             ))}
           </div>
         ) : (
-
           <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 sm:gap-2.5 ">
             {filteredProducts.map((product, index) => {
-
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length
                 : typeof product.replies === 'number'
@@ -449,7 +478,7 @@ export default function HomePageClient() {
               return (
                 <div
                   key={product._id}
-                  className={`${rowIndex > 0 ? 'border-t border-gray-200' : ''} ${index % colCount !== 0 ? 'border-l border-gray-200' : ''}`}
+                  className={`${rowIndex > 0 ? 'border-t border-gray-200' : ''}`}
                 >
                   <ProductCard
                     productId={product._id}

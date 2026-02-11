@@ -199,11 +199,11 @@ export default function ProductsListClient({
       <CategoryTabs value={selected} onChange={setSelected} />
 
       <div
-        className={`fixed top-28 z-15 flex place-self-end mr-3 transition-transform duration-300 ${
+        className={`fixed top-28 z-15 left-0 right-0 max-w-186 mx-auto flex justify-end pr-3 pointer-events-none transition-transform duration-300 ${
           isVisible ? 'translate-y-0' : '-translate-y-20'
         }`}
       >
-        <div className="relative">
+        <div className="relative pointer-events-auto">
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -227,24 +227,28 @@ export default function ProductsListClient({
             </svg>
           </button>
 
-          {isDropdownOpen && (
-            <div className="absolute top-full right-1 mt-1 bg-white border border-gray-200 rounded-lg overflow-hidden">
-              {(Object.keys(sortLabels) as SortOption[])
-                .filter((option) => option !== sortBy)
-                .map((option) => (
-                  <button
-                    key={option}
-                    onClick={() => {
-                      setSortBy(option);
-                      setIsDropdownOpen(false);
-                    }}
-                    className="block w-full px-4 py-2 text-paragraph text-gray-800 hover:bg-gray-100 text-left whitespace-nowrap"
-                  >
-                    {sortLabels[option]}
-                  </button>
-                ))}
-            </div>
-          )}
+          <div
+            className={`absolute top-full right-1 mt-1 bg-white border border-gray-200 rounded-lg overflow-hidden transition-all duration-200 origin-top ${
+              isDropdownOpen
+                ? 'opacity-100 scale-y-100'
+                : 'opacity-0 scale-y-0 pointer-events-none'
+            }`}
+          >
+            {(Object.keys(sortLabels) as SortOption[])
+              .filter((option) => option !== sortBy)
+              .map((option) => (
+                <button
+                  key={option}
+                  onClick={() => {
+                    setSortBy(option);
+                    setIsDropdownOpen(false);
+                  }}
+                  className="block w-full px-4 py-2 text-paragraph text-gray-800 hover:bg-gray-100 text-left whitespace-nowrap"
+                >
+                  {sortLabels[option]}
+                </button>
+              ))}
+          </div>
         </div>
       </div>
 
