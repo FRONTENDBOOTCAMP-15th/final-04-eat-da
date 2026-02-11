@@ -164,13 +164,13 @@ export default async function SellersList() {
   );
 
   return (
-    <div className="flex flex-col gap-7.5 mt-15 pb-23">
+    <>
       <ScrollToTop />
       <ProductsPageHeader />
 
       <SellersListClient sellerCards={visibleSellerCards} />
 
       <BottomNavigation />
-    </div>
+    </>
   );
 }
