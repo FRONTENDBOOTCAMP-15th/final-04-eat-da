@@ -30,7 +30,7 @@ async function getProducts(): Promise<Product[]> {
     // 구독권 제외
     return products.filter((p: Product) => !p.extra?.isSubscription);
   } catch (error) {
-    console.error('상품 조회 실패:', error);
+    // console.error('상품 조회 실패:', error);
     return [];
   }
 }
@@ -42,7 +42,7 @@ async function getSellers(): Promise<Seller[]> {
     const items: Seller[] = res.data.item || [];
     return items.filter((user) => user.type === 'seller');
   } catch (error) {
-    console.error('판매자 목록 조회 실패:', error);
+    // console.error('판매자 목록 조회 실패:', error);
     return [];
   }
 }

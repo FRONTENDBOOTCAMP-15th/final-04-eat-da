@@ -1,7 +1,7 @@
 import SellersListClient from '@/app/sellers/components/SellersListClient';
 import BottomNavigation from '@/app/src/components/common/BottomNavigation';
-import Header from '@/app/src/components/common/Header';
 import ScrollToTop from '@/app/src/components/common/ScrollToTop';
+import ProductsPageHeader from '@/app/src/components/ui/ProductsPageHeader';
 import { getAxios } from '@/lib/axios';
 import { getTier } from '@/lib/tier';
 import { Metadata } from 'next';
@@ -20,7 +20,7 @@ interface Seller {
   seller_id?: number;
   name: string;
   type?: string;
-  image?: string;
+  image?: string | { path?: string };
   totalSales?: number;
   extra?: {
     description?: string;
@@ -37,6 +37,7 @@ interface ProductSummary {
   mainImages?: Array<{ path?: string; name?: string } | string>;
   extra?: {
     isSubscription?: boolean;
+    pickupPlace?: string;
   };
 }
 
@@ -52,7 +53,7 @@ async function getSellers(): Promise<Seller[]> {
     const items: Seller[] = res.data.item || [];
     return items.filter((user) => user.type === 'seller');
   } catch (error) {
-    console.error('판매자 목록 조회 실패:', error);
+    // console.error('판매자 목록 조회 실패:', error);
     return [];
   }
 }
@@ -63,7 +64,7 @@ async function getAllProducts(): Promise<ProductSummary[]> {
     const res = await axios.get('/products', { params: { limit: 200 } });
     return res.data.item || [];
   } catch (error) {
-    console.error('상품 목록 조회 실패:', error);
+    // console.error('상품 목록 조회 실패:', error);
     return [];
   }
 }
@@ -143,6 +144,14 @@ export default async function SellersList() {
     const topDishes = getTopDishes(dishesOnly);
     const { rating, reviewCount } = getSellerRating(dishesOnly);
 
+    const kitchens = [
+      ...new Set(
+        dishesOnly
+          .map((p) => p.extra?.pickupPlace)
+          .filter((k): k is string => Boolean(k))
+      ),
+    ];
+
     return {
       sellerId,
       seller,
@@ -151,6 +160,7 @@ export default async function SellersList() {
       reviewCount,
       productCount: dishesOnly.length,
       tier: getTier(seller.totalSales as number).label,
+      kitchens,
     };
   });
   const visibleSellerCards = sellerCards.filter(
@@ -160,7 +170,7 @@ export default async function SellersList() {
   return (
     <div className="flex flex-col gap-7.5 mt-15 pb-23">
       <ScrollToTop />
-      <Header title="주부 목록" showBackButton showSearch showCart />
+      <ProductsPageHeader />
 
       <SellersListClient sellerCards={visibleSellerCards} />
 
