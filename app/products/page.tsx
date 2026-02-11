@@ -6,12 +6,9 @@ import { getAxios } from '@/lib/axios';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '잇다 반찬 목록',
-  openGraph: {
-    title: '잇다 반찬 목록',
-    description: '반찬 목록 페이지',
-    url: '/products',
-  },
+  title: '반찬 둘러보기 - 잇다',
+  description:
+    '우리 동네 주부님들이 정성껏 만든 다양한 집밥 반찬을 둘러보세요.',
 };
 
 interface Seller {

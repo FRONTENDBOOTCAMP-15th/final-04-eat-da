@@ -1,12 +1,32 @@
 import './globals.css';
 import './src/styles/tailwind.css';
 import { Inter } from 'next/font/google';
+import { Metadata } from 'next';
 
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 });
+
+export const metadata: Metadata = {
+  title: '잇다 - 우리 동네 주부님의 집밥',
+  description: '정성 가득 집밥 한 끼',
+  openGraph: {
+    title: '잇다 - 우리 동네 주부님의 집밥',
+    description: '정성 가득 집밥 한 끼',
+    images: [
+      {
+        url: 'https://res.cloudinary.com/ddedslqvv/image/upload/v1770784776/febc15-final04-ecad/oEd-zW4BO.jpg',
+        width: 1200,
+        height: 630,
+        alt: '잇다 대표 이미지',
+      },
+    ],
+    type: 'website',
+    siteName: '잇다',
+  },
+};
 
 export default function RootLayout({
   children,
