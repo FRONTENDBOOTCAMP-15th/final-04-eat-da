@@ -38,7 +38,7 @@ export default function MyPageClient() {
 
   useEffect(() => {
     if (!loggedInUser) {
-      router.replace('/login?redirect=/mypage');
+      router.replace('/login');
       return;
     }
 

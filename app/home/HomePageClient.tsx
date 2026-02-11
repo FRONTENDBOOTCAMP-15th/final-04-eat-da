@@ -310,7 +310,7 @@ export default function HomePageClient() {
       {/* 스플래시 오버레이 */}
       {showSplash && (
         <div
-          className={`fixed inset-0 z-[100] bg-[#ff6155] min-[390px]:bg-[#ffffff] flex items-center justify-center transition-opacity duration-500 ${
+          className={`fixed inset-0 z-[100] bg-[#ff6155] min-[391px]:bg-[#ffffff] flex items-center justify-center transition-opacity duration-500 ${
             splashFading ? 'opacity-0' : 'opacity-100'
           }`}
         >
