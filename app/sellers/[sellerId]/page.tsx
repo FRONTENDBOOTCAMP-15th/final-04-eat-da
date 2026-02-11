@@ -254,7 +254,7 @@ export default async function SellersDetailPage({
         description={sellerDescription}
       />
       {/* 반찬 리스트 */}
-      <div className="grid grid-cols-2">
+      <div className="grid grid-cols-2 sm:grid-cols-3 sm:gap-2 sm:px-5">
         {products.length > 0 ? (
           products.map((product) => (
             <ProductCard
