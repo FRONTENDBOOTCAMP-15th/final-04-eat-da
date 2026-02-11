@@ -20,7 +20,7 @@ interface SellerCardData {
     name?: string;
     image?: string | { path?: string };
     extra?: {
-      description?: string;
+      introduction?: string;
       intro?: string;
       profileImage?: string;
     };
@@ -173,7 +173,7 @@ export default function SellersListClient({
           const isLast = index === sortedSellers.length - 1;
           const sellerName = card.seller.name ?? '주부';
           const sellerDescription =
-            card.seller.extra?.description ??
+            card.seller.extra?.introduction ??
             card.seller.extra?.intro ??
             '정성스럽게 만든 집밥을 나눕니다.';
           const sellerProfileImage =

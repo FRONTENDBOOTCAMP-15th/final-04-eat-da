@@ -157,7 +157,7 @@ export default function ProductDetailClient({
   const seller = product.seller ?? {};
   const sellerName: string = seller.name ?? '주부';
   const sellerDescription: string =
-    seller.extra?.description ?? seller.extra?.intro ?? '';
+    seller.extra?.introduction ?? seller.extra?.intro ?? '';
   const rating: number = product.rating ?? 0;
   const reviewCount: number = reviews.length;
 
