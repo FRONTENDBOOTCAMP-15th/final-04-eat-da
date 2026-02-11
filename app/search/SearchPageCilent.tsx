@@ -92,7 +92,7 @@ export default function SearchPageCilent() {
         </div>
       </header>
 
-      <div className="w-full max-w-[744px] min-w-[390px] mx-auto px-4 sm:px-6">
+      <div className="w-full max-w-[744px] min-w-[390px] mx-auto sm:px-6">
         <div className="pt-19 pb-20">
           {isLoading ? (
             <div className="text-center py-10">

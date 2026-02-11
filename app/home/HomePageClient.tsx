@@ -105,9 +105,7 @@ export default function HomePageClient() {
 
   const filteredRecommendProducts = useMemo(
     () =>
-      recommendProducts.filter(
-        (p) => p.extra?.pickupPlace === nearestKitchen
-      ),
+      recommendProducts.filter((p) => p.extra?.pickupPlace === nearestKitchen),
     [recommendProducts, nearestKitchen]
   );
 
@@ -237,9 +235,7 @@ export default function HomePageClient() {
 
       if (eligibleSellers.length > 0) {
         const randomSeller =
-          eligibleSellers[
-            Math.floor(Math.random() * eligibleSellers.length)
-          ];
+          eligibleSellers[Math.floor(Math.random() * eligibleSellers.length)];
 
         const sellerWithStats = calculateSellerStats(randomSeller, products);
         setRecommendSeller(sellerWithStats);
@@ -325,10 +321,10 @@ export default function HomePageClient() {
                 : 'opacity-0 translate-y-8'
             }`}
           >
-            <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[390px]:text-[#ff6155] leading-tight">
+            <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[391px]:text-[#ff6155] leading-tight">
               <span className="shrink-0">잇</span>
               <span
-                className="flex-1 h-1 bg-[#ffffff] min-[390px]:bg-[#ff6155] mx-3 overflow-hidden"
+                className="flex-1 h-1 bg-[#ffffff] min-[391px]:bg-[#ff6155] mx-3 overflow-hidden"
                 style={
                   splashVisible
                     ? { animation: 'line-expand 0.8s ease-in 1.1s both' }
@@ -368,7 +364,7 @@ export default function HomePageClient() {
           </div>
         </Link>
 
-        <div>
+        <div className="min-[744px]:max-w min-[744px]:mx-auto">
           <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
           <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
             {isLoading ? (
@@ -385,7 +381,7 @@ export default function HomePageClient() {
           </div>
         </div>
 
-        <div className="mb-1">
+        <div className="mb-1 min-[744px]:max-w min-[744px]:mx-auto">
           <p className="text-display-5 font-semibold pb-4">
             오늘의 추천 주부님
           </p>
