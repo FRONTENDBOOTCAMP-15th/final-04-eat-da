@@ -20,7 +20,7 @@ interface Seller {
   seller_id?: number;
   name: string;
   type?: string;
-  image?: string;
+  image?: string | { path?: string };
   totalSales?: number;
   extra?: {
     description?: string;
@@ -53,7 +53,7 @@ async function getSellers(): Promise<Seller[]> {
     const items: Seller[] = res.data.item || [];
     return items.filter((user) => user.type === 'seller');
   } catch (error) {
-    console.error('판매자 목록 조회 실패:', error);
+    // console.error('판매자 목록 조회 실패:', error);
     return [];
   }
 }
@@ -64,7 +64,7 @@ async function getAllProducts(): Promise<ProductSummary[]> {
     const res = await axios.get('/products', { params: { limit: 200 } });
     return res.data.item || [];
   } catch (error) {
-    console.error('상품 목록 조회 실패:', error);
+    // console.error('상품 목록 조회 실패:', error);
     return [];
   }
 }
