@@ -59,7 +59,9 @@ export default function HomePageClient() {
   const [recommendSeller, setRecommendSeller] =
     useState<SellerWithStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem('splashShown'));
+  const [showSplash, setShowSplash] = useState(
+    () => !sessionStorage.getItem('splashShown')
+  );
   const [splashVisible, setSplashVisible] = useState(false);
   const [splashFading, setSplashFading] = useState(false);
 
@@ -296,24 +298,26 @@ export default function HomePageClient() {
             splashFading ? 'opacity-0' : 'opacity-100'
           }`}
         >
-            <div
-              className={`w-full max-w-[744px] px-5 transition-all duration-1000 ${
-                splashVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}
-            >
-              <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[391px]:text-[#ff6155] leading-tight">
-                <span className="shrink-0">잇</span>
-                <span
-                  className="flex-1 h-1 bg-[#ffffff] min-[391px]:bg-[#ff6155] mx-3 overflow-hidden"
-                  style={
-                    splashVisible
-                      ? { animation: 'line-expand 0.8s ease-in 1.1s both' }
-                      : undefined
-                  }
-                />
-                <span className="shrink-0">다</span>
-              </h1>
-            </div>
+          <div
+            className={`w-full max-w-[744px] px-5 transition-all duration-1000 ${
+              splashVisible
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[391px]:text-[#ff6155] leading-tight">
+              <span className="shrink-0">잇</span>
+              <span
+                className="flex-1 h-1 bg-[#ffffff] min-[391px]:bg-[#ff6155] mx-3 overflow-hidden"
+                style={
+                  splashVisible
+                    ? { animation: 'line-expand 0.8s ease-in 1.1s both' }
+                    : undefined
+                }
+              />
+              <span className="shrink-0">다</span>
+            </h1>
+          </div>
         </div>
       )}
 
@@ -344,7 +348,7 @@ export default function HomePageClient() {
           </div>
         </Link>
 
-        <div>
+        <div className="min-[744px]:max-w min-[744px]:mx-auto">
           <p className="text-display-5 font-semibold pb-4">오늘의 추천 반찬</p>
           <div className="flex gap-1 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
             {isLoading ? (
@@ -361,7 +365,7 @@ export default function HomePageClient() {
           </div>
         </div>
 
-        <div className="mb-1">
+        <div className="mb-1 min-[744px]:max-w min-[744px]:mx-auto">
           <p className="text-display-5 font-semibold pb-4">
             오늘의 추천 주부님
           </p>
@@ -439,10 +443,8 @@ export default function HomePageClient() {
             ))}
           </div>
         ) : (
-
           <div className="grid grid-cols-2 -mx-5 sm:grid-cols-3 sm:gap-2.5 ">
             {filteredProducts.map((product, index) => {
-
               const reviewCount = Array.isArray(product.replies)
                 ? product.replies.length
                 : typeof product.replies === 'number'
