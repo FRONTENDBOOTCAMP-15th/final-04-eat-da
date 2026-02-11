@@ -86,7 +86,7 @@ export default function ProductBottomSheet({
 
       handleClose();
     } catch (error: any) {
-      console.error('장바구니 추가 실패:', error);
+      // console.error('장바구니 추가 실패:', error);
 
       if (error.response?.status === 409) {
         alert('이미 장바구니에 담긴 상품입니다.');

@@ -62,7 +62,7 @@ export default function ProductDetailClient({
         setSellerTier(sellerInfo.tier);
       }
     } catch (error) {
-      console.error('상품 조회 실패:', error);
+      // console.error('상품 조회 실패:', error);
     } finally {
       setIsLoading(false);
     }
@@ -92,11 +92,16 @@ export default function ProductDetailClient({
       const totalSales = sellerFromList?.totalSales ?? 0;
 
       return {
-        image: seller?.extra?.profileImage ?? seller?.image,
+        image: seller?.extra?.profileImage
+          ?? (typeof seller?.image === 'string'
+            ? seller.image
+            : seller?.image?.path
+              ? getImageUrl(seller.image.path)
+              : undefined),
         tier: getTier(totalSales),
       };
     } catch (error) {
-      console.error('판매자 정보 조회 실패:', error);
+      // console.error('판매자 정보 조회 실패:', error);
       return { image: undefined, tier: getTier(0) };
     }
   };
@@ -116,7 +121,7 @@ export default function ProductDetailClient({
           setBookmarkId(response.data.item._id);
         } catch (error: any) {
           if (error.response?.status === 422) {
-            console.log('이미 북마크되어 있음 - 북마크 목록 재조회');
+            // console.log('이미 북마크되어 있음 - 북마크 목록 재조회');
             const bookmarksRes = await axios.get('/bookmarks');
             const bookmarks = bookmarksRes.data.item || [];
             const existing = bookmarks.find((b: any) => {
@@ -132,7 +137,7 @@ export default function ProductDetailClient({
         }
       }
     } catch (error) {
-      console.error('북마크 토글 실패:', error);
+      // console.error('북마크 토글 실패:', error);
     }
   };
 

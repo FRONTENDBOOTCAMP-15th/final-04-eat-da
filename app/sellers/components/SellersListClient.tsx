@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import SellerCard from '@/app/sellers/components/SellerCard';
 import useKitchenStore from '@/zustand/kitchenStore';
+import { getImageUrl } from '@/lib/review';
 
 type SortOption = 'recommend' | 'rating' | 'review' | 'product';
 
@@ -17,7 +18,7 @@ interface SellerCardData {
   sellerId: number;
   seller: {
     name?: string;
-    image?: string;
+    image?: string | { path?: string };
     extra?: {
       description?: string;
       intro?: string;
@@ -177,8 +178,11 @@ export default function SellersListClient({
             '정성스럽게 만든 집밥을 나눕니다.';
           const sellerProfileImage =
             card.seller.extra?.profileImage ??
-            card.seller.image ??
-            '/seller/seller1.png';
+            (typeof card.seller.image === 'string'
+              ? card.seller.image
+              : card.seller.image?.path
+                ? getImageUrl(card.seller.image.path)
+                : '/seller/seller1.png');
 
           return (
             <SellerCard
