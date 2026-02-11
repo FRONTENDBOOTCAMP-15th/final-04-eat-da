@@ -168,7 +168,7 @@ export default function SellersListClient({
         </div>
       </div>
 
-      <div>
+      <div className="max-w-186 mx-auto">
         {sortedSellers.map((card, index) => {
           const isLast = index === sortedSellers.length - 1;
           const sellerName = card.seller.name ?? '주부';
