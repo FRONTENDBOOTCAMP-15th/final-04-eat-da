@@ -304,7 +304,7 @@ export default function HomePageClient() {
       {/* 스플래시 오버레이 */}
       {showSplash && (
         <div
-          className={`fixed inset-0 z-[100] bg-[#ff6155] min-[390px]:bg-[#ffffff] flex items-center justify-center transition-opacity duration-500 ${
+          className={`fixed inset-0 z-[100] bg-[#ff6155] min-[391px]:bg-[#ffffff] flex items-center justify-center transition-opacity duration-500 ${
             splashFading ? 'opacity-0' : 'opacity-100'
           }`}
         >
@@ -315,10 +315,10 @@ export default function HomePageClient() {
                 : 'opacity-0 translate-y-8'
             }`}
           >
-            <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[390px]:text-[#ff6155] leading-tight">
+            <h1 className="relative flex items-center justify-center mx-10 text-3xl font-bold text-[#ffffff] min-[391px]:text-[#ff6155] leading-tight">
               <span className="shrink-0">잇</span>
               <span
-                className="flex-1 h-1 bg-[#ffffff] min-[390px]:bg-[#ff6155] mx-3 overflow-hidden"
+                className="flex-1 h-1 bg-[#ffffff] min-[391px]:bg-[#ff6155] mx-3 overflow-hidden"
                 style={
                   splashVisible
                     ? { animation: 'line-expand 0.8s ease-in 1.1s both' }
