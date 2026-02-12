@@ -18,6 +18,8 @@
 ![Node.js](https://img.shields.io/badge/Node.js-5FA04E?style=flat&logo=nodedotjs&logoColor=white)
 ![Socket.IO](https://img.shields.io/badge/Socket.IO-010101?style=flat&logo=socketdotio&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)
+![PortOne](https://img.shields.io/badge/PortOne-FC6B2D?style=flat&logo=portone&logoColor=white)
+![Bruno](https://img.shields.io/badge/Bruno-F4AA41?style=flat&logo=bruno&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white)
 ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=flat&logo=figma&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-5865F2?style=flat&logo=discord&logoColor=white)
@@ -31,10 +33,11 @@
 
 1. [프로젝트 소개](#프로젝트-소개)
 2. [팀원 소개](#팀원-소개)
-3. [주요 기능](#주요-기능)
-4. [페이지 구조 & 흐름도](#페이지-구조--흐름도)
-5. [시연 영상](#시연-영상)
-6. [회고](#회고)
+3. [협업 방식](#협업-방식)
+4. [주요 기능](#주요-기능)
+5. [페이지 구조 & 흐름도](#페이지-구조--흐름도)
+6. [시연 영상](#시연-영상)
+7. [회고](#회고)
 
 <br>
 
@@ -193,6 +196,45 @@
 
 <br>
 
+## 협업 방식
+
+### 커뮤니케이션
+
+> **데일리 스크럼** 매일 9시 / 진행 상황 공유 및 이슈 논의
+
+| 도구                   | 용도                       |
+| ---------------------- | -------------------------- |
+| **Discord**            | 실시간 소통, 데일리 스크럼 |
+| **GitHub Wiki**        | 회의록 기록 및 공유        |
+| **Notion**             | 일정 관리, 문서화          |
+| **GitHub Issues & PR** | 작업 단위 관리, 코드 리뷰  |
+
+### 브랜치
+
+```
+main ───────────────────────────── 배포 브랜치
+ └── develop ───────────────────── 개발 통합 브랜치
+      ├── feat/home ────────────── 기능 브랜치
+      ├── feat/product-list
+      ├── feat/cart
+      ├── feat/checkout
+      ├── feat/login
+      ├── feat/review
+      ├── feat/mypage
+      └── feat/wishlist
+```
+
+- `main` — 배포 가능한 안정 브랜치
+- `develop` — 기능 브랜치를 통합하는 개발 브랜치
+- `feat/*` — 기능 단위로 브랜치를 생성하여 작업 후 PR을 통해 `develop`에 머지
+
+### PR & 이슈 관리
+
+- **GitHub Issues** — 작업 단위로 이슈를 생성하고 현재 상황 · 목표 · 작업 내용을 명시
+- **PR 템플릿** — PR 타입 · 반영 브랜치 · 연관 이슈 · 작업 사항을 체크리스트로 작성하여 리뷰 효율화
+
+<br>
+
 ## 주요 기능
 
 ### 구매자
@@ -261,9 +303,11 @@ app/
 
 **스플래시 이미지** → **홈**
 
-<video src="https://github.com/user-attachments/assets/e1699f4a-4a6f-4b71-b833-20758cc216a5" width="800" autoplay loop muted></video>
+> 앱 진입 시 보이는 메인 화면으로, 오늘의 추천 반찬과 주부님을 한눈에 탐색할 수 있습니다.
 
-앱 진입 시 보이는 메인 화면으로, 오늘의 추천 반찬과 주부님을 한눈에 탐색할 수 있습니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/e1699f4a-4a6f-4b71-b833-20758cc216a5" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -271,9 +315,11 @@ app/
 
 **홈/반찬 목록/상품 상세** → **위시리스트**
 
-<video src="https://github.com/user-attachments/assets/d61fe49a-b68b-4b13-acf3-d6c8e76b8de4" width="800" autoplay loop muted></video>
+> 홈이나 상품 페이지에서 마음에 드는 반찬의 하트 버튼을 클릭해 찜하고, 위시리스트에서 찜한 반찬을 한눈에 확인하며 언제든지 주문할 수 있습니다.
 
-홈이나 상품 페이지에서 마음에 드는 반찬의 하트 버튼을 클릭해 찜하고, 위시리스트에서 찜한 반찬을 한눈에 확인하며 언제든지 주문할 수 있습니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/d61fe49a-b68b-4b13-acf3-d6c8e76b8de4" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -281,9 +327,11 @@ app/
 
 **홈** → **반찬 목록** → **필터/정렬/검색** → **상품 상세**
 
-<video src="https://github.com/user-attachments/assets/d2edddd5-5dfd-49ff-9985-887f25b0c9f4" width="800" autoplay loop muted></video>
+> 현재 위치한 동네 공유주방 기준으로 반찬이 노출되며, 카테고리 필터·정렬·검색 기능으로 원하는 반찬을 빠르게 찾을 수 있습니다. 상세 페이지에서는 이미지, 가격, 재료, 픽업 정보와 리뷰를 확인할 수 있습니다.
 
-현재 위치한 동네 공유주방 기준으로 반찬이 노출되며, 카테고리 필터·정렬·검색 기능으로 원하는 반찬을 빠르게 찾을 수 있습니다. 상세 페이지에서는 이미지, 가격, 재료, 픽업 정보와 리뷰를 확인할 수 있습니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/d2edddd5-5dfd-49ff-9985-887f25b0c9f4" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -294,9 +342,11 @@ app/
 
 **상품 상세** → **바로 구매** → **결제 완료**
 
-<video src="https://github.com/user-attachments/assets/64f261a4-5692-4493-8ac2-183a24308ab0" width="800" autoplay loop muted></video>
+> 상품 상세에서 장바구니에 담은 뒤 수량을 조절하고 주문하거나, 바로 구매를 통해 즉시 결제할 수 있습니다. 픽업 날짜와 시간을 선택한 후 PortOne 결제로 안전하게 주문을 완료합니다.
 
-상품 상세에서 장바구니에 담은 뒤 수량을 조절하고 주문하거나, 바로 구매를 통해 즉시 결제할 수 있습니다. 픽업 날짜와 시간을 선택한 후 PortOne 결제로 안전하게 주문을 완료합니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/64f261a4-5692-4493-8ac2-183a24308ab0" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -304,9 +354,11 @@ app/
 
 **마이페이지** → **반찬 관리** → **반찬 등록/수정/삭제**
 
-<video src="https://github.com/user-attachments/assets/8e8e7564-accc-49c1-9a17-750852033311" width="800" autoplay loop muted></video>
+> 판매자가 마이페이지의 '반찬 관리'에서 새로운 반찬을 등록하고, 이름·가격·설명 등을 수정하며, 본인 주소 기준 가까운 공유주방 핀을 설정할 수 있습니다.
 
-판매자가 마이페이지의 '반찬 관리'에서 새로운 반찬을 등록하고, 이름·가격·설명 등을 수정하며, 본인 주소 기준 가까운 공유주방 핀을 설정할 수 있습니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/8e8e7564-accc-49c1-9a17-750852033311" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -314,9 +366,11 @@ app/
 
 **구매자 주문** → **실시간 주문 알림** → **알림 센터**
 
-<video src="https://github.com/user-attachments/assets/d6289b26-050c-4484-8e7a-cd2461b08bea" width="800" autoplay loop muted></video>
+> 구매자가 주문하면 판매자에게 WebSocket으로 실시간 토스트 알림이 전달됩니다. 알림 센터에서 읽지 않은 알림을 확인하고, 알림 클릭 시 해당 주문 관리 페이지로 바로 이동할 수 있습니다.
 
-구매자가 주문하면 판매자에게 WebSocket으로 실시간 토스트 알림이 전달됩니다. 알림 센터에서 읽지 않은 알림을 확인하고, 알림 클릭 시 해당 주문 관리 페이지로 바로 이동할 수 있습니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/d6289b26-050c-4484-8e7a-cd2461b08bea" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -324,9 +378,11 @@ app/
 
 **마이페이지** → **주문 관리** → **상태 변경**
 
-<video src="https://github.com/user-attachments/assets/85a4e56c-c08c-490c-aaac-2f793a0dd741" width="800" autoplay loop muted></video>
+> 판매자가 '주문 관리'에서 상태별 필터링으로 주문을 확인하고, 대기중 → 승인됨 → 조리완료 → 픽업완료 순서로 주문 상태를 변경하여 픽업을 관리합니다.
 
-판매자가 '주문 관리'에서 상태별 필터링으로 주문을 확인하고, 대기중 → 승인됨 → 조리완료 → 픽업완료 순서로 주문 상태를 변경하여 픽업을 관리합니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/85a4e56c-c08c-490c-aaac-2f793a0dd741" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -334,9 +390,11 @@ app/
 
 **마이페이지** → **구매 내역** → **주문 상세** → **픽업 상태 확인**
 
-<video src="https://github.com/user-attachments/assets/9db05e49-f9b1-46c0-8b19-3d84e75641ce" width="800" autoplay loop muted></video>
+> 구매자가 마이페이지의 '구매 내역'에서 날짜별로 주문 내역을 확인하고, 주문 상세에서 주문번호·픽업 장소·픽업 시간·결제 금액을 조회할 수 있습니다. 픽업 완료 시 리뷰 작성 버튼이 활성화됩니다.
 
-구매자가 마이페이지의 '구매 내역'에서 날짜별로 주문 내역을 확인하고, 주문 상세에서 주문번호·픽업 장소·픽업 시간·결제 금액을 조회할 수 있습니다. 픽업 완료 시 리뷰 작성 버튼이 활성화됩니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/9db05e49-f9b1-46c0-8b19-3d84e75641ce" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -344,9 +402,11 @@ app/
 
 **픽업 완료** → **리뷰 관리** → **리뷰 작성/수정/삭제**
 
-<video src="https://github.com/user-attachments/assets/916533bb-0d55-46b0-87d8-956f875fd0e1" width="800" autoplay loop muted></video>
+> 리뷰 관리 페이지에서 '작성 가능한 리뷰'와 '내 리뷰' 탭으로 구분되며, 픽업 완료된 상품에 대해 별점·사진(최대 5장)·후기를 작성할 수 있습니다. 작성된 리뷰는 수정·삭제가 가능합니다.
 
-리뷰 관리 페이지에서 '작성 가능한 리뷰'와 '내 리뷰' 탭으로 구분되며, 픽업 완료된 상품에 대해 별점·사진(최대 5장)·후기를 작성할 수 있습니다. 작성된 리뷰는 수정·삭제가 가능합니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/916533bb-0d55-46b0-87d8-956f875fd0e1" width="800" autoplay loop muted></video>
+</div>
 
 ---
 
@@ -354,21 +414,26 @@ app/
 
 **주부 목록** → **주부 상세** → **구독 결제**
 <br>
+
 **마이페이지** → **구독 관리**
 
-<video src="https://github.com/user-attachments/assets/49b9345f-5606-4568-b14f-a1956628368d" width="800" autoplay loop muted></video>
+> 주부 목록에서 우리 동네에서 정성껏 집밥을 만드시는 주부님들을 만나 구독 상품을 확인한 뒤, 안전한 결제로 구독을 신청하고 구독 관리에서 구독 현황을 관리할 수 있습니다.
 
-**주부 목록**에서 우리 동네에서 정성껏 집밥을 만드시는 주부님들을 만나 구독 상품을 확인한 뒤, 안전한 결제로 구독을 신청하고 **구독 관리**에서 구독 현황을 관리할 수 있습니다.
+<div align="center">
+<video src="https://github.com/user-attachments/assets/49b9345f-5606-4568-b14f-a1956628368d" width="800" autoplay loop muted></video>
+</div>
 
 ## 프로젝트 후기
 
 ### 😏솔직히 이건 진짜 좋았다
 
+- 역할 분배할 때 각자가 자신 있는 부분 위주로 자연스럽게 나누면서, 프로젝트 전반에서 서로의 강점을 잘 살릴 수 있었던 점이 가장 좋았습니다. 또 팀원 모두가 시간 관리를 효율적으로 해주셔서 작업이 불필요하게 늘어지지 않았고, 각자 맡은 부분에 책임감을 가지고 임해주셔서 처음부터 끝까지 좋은 분위기를 유지할 수 있었습니다. 새로운 제안이나 수정 사항이 생겼을 때도 모두 열린 마음으로 의견을 나누었고, 그 덕분에 프로젝트가 더 나은 방향으로 발전할 수 있었다고 생각합니다. 지금까지 함께 달려와 준 팀원분들께 진심으로 감사드립니다! 이렇게 좋은 팀원들을 만날 수 있었던 것은 정말 행운입니다!!!!!🧡
+
 - 각자 잘하는 부분을 적극적으로 맡고, 스스로 할 일을 찾아 책임감 있게 수행하는 팀원들을 만나서 좋았습니다. 어려운 문제가 생기면 함께 고민하고 해결하려는 태도도 인상적이었습니다.매일 데일리 스크럼을 진행하면서 서로의 의견을 존중해주었고, 갑작스럽게 새로운 기능을 제안해도 부정적으로 반응하기보다 “도전해보겠다”는 자세로 임해주어서 팀 분위기가 매우 좋았습니다.덕분에 즐겁고 긍정적인 분위기 속에서 프로젝트를 마무리할 수 있었습니다.
 
 - 제가 실력이 부족해서 맡은 부분이 적었습니다. 그럼에도 불구하고 배려해주시고 계속해서 도움을 주시는 팀원분들을 만나서 좋았습니다. 팀원분들이 다재다능하셔서 제가 걱정했던 것이 무색할 정도였습니다. 본인의 맡은 일을 끝내시고 다른 일을 도와주시기 위해 항상 물어보시고, 제가 검토하지 못한 부분의 오류도 발견하여 말씀해주시니 정말 감사했습니다. 또한 항상 웃는 좋은 분위기를 만들어주셔서 질문을 하거나 실수를 하더라도 주눅들지 않고 마무리할 수 있었던 것 같습니다.
 
-- 역할 분배할 때 각자가 자신 있는 부분 위주로 자연스럽게 나누면서, 프로젝트 전반에서 서로의 강점을 잘 살릴 수 있었던 점이 가장 좋았습니다. 또 팀원 모두가 시간 관리를 효율적으로 해주셔서 작업이 불필요하게 늘어지지 않았고, 각자 맡은 부분에 책임감을 가지고 임해주셔서 처음부터 끝까지 좋은 분위기를 유지할 수 있었습니다. 새로운 제안이나 수정 사항이 생겼을 때도 모두 열린 마음으로 의견을 나누었고, 그 덕분에 프로젝트가 더 나은 방향으로 발전할 수 있었다고 생각합니다. 지금까지 함께 달려와 준 팀원분들께 진심으로 감사드립니다! 이렇게 좋은 팀원들을 만날 수 있었던 것은 정말 행운입니다!!!!!🧡
+- 초반에 마크업 진행이 더딜 때 먼저 다가와서 도와주셔서 너무 따뜻하고 든든했습니다. 그래서 그런지 한 번도 해본 적 없는 기능을 구현해 막막할 때도 팀원분들이 도와주실 거라는 믿음이 있어 안심하고 도전할 수 있었던 것 같습니다. 진행 속도가 느리더라도 질책 없이 기다려주시고 응원해주셔서 부담 없이 작업에 집중할 수 있었습니다.<br>다들 진행 상황 공유도 잘 해주시고, 매일 정해둔 규칙에 맞춰서 회의록 쓰는 게 귀찮으셨을법도 한데 꾸준히 정리해 주셔서 정말 감사했습니다.부트캠프의 마지막을 좋은 팀원들과 함께해서 즐거웠습니다.
 
 <br>
 
@@ -399,12 +464,12 @@ app/
 **아쉬운점**
 
 - 구독 기능을 실제로 구현하고 싶었지만 API의 한계로 구현하지 못한 점
-- 추천 알고리즘의 단순도: 구매 히스토리 데이터 기반 개인화 추천까지 구현하지 못한 점
+- 추천 기능에 알고리즘을 사용하여 데이터 기반 개인화 추천까지 구현하지 못한 점
 
 **트러블 슈팅**
 
 1. 판매자 목록에서 판매자 정보를 먼저 불러온 뒤, 각 판매자별 상품 목록을 개별 API로 호출해서 많은 API 호출로 인해 페이지 로딩 속도가 느려지는 문제
-   → `Promise.all`을 사용해 판매자 목록과 전체 상품 목록을 2번의 API 호출로 병렬 요청하도록 변경하고, 전체 상품 데이터를 `groupProductsBySeller` 함수로 판매자별 그룹핑하여 API 호출 횟수를 2회로 감소
+   → `Promise.all`을 사용해 판매자 목록과 전체 상품 목록을 2번의 API 호출로 병렬 요청하도록 변경하고, 판매자별 그룹핑함수를 사용하여 API 호출 횟수를 2회로 감소
 2. 반찬 목록에서 각 상품에 판매자의 티어 정보를 붙여야 하는데, 상품마다 판매자 배열을 탐색하면 (상품 수 × 판매자 수)만큼의 비교가 발생하는 문제
    → 판매자 데이터를 `Map` 구조로 변환하여 상품 수만큼만 조회하게 되어 전체 탐색 시간을 개선
 
@@ -427,7 +492,7 @@ app/
 
 #### 이유진
 
-> 처음 다뤄보는 기술이 많아 도전적이었지만, 팀원들과 함께여서 완성할 수 있었습니다.
+> 처음 다뤄보는 기술이 많아 걱정이 앞섰지만, 팀원들과 함께여서 도전할 수 있었습니다.
 
 **아쉬운점**
 
@@ -440,4 +505,4 @@ app/
 1. 웹소켓 서버가 채팅 기반 구조라 알림 용도로 사용했을 때 판매자가 본인 주문을 넣으면 자기 자신에게도 토스트 알림이 출력되는 문제
    → 주문을 보내는 동안에는 본인에게 알림이 뜨지 않도록 플래그를 추가하고, 각 판매자마다 별도의 소켓 방을 만들어 주문받은 판매자에게만 알림이 가도록 수정
 2. 픽업 리마인더 알림을 WebSocket으로 구현하려 했으나, 소켓에 예약 알림 기능이 없어 시간 기반 알림이 불가능했던 문제
-   → PickupAlarmProvider를 루트 layout에 배치하여 어떤 페이지에서든 접속만 하면 자동으로 구매 내역을 조회하고, `setTimeout`으로 픽업 1시간 전 리마인더와 픽업 시간 도래 알림을 스케줄링하는 방식으로 전환.
+   → 루트 layout에 알림 컴포넌트를 배치하여 어떤 페이지에서든 자동으로 구매 내역을 확인하고, 픽업 1시간 전과 픽업 시간에 맞춰 알림이 뜨도록 타이머 기반으로 전환
