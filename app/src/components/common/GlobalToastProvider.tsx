@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Toast from '@/app/src/components/ui/Toast';
 import { useSellerSocket } from '@/lib/socket/useSellerSocket';
@@ -8,6 +8,13 @@ import useUserStore from '@/zustand/userStore';
 import useNotificationStore from '@/zustand/notificationStore';
 
 const HIDDEN_PATHS = ['/login', '/signup', '/mypage/verify'];
+
+// TODO: 테스트용 - 확인 후 삭제
+function TestToast(props: Omit<React.ComponentProps<typeof Toast>, 'onClose'>) {
+  const [show, setShow] = useState(true);
+  if (!show) return null;
+  return <Toast {...props} onClose={() => setShow(false)} />;
+}
 
 export default function GlobalToastProvider() {
   const user = useUserStore((state) => state.user);
@@ -46,7 +53,13 @@ export default function GlobalToastProvider() {
   if (!user || HIDDEN_PATHS.includes(pathname)) return null;
 
   return (
-    <div className="fixed top-0 right-5 w-105 z-60 pointer-events-none pt-5 flex flex-col items-end gap-5 max-[743px]:inset-x-0 max-[743px]:w-auto max-[743px]:max-w-186 max-[743px]:mx-auto max-[743px]:px-5 max-[468px]:items-center">
+    <div className="fixed top-0 right-5 w-105 z-60 pointer-events-none pt-5 flex flex-col items-end gap-3 max-[743px]:inset-x-0 max-[743px]:w-auto max-[743px]:max-w-186 max-[743px]:mx-auto max-[743px]:px-5 max-[468px]:items-center">
+      {/* TODO: 테스트용 토스트 - 확인 후 삭제 */}
+      <TestToast
+        variant="order"
+        items={[{ name: '테스트 반찬', quantity: 1 }]}
+      />
+      <TestToast variant="pickup" message="픽업 테스트 알림입니다" />
       {[...toasts].reverse().map((toast, i) => (
         <Toast
           key={i}

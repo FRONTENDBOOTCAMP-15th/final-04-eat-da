@@ -50,6 +50,7 @@ export function useSellerSocket(sellerId: number) {
           .map((p) => `${p.name} ${p.quantity}개`)
           .join(', ');
 
+        console.log('[fetchPendingOrders] 알림 추가:', order._id, productNames);
         addNotification({
           type: 'order',
           sellerId,
@@ -59,8 +60,8 @@ export function useSellerSocket(sellerId: number) {
           productName: order.products.map((p) => p.name).join(', '),
         });
       }
-    } catch {
-      // 주문 조회 실패 시 무시
+    } catch (e) {
+      console.error('[fetchPendingOrders] 주문 조회 실패:', e);
     }
   }, [sellerId, addNotification, hasOrderNotification]);
 
