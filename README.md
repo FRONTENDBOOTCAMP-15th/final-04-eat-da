@@ -155,7 +155,7 @@ app/
 
 **스플래시 이미지** → **홈**
 
-<!-- ![홈 화면](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/e1699f4a-4a6f-4b71-b833-20758cc216a5" width="800" autoplay loop muted></video>
 
 앱 진입 시 보이는 메인 화면으로, 오늘의 추천 반찬과 주부님을 한눈에 탐색할 수 있습니다.
 
@@ -165,7 +165,7 @@ app/
 
 **홈/반찬 목록/상품 상세** → **위시리스트**
 
-<!-- ![찜하기](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/d61fe49a-b68b-4b13-acf3-d6c8e76b8de4" width="800" autoplay loop muted></video>
 
 홈이나 상품 페이지에서 마음에 드는 반찬의 하트 버튼을 클릭해 찜하고, 위시리스트에서 찜한 반찬을 한눈에 확인하며 언제든지 주문할 수 있습니다.
 
@@ -175,7 +175,7 @@ app/
 
 **홈** → **반찬 목록** → **필터/정렬/검색** → **상품 상세**
 
-<!-- ![반찬 둘러보기](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/d2edddd5-5dfd-49ff-9985-887f25b0c9f4" width="800" autoplay loop muted></video>
 
 현재 위치한 동네 공유주방 기준으로 반찬이 노출되며, 카테고리 필터·정렬·검색 기능으로 원하는 반찬을 빠르게 찾을 수 있습니다. 상세 페이지에서는 이미지, 가격, 재료, 픽업 정보와 리뷰를 확인할 수 있습니다.
 
@@ -188,7 +188,7 @@ app/
 
 **상품 상세** → **바로 구매** → **결제 완료**
 
-<!-- ![반찬 주문](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/64f261a4-5692-4493-8ac2-183a24308ab0" width="800" autoplay loop muted></video>
 
 상품 상세에서 장바구니에 담은 뒤 수량을 조절하고 주문하거나, 바로 구매를 통해 즉시 결제할 수 있습니다. 픽업 날짜와 시간을 선택한 후 PortOne 결제로 안전하게 주문을 완료합니다.
 
@@ -198,7 +198,7 @@ app/
 
 **마이페이지** → **반찬 관리** → **반찬 등록/수정/삭제**
 
-<!-- ![반찬 관리](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/8e8e7564-accc-49c1-9a17-750852033311" width="800" autoplay loop muted></video>
 
 판매자가 마이페이지의 '반찬 관리'에서 새로운 반찬을 등록하고, 이름·가격·설명 등을 수정하며, 본인 주소 기준 가까운 공유주방 핀을 설정할 수 있습니다.
 
@@ -208,7 +208,7 @@ app/
 
 **구매자 주문** → **실시간 주문 알림** → **알림 센터**
 
-<!-- ![주문 알림](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/d6289b26-050c-4484-8e7a-cd2461b08bea" width="800" autoplay loop muted></video>
 
 구매자가 주문하면 판매자에게 WebSocket으로 실시간 토스트 알림이 전달됩니다. 알림 센터에서 읽지 않은 알림을 확인하고, 알림 클릭 시 해당 주문 관리 페이지로 바로 이동할 수 있습니다.
 
@@ -218,7 +218,7 @@ app/
 
 **마이페이지** → **주문 관리** → **상태 변경**
 
-<!-- ![주문 관리](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/85a4e56c-c08c-490c-aaac-2f793a0dd741" width="800" autoplay loop muted></video>
 
 판매자가 '주문 관리'에서 상태별 필터링으로 주문을 확인하고, 대기중 → 승인됨 → 조리완료 → 픽업완료 순서로 주문 상태를 변경하여 픽업을 관리합니다.
 
@@ -228,7 +228,7 @@ app/
 
 **마이페이지** → **구매 내역** → **주문 상세** → **픽업 상태 확인**
 
-<!-- ![구매 내역](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/9db05e49-f9b1-46c0-8b19-3d84e75641ce" width="800" autoplay loop muted></video>
 
 구매자가 마이페이지의 '구매 내역'에서 날짜별로 주문 내역을 확인하고, 주문 상세에서 주문번호·픽업 장소·픽업 시간·결제 금액을 조회할 수 있습니다. 픽업 완료 시 리뷰 작성 버튼이 활성화됩니다.
 
@@ -238,7 +238,7 @@ app/
 
 **픽업 완료** → **리뷰 관리** → **리뷰 작성/수정/삭제**
 
-<!-- ![리뷰 작성](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/916533bb-0d55-46b0-87d8-956f875fd0e1" width="800" autoplay loop muted></video>
 
 리뷰 관리 페이지에서 '작성 가능한 리뷰'와 '내 리뷰' 탭으로 구분되며, 픽업 완료된 상품에 대해 별점·사진(최대 5장)·후기를 작성할 수 있습니다. 작성된 리뷰는 수정·삭제가 가능합니다.
 
@@ -249,7 +249,7 @@ app/
 **주부 목록** → **주부 상세** → **구독 결제**
 **마이페이지** → **구독 관리**
 
-<!-- ![구독](시연영상경로) -->
+<video src="https://github.com/user-attachments/assets/49b9345f-5606-4568-b14f-a1956628368d" width="800" autoplay loop muted></video>
 
 **주부 목록**에서 우리 동네에서 정성껏 집밥을 만드시는 주부님들을 만나 구독 상품을 확인한 뒤, 안전한 결제로 구독을 신청하고 **구독 관리**에서 구독 현황을 관리할 수 있습니다.
 
