@@ -56,16 +56,16 @@
 
 <table>
   <tr>
-    <td align="center" width="200"><a href="https://github.com/jiyou228">김지유</a></td>
-    <td align="center" width="200"><a href="https://github.com/zinapark">박지은</a></td>
-    <td align="center" width="200"><a href="https://github.com/nnjys99">장유석</a></td>
-    <td align="center" width="200"><a href="https://github.com/UJin1122">이유진</a></td>
-  </tr>
-  <tr>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/92305322?v=4&s=150" width="150" height="150"/></td>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/226252328?v=4&s=150" width="150" height="150"/></td>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/225927416?v=4&s=150" width="150" height="150"/></td>
     <td align="center"><img src="https://avatars.githubusercontent.com/u/226252773?v=4&s=150" width="150" height="150"/></td>
+  </tr>
+  <tr>
+    <td align="center" width="200"><a href="https://github.com/jiyou228">김지유</a></td>
+    <td align="center" width="200"><a href="https://github.com/zinapark">박지은</a></td>
+    <td align="center" width="200"><a href="https://github.com/nnjys99">장유석</a></td>
+    <td align="center" width="200"><a href="https://github.com/UJin1122">이유진</a></td>
   </tr>
   <tr>
     <td align="center">PM</td>
@@ -74,10 +74,88 @@
     <td align="center">서기</td>
   </tr>
   <tr>
-    <td align="center"><b>홈</b> / <b>장바구니</b> / <b>구매</b> / <b>위시리스트</b></td>
-    <td align="center"><b>주부 목록·상세</b> / <b>반찬 목록·상세</b> / <b>About</b></td>
-    <td align="center"><b>로그인</b> / <b>회원가입</b> / <b>리뷰 관리</b></td>
-    <td align="center"><b>마이페이지</b> 및 <b>하위 페이지</b></td>
+    <td>
+    <details>
+      <summary><b>홈</b></summary>
+      <sub>• 추천 주부</sub><br>
+      <sub>• 추천 반찬</sub>
+    </details>
+    <details>
+      <summary><b>장바구니</b></summary>
+      <sub>• 바텀 시트 구현</sub><br>
+      <sub>• 헤더 장바구니 수량 플로팅 처리</sub>
+    </details>
+    <details>
+      <summary><b>구매</b></summary>
+      <sub>• 구매 페이지</sub><br>
+      <sub>• 구매완료 페이지</sub><br>
+      <sub>• 실결제 연동</sub>
+    </details>
+    <details>
+    <summary><b>위시리스트</b></summary>
+      <sub>• 찜 목록 관리</sub>
+    </details>
+    <details>
+      <summary><b>검색</b></summary>
+      <sub>• 상품 검색</sub>
+    </details>
+    </td>
+    <td>
+    <details><summary><b>주부 목록·상세</b></summary><sub>내용</sub></details>
+    <details><summary><b>반찬 목록·상세</b></summary><sub>내용</sub></details>
+    <details><summary><b>About</b></summary><sub>내용</sub></details>
+    </td>
+    <td>
+    <details><summary><b>로그인</b></summary><sub>• 로그인 페이지</sub></details>
+    <details>
+      <summary><b>회원가입</b></summary>
+      <sub>• 다음 주소 API 연동</sub><br>
+      <sub>• DiceBear 아바타 생성 API 연동</sub>
+    </details>
+    <details>
+      <summary><b>리뷰</b></summary>
+      <sub>• 리뷰 관리 페이지</sub><br>
+      <sub>• 리뷰 작성 · 수정</sub>
+    </details>
+    <details><summary><b>개인정보 설정</b></summary><sub>• 개인 정보 수정 페이지</sub><br>
+    <sub>• 정보 확인 페이지</sub></details>
+    <details><summary><b>헤더</b></summary><sub>• 공통 헤더 컴포넌트</sub></details>
+    </td>
+    <td>
+    <details>
+      <summary><b>마이페이지</b></summary>
+      <sub>• 사용자 티어 기능 추가 및 페이지 반영</sub>
+    </details>
+    <details>
+      <summary><b>반찬 관리</b></summary>
+      <sub>• 판매자 전용 페이지</sub><br>
+      <sub>• 반찬 등록 · 수정 · 삭제</sub><br>
+      <sub>• 픽업 장소 선택- 카카오맵 연동</sub>
+    </details>
+    <details>
+      <summary><b>구매 내역</b></summary>
+      <sub>• 구매 목록 페이지</sub><br>
+      <sub>• 구매 상세 페이지-주문 상태 표시</sub>
+    </details>
+    <details>
+      <summary><b>주문 관리</b></summary>
+      <sub>• 판매자 전용 페이지</sub><br>
+      <sub>• 주문 상태 변경 기능</sub>
+    </details>
+    <details>
+      <summary><b>알림</b></summary>
+      <sub>• 토스트 알림 컴포넌트 구현</sub><br>
+      <sub>• 알림 페이지</sub><br>
+      <sub>• 홈 헤더 알림 수 표시</sub><br>
+      <sub>• 주문 알림</sub><br>
+      <sub>• 픽업 리마인더 알림</sub><br>
+      <sub>• 픽업 확인 알림</sub>
+    </details>
+    <details>
+      <summary><b>채널톡</b></summary>
+      <sub>• 고객센터 및 홈 채널톡 연동</sub>
+    </details>
+    </td>
   </tr>
 </table>
 
@@ -247,16 +325,85 @@ app/
 ### 10. 구독 서비스
 
 **주부 목록** → **주부 상세** → **구독 결제**
+<br>
 **마이페이지** → **구독 관리**
 
 <video src="https://github.com/user-attachments/assets/49b9345f-5606-4568-b14f-a1956628368d" width="800" autoplay loop muted></video>
 
 **주부 목록**에서 우리 동네에서 정성껏 집밥을 만드시는 주부님들을 만나 구독 상품을 확인한 뒤, 안전한 결제로 구독을 신청하고 **구독 관리**에서 구독 현황을 관리할 수 있습니다.
 
-## 회고
+## 프로젝트 후기
 
-|             | 김지유 | 박지은 | 장유석 | 이유진 |
-| ----------- | ------ | ------ | ------ | ------ |
-| 소감 한마디 | -      | -      | -      | -      |
-| 부족한점    | -      | -      | -      | -      |
-| 잘한점      | -      | -      | -      | -      |
+### 😏솔직히 이건 진짜 좋았다
+
+- 각자 잘하는 부분을 적극적으로 맡고, 스스로 할 일을 찾아 책임감 있게 수행하는 팀원들을 만나서 좋았습니다. 어려운 문제가 생기면 함께 고민하고 해결하려는 태도도 인상적이었습니다.매일 데일리 스크럼을 진행하면서 서로의 의견을 존중해주었고, 갑작스럽게 새로운 기능을 제안해도 부정적으로 반응하기보다 “도전해보겠다”는 자세로 임해주어서 팀 분위기가 매우 좋았습니다.덕분에 즐겁고 긍정적인 분위기 속에서 프로젝트를 마무리할 수 있었습니다.
+
+- 제가 실력이 부족해서 맡은 부분이 적었습니다. 그럼에도 불구하고 배려해주시고 계속해서 도움을 주시는 팀원분들을 만나서 좋았습니다. 팀원분들이 다재다능하셔서 제가 걱정했던 것이 무색할 정도였습니다. 본인의 맡은 일을 끝내시고 다른 일을 도와주시기 위해 항상 물어보시고, 제가 검토하지 못한 부분의 오류도 발견하여 말씀해주시니 정말 감사했습니다. 또한 항상 웃는 좋은 분위기를 만들어주셔서 질문을 하거나 실수를 하더라도 주눅들지 않고 마무리할 수 있었던 것 같습니다.
+
+<br>
+
+### 회고
+
+#### 김지유
+
+> 쇼핑몰 CRUD를 전반적으로 잘 활용한 프로젝트였고, 끝까지 완성도 있게 마무리할 수 있어서 뿌듯합니다!
+
+**아쉬운점**
+
+- 날씨 API를 활용해 날씨에 맞는 반찬을 추천하는 기능을 구현하고 싶었지만 적용하지 못한 점
+- 실제로 정기결제(구독) 기능이 지원되지 않는 점
+
+**트러블 슈팅**
+
+1. 모바일 결제 시 리다이렉트를 설정하지 않아 결제 완료 후에도 결제화면으로 돌아오는 문제
+   → 결제 완료 페이지로 리다이렉트하도록 설정하여 해결
+2. 비로그인 상태에서 찜 클릭 시 콘솔에만 에러가 발생하고 사용자에게 피드백이 없는 문제
+   → 비로그인 시 로그인 페이지로 이동 후 자동으로 위시리스트 페이지로 이동하며 찜 처리되도록 개선
+
+---
+
+#### 박지은
+
+> -
+
+**아쉬운점**
+
+-
+
+**트러블 슈팅**
+
+-
+
+---
+
+#### 장유석
+
+> 파이널 프로젝트가 걱정이 많이 되었지만 좋은 팀원분들을 만난 덕분에 잘 마무리할 수 있게 되어서 좋았습니다.
+
+**아쉬운점**
+
+- 탈퇴 기능이 없어서 영원히 탈퇴가 불가능하다는 점
+
+**트러블 슈팅**
+
+1. 프로필 이미지를 삭제하거나 없는 상태로 등록했을 때 랜덤 아바타가 표시되지 않는 문제
+   → 이미지 URL이 http로 시작하면 전부 무시하는 로직이 원인이었는데, http 여부가 아닌 dicebear(기본 랜덤 이미지) 포함 여부로 구분하도록 변경하여 해결
+
+---
+
+#### 이유진
+
+> 처음 다뤄보는 기술이 많아 도전적이었지만, 팀원들과 함께여서 완성할 수 있었습니다.
+
+**아쉬운점**
+
+- 주문 상태 변경에 따른 단계별 알림 기능을 추가하지 못한 점
+- 판매자와 구매자 간 실시간 채팅 기능을 구현하지 못한 점
+- Service Worker를 활용한 백그라운드 푸시 알림을 적용해보고 싶었지만 도입하지 못한 점
+
+**트러블 슈팅**
+
+1. Socket.IO가 채팅 기반 구조라 알림 용도로 사용했을 때 판매자가 본인 주문을 넣으면 자기 자신에게도 토스트 알림이 출력되는 문제
+   → 주문을 보내는 동안에는 본인에게 알림이 뜨지 않도록 플래그를 추가하고, 각 판매자마다 별도의 소켓 방을 만들어 주문받은 판매자에게만 알림이 가도록 수정
+2. 픽업 리마인더 알림을 WebSocket으로 구현하려 했으나, 소켓에 예약 알림 기능이 없어 시간 기반 알림이 불가능했던 문제
+   → PickupAlarmProvider를 루트 layout에 배치하여 어떤 페이지에서든 접속만 하면 자동으로 구매 내역을 조회하고, `setTimeout`으로 픽업 1시간 전 리마인더와 픽업 시간 도래 알림을 스케줄링하는 방식으로 전환.
